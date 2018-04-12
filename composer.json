@@ -19,7 +19,8 @@
         }
     },
     "bin": [
-        "bin/svn-agent-host.php"
+        "bin/svn-agent-host.php",
+        "bin/svn-cleanup.sh"
     ],
     "extra": {
         "_readme": [

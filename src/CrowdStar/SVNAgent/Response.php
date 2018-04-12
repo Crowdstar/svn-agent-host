@@ -31,7 +31,7 @@ class Response
      */
     public function __construct(Logger $logger = null)
     {
-        $this->setLoggerName('response')->setLogger($logger ?: Config::singleton()->getLogger());
+        $this->setLogger($logger, 'response');
     }
 
     /**

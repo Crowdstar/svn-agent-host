@@ -2,6 +2,7 @@
 
 namespace CrowdStar\SVNAgent\Traits;
 
+use CrowdStar\SVNAgent\Config;
 use Monolog\Logger;
 
 /**
@@ -49,12 +50,13 @@ trait LoggerTrait
     }
 
     /**
-     * @param Logger $logger
+     * @param Logger|null $logger
      * @param string $loggerName
      * @return $this
      */
-    public function setLogger(Logger $logger, string $loggerName = null)
+    public function setLogger($logger, string $loggerName = null)
     {
+        $logger       = $logger ?: Config::singleton()->getLogger();
         $loggerName   = $loggerName ?? $this->getLoggerName();
         $this->logger = ($loggerName ? $logger->withName($loggerName) : $logger);
 

@@ -26,7 +26,7 @@ class Request
      */
     public function __construct(Logger $logger = null)
     {
-        $this->setLoggerName('request')->setLogger($logger ?: Config::singleton()->getLogger());
+        $this->setLogger($logger, 'request');
     }
 
     /**

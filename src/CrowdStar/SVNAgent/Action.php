@@ -59,7 +59,7 @@ class Action
             ->setAction($action)
             ->setData($data)
             ->setLoggerName('action')
-            ->setLogger($logger ?: Config::singleton()->getLogger())
+            ->setLogger($logger, 'action')
             ->setConfig(Config::singleton());
     }
 
@@ -116,7 +116,7 @@ class Action
                     chdir($this->getConfig()->getSvnRootDir());
                     $this->setMessage('SVN cleanup')->exec(
                         function () {
-                            sh::bash(Config::singleton()->getRootDir() . '/bin/svn-cleanup.sh');
+                            sh::bash(Config::singleton()->getRootDir() . '/vendor/bin/svn-cleanup.sh');
                         }
                     );
                 } else {
