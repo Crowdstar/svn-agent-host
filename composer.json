@@ -18,6 +18,9 @@
             "CrowdStar\\SVNAgent\\": "src/CrowdStar/SVNAgent/"
         }
     },
+    "bin": [
+        "bin/svn-agent-host.php"
+    ],
     "extra": {
         "_readme": [
             ""
