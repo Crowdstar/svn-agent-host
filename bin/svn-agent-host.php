@@ -11,7 +11,24 @@
  *      The code piece included fixes issue in above GitHub repository.
  */
 
-require_once __DIR__ . '/vendor/autoload.php';
+$loaded = false;
+$dirs   = [
+    __DIR__,
+    dirname(__DIR__, 1),
+    dirname(__DIR__, 4),
+];
+foreach ($dirs as $dir) {
+    $file = $dir . '/vendor/autoload.php';
+    if (file_exists($file)) {
+        require_once $file;
+        $loaded = true;
+        break;
+    }
+}
+if (!$loaded) {
+    echo "Error: Composer autoloading file not found.\n";
+    exit(1);
+}
 
 use CrowdStar\SVNAgent\Action;
 use CrowdStar\SVNAgent\Config;
