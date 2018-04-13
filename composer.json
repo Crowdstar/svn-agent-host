@@ -1,39 +1,32 @@
 {
-    "name": "crowdstar/svn-agent-host",
-    "description": "A native messaging host to handle SVN commands received from specific Chrome extension.",
-    "homepage": "https://www.glu.com",
-    "type": "project",
-    "license": "Commercial",
-    "require": {
-        "php": ">=7.0",
-        "monolog/monolog": "~1.11",
-        "mrrio/shellwrap": "~0.4.0"
-    },
-    "require-dev": {
-        "overtrue/phplint": "~1.1.0",
-        "squizlabs/php_codesniffer" : ">=2.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "CrowdStar\\SVNAgent\\": "src/CrowdStar/SVNAgent/"
-        }
-    },
-    "bin": [
-        "bin/svn-agent-host.php",
-        "bin/svn-cleanup.sh"
-    ],
-    "extra": {
-        "_readme": [
-            ""
-        ],
-        "_todo": [
-            ""
-        ]
-    },
-    "config" : {
-        "discard-changes": true,
-        "optimize-autoloader": true,
-        "sort-packages": true
-    },
-    "prefer-stable": true
+  "name": "crowdstar/svn-agent-host",
+  "description": "A native messaging host to handle SVN commands received from specific Chrome extension.",
+  "homepage": "https://www.glu.com",
+  "type": "project",
+  "license": "Commercial",
+  "require": {
+    "php": ">=7.0",
+    "monolog/monolog": "~1.11",
+    "mrrio/shellwrap": "~0.4.0",
+    "vlucas/phpdotenv": "~2.2"
+  },
+  "require-dev": {
+    "overtrue/phplint": "~1.1.0",
+    "squizlabs/php_codesniffer": ">=2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "CrowdStar\\SVNAgent\\": "src/CrowdStar/SVNAgent/"
+    }
+  },
+  "bin": [
+    "bin/svn-agent-host.php",
+    "bin/svn-cleanup.sh"
+  ],
+  "config": {
+    "discard-changes": true,
+    "optimize-autoloader": true,
+    "sort-packages": true
+  },
+  "prefer-stable": true
 }

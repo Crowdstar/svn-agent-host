@@ -3,6 +3,8 @@
 namespace CrowdStar\SVNAgent;
 
 use CrowdStar\SVNAgent\Traits\LoggerTrait;
+use Dotenv\Dotenv;
+use Exception;
 use Monolog\ErrorHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -16,25 +18,21 @@ class Config
 {
     use LoggerTrait;
 
-    /**
-     * @var string
-     */
-    protected $rootDir;
+    const SVN_AGENT_ROOT_DIR     = 'SVN_AGENT_ROOT_DIR';
+    const SVN_AGENT_SVN_ROOT_DIR = 'SVN_AGENT_SVN_ROOT_DIR';
+    const SVN_AGENT_SVN_ROOT     = 'SVN_AGENT_SVN_ROOT';
+    const SVN_AGENT_SVN_TRUNK    = 'SVN_AGENT_SVN_TRUNK';
+    const SVN_AGENT_LOGFILE      = 'SVN_AGENT_LOGFILE';
+    const SVN_AGENT_TIMEZONE     = 'SVN_AGENT_TIMEZONE';
 
-    /**
-     * @var string
-     */
-    protected $svnRootDir;
-
-    /**
-     * @var string
-     */
-    protected $svnRoot;
-
-    /**
-     * @var string
-     */
-    protected $svnTrunk;
+    const REQUIRED_ENVIRONMENT_VARIABLES = [
+        self::SVN_AGENT_ROOT_DIR,
+        self::SVN_AGENT_SVN_ROOT_DIR,
+        self::SVN_AGENT_SVN_ROOT,
+        self::SVN_AGENT_SVN_TRUNK,
+        self::SVN_AGENT_LOGFILE,
+        self::SVN_AGENT_TIMEZONE,
+    ];
 
     /**
      * @var Config
@@ -46,7 +44,6 @@ class Config
      */
     protected function __construct()
     {
-        $this->init();
     }
 
     /**
@@ -69,23 +66,22 @@ class Config
     }
 
     /**
-     * @return $this
-     * @throws \Exception
+     * @param string $path
+     * @return Config
+     * @throws Exception
      */
-    protected function init(): Config
+    public function init(string $path): Config
     {
-        date_default_timezone_set('America/Los_Angeles');
+        $dotenv = (new Dotenv($path));
+        $dotenv->overload();
+        foreach (self::REQUIRED_ENVIRONMENT_VARIABLES as $var) {
+            $dotenv->required($var)->notEmpty();
+        }
 
-        $this
-            ->setRootDir($_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'svn-agent')
-            ->setSvnRootDir($this->getRootDir() . '/svn-agent')
-            ->setSvnRoot('https://svn.riouxsvn.com/deminy')
-            ->setSvnTrunk($this->getSvnRoot() . '/trunk');
+        date_default_timezone_set(getenv(self::SVN_AGENT_TIMEZONE));
 
         $logger = new Logger('SVN Agent');
-        $logger->pushHandler(
-            new StreamHandler($this->getRootDir() . DIRECTORY_SEPARATOR . 'svn-agent-host.log', Logger::DEBUG)
-        );
+        $logger->pushHandler(new StreamHandler(getenv(self::SVN_AGENT_LOGFILE), Logger::DEBUG));
         $this->setLogger($logger);
 
         ErrorHandler::register($this->getLogger());
@@ -98,18 +94,7 @@ class Config
      */
     public function getRootDir(): string
     {
-        return $this->rootDir;
-    }
-
-    /**
-     * @param string $rootDir
-     * @return $this
-     */
-    public function setRootDir(string $rootDir): Config
-    {
-        $this->rootDir = $this->rtrim($rootDir);
-
-        return $this;
+        return $this->rtrim(getenv(self::SVN_AGENT_ROOT_DIR));
     }
 
     /**
@@ -117,18 +102,7 @@ class Config
      */
     public function getSvnRootDir(): string
     {
-        return $this->svnRootDir;
-    }
-
-    /**
-     * @param string $svnRootDir
-     * @return $this
-     */
-    public function setSvnRootDir(string $svnRootDir): Config
-    {
-        $this->svnRootDir = $this->rtrim($svnRootDir);
-
-        return $this;
+        return $this->rtrim(getenv(self::SVN_AGENT_SVN_ROOT_DIR));
     }
 
     /**
@@ -136,18 +110,7 @@ class Config
      */
     public function getSvnRoot(): string
     {
-        return $this->svnRoot;
-    }
-
-    /**
-     * @param string $svnRoot
-     * @return $this
-     */
-    public function setSvnRoot(string $svnRoot): Config
-    {
-        $this->svnRoot = $this->rtrim($svnRoot);
-
-        return $this;
+        return $this->rtrim(getenv(self::SVN_AGENT_SVN_ROOT));
     }
 
     /**
@@ -155,18 +118,7 @@ class Config
      */
     public function getSvnTrunk(): string
     {
-        return $this->svnTrunk;
-    }
-
-    /**
-     * @param string $svnTrunk
-     * @return $this
-     */
-    public function setSvnTrunk(string $svnTrunk): Config
-    {
-        $this->svnTrunk = $this->rtrim($svnTrunk);
-
-        return $this;
+        return $this->rtrim(getenv(self::SVN_AGENT_SVN_TRUNK));
     }
 
     /**

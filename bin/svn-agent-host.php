@@ -34,12 +34,12 @@ use CrowdStar\SVNAgent\Action;
 use CrowdStar\SVNAgent\Config;
 use CrowdStar\SVNAgent\Request;
 
-$logger = Config::singleton()->getLogger();
+$config = Config::singleton()->init($dir);
 
-$logger->info('Native messaging host SVN Agent started');
+$config->getLogger()->info('Native messaging host SVN Agent started');
 
 $request  = new Request();
 $response = Action::fromRequest($request->readRequest())->process()->getResponse();
 $response->sendResponse();
 
-$logger->info('Native messaging host SVN Agent stopped');
+$config->getLogger()->info('Native messaging host SVN Agent stopped');
