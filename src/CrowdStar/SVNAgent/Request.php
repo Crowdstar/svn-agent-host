@@ -17,7 +17,22 @@ class Request
     /**
      * @var string
      */
-    protected $request = '';
+    protected $username;
+
+    /**
+     * @var string
+     */
+    protected $password;
+
+    /**
+     * @var string
+     */
+    protected $action;
+
+    /**
+     * @var array
+     */
+    protected $data = [];
 
     /**
      * Request constructor.
@@ -36,8 +51,17 @@ class Request
     {
         $stdin = fopen('php://stdin', 'r');
         $len   = current(unpack('L', fread($stdin, 4)));
-        $this->setRequest($len ? fread($stdin, $len) : '');
+        $data  = $len ? json_decode(fread($stdin, $len), true) : [];
         fclose($stdin);
+
+        $this
+            ->setUsername($data['username'] ?? '')
+            ->setPassword($data['password'] ?? '')
+            ->setAction($data['action'] ?? '')
+            ->setData($data['data'] ?? []);
+
+        $this->getLogger()->info('request action: ' . $this->getAction());
+        $this->getLogger()->info('request data: ' . json_encode($this->getData()));
 
         return $this;
     }
@@ -45,20 +69,75 @@ class Request
     /**
      * @return string
      */
-    public function getRequest(): string
+    public function getUsername(): string
     {
-        return $this->request;
+        return $this->username;
     }
 
     /**
-     * @param string $request
+     * @param string $username
      * @return $this
      */
-    public function setRequest(string $request): Request
+    public function setUsername(string $username): Request
     {
-        $this->request = $request;
+        $this->username = $username;
 
-        $this->getLogger()->info('request: ' . $request);
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string $password
+     * @return $this
+     */
+    public function setPassword(string $password): Request
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAction(): string
+    {
+        return $this->action;
+    }
+
+    /**
+     * @param string $action
+     * @return $this
+     */
+    public function setAction(string $action): Request
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param array $data
+     * @return $this
+     */
+    public function setData(array $data): Request
+    {
+        $this->data = $data;
 
         return $this;
     }

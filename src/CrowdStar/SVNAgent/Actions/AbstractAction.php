@@ -1,25 +1,25 @@
 <?php
 
-namespace CrowdStar\SVNAgent;
+namespace CrowdStar\SVNAgent\Actions;
 
 use Closure;
+use CrowdStar\SVNAgent\Config;
+use CrowdStar\SVNAgent\Exception;
+use CrowdStar\SVNAgent\Request;
+use CrowdStar\SVNAgent\Response;
 use CrowdStar\SVNAgent\Traits\LoggerTrait;
 use Monolog\Logger;
 use MrRio\ShellWrap as sh;
 use MrRio\ShellWrapException;
 
 /**
- * Class Action
+ * Class AbstractAction
  *
- * @package CrowdStar\SVNAgent
+ * @package CrowdStar\SVNAgent\Actions
  */
-class Action
+abstract class AbstractAction
 {
     use LoggerTrait;
-
-    const SVN_CHECKOUT = 'checkout';
-    const SVN_STATUS   = 'status';
-    const SVN_CLEANUP  = 'cleanup';
 
     /**
      * @var Config
@@ -27,14 +27,14 @@ class Action
     protected $config;
 
     /**
-     * @var string
-     */
-    protected $action;
-
-    /**
      * @var array
      */
     protected $data;
+
+    /**
+     * @var Request
+     */
+    protected $request;
 
     /**
      * @var Response
@@ -47,97 +47,42 @@ class Action
     protected $message;
 
     /**
-     * Action constructor.
+     * AbstractAction constructor.
      *
-     * @param string $action
-     * @param array $data
-     * @param Logger $logger
+     * @param Request $request
+     * @param Logger|null $logger
+     * @throws Exception
      */
-    public function __construct(string $action, array $data, Logger $logger = null)
+    public function __construct(Request $request, Logger $logger = null)
     {
         $this
-            ->setAction($action)
-            ->setData($data)
-            ->setLoggerName('action')
-            ->setLogger($logger, 'action')
+            ->setRequest($request)
+            ->setLogger(($logger ?: $request->getLogger()), 'action')
             ->setConfig(Config::singleton());
     }
 
     /**
-     * @param Request $request
-     * @param Logger $logger
-     * @return $this
+     * @return AbstractAction
      */
-    public static function fromRequest(Request $request, Logger $logger = null): Action
-    {
-        $requestData = json_decode($request->getRequest(), true);
-        $action      = $requestData['action'] ?? '';
-        $data        = $requestData['data'] ?? [];
-
-        return ($logger ? new static($action, $data, $logger) : new static($action, $data));
-    }
-
-    /**
-     * @return Action
-     */
-    public function process(): Action
+    public function process(): AbstractAction
     {
         $this->setResponse(new Response($this->getLogger()));
-
-        switch ($this->getAction()) {
-            case self::SVN_CHECKOUT:
-                if (!is_readable($this->getConfig()->getSvnRootDir())) {
-                    $this->setMessage('SVN checkout')->exec(
-                        function () {
-                            sh::svn(
-                                $this->getAction(),
-                                $this->getConfig()->getSvnTrunk(),
-                                $this->getConfig()->getSvnRootDir()
-                            );
-                        }
-                    );
-                } else {
-                    $this->setError("Folder \"{$this->getConfig()->getSvnRootDir()}\" already exists");
-                }
-                break;
-            case self::SVN_STATUS:
-                if (is_readable($this->getConfig()->getSvnRootDir())) {
-                    $this->setMessage('SVN status')->exec(
-                        function () {
-                            sh::svn($this->getAction(), $this->getConfig()->getSvnRootDir());
-                        }
-                    );
-                } else {
-                    $this->setError("Folder \"{$this->getConfig()->getSvnRootDir()}\" not exist");
-                }
-                break;
-            case self::SVN_CLEANUP:
-                if (is_readable($this->getConfig()->getSvnRootDir())) {
-                    chdir($this->getConfig()->getSvnRootDir());
-                    $this->setMessage('SVN cleanup')->exec(
-                        function () {
-                            sh::bash(Config::singleton()->getRootDir() . '/vendor/bin/svn-cleanup.sh');
-                        }
-                    );
-                } else {
-                    $this->setError("Folder \"{$this->getConfig()->getSvnRootDir()}\" not exist");
-                }
-                break;
-            default:
-                $this->setError("unknown action '{$this->getAction()}'");
-                break;
-        }
-
+        $this->processAction();
         $this->getLogger()->info('response: ' . $this->getResponse());
 
         return $this;
     }
 
     /**
-     * @param Closure ...$array
-     * @return Action
+     * @return AbstractAction
      */
-    protected function exec(Closure ...$array): Action
+    abstract public function processAction(): AbstractAction;
+
+    /**
+     * @param Closure ...$array
+     * @return AbstractAction
+     */
+    protected function exec(Closure ...$array): AbstractAction
     {
         $sh      = new sh();
         $results = [];
@@ -168,7 +113,7 @@ class Action
      * @param Config $config
      * @return $this
      */
-    public function setConfig(Config $config): Action
+    public function setConfig(Config $config): AbstractAction
     {
         $this->config = $config;
 
@@ -176,39 +121,25 @@ class Action
     }
 
     /**
-     * @return string
+     * @return Request
      */
-    public function getAction(): string
+    public function getRequest(): Request
     {
-        return $this->action;
+        return $this->request;
     }
 
     /**
-     * @param string $action
+     * @param Request $request
      * @return $this
+     * @throws Exception
      */
-    public function setAction(string $action): Action
+    public function setRequest(Request $request): AbstractAction
     {
-        $this->action = $action;
+        if (!$request->getUsername() || !$request->getPassword()) {
+            throw new Exception('SVN credential missing');
+        }
 
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getData(): array
-    {
-        return $this->data;
-    }
-
-    /**
-     * @param array $data
-     * @return $this
-     */
-    public function setData(array $data): Action
-    {
-        $this->data = $data;
+        $this->request = $request;
 
         return $this;
     }
@@ -225,7 +156,7 @@ class Action
      * @param Response $response
      * @return $this
      */
-    public function setResponse(Response $response): Action
+    public function setResponse(Response $response): AbstractAction
     {
         $this->response = $response;
 
@@ -244,7 +175,7 @@ class Action
      * @param string $message
      * @return $this
      */
-    public function setMessage(string $message): Action
+    public function setMessage(string $message): AbstractAction
     {
         $this->message = $message;
 
@@ -253,9 +184,9 @@ class Action
 
     /**
      * @param string $error
-     * @return Action
+     * @return $this
      */
-    protected function setError(string $error): Action
+    protected function setError(string $error): AbstractAction
     {
         $this->getResponse()->setError($error);
 

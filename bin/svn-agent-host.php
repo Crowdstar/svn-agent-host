@@ -30,7 +30,7 @@ if (!$loaded) {
     exit(1);
 }
 
-use CrowdStar\SVNAgent\Action;
+use CrowdStar\SVNAgent\Actions\ActionFactory;
 use CrowdStar\SVNAgent\Config;
 use CrowdStar\SVNAgent\Request;
 
@@ -39,7 +39,7 @@ $config = Config::singleton()->init($dir);
 $config->getLogger()->info('Native messaging host SVN Agent started');
 
 $request  = new Request();
-$response = Action::fromRequest($request->readRequest())->process()->getResponse();
+$response = ActionFactory::fromRequest($request->readRequest())->process()->getResponse();
 $response->sendResponse();
 
 $config->getLogger()->info('Native messaging host SVN Agent stopped');
