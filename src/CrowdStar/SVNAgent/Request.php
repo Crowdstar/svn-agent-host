@@ -55,8 +55,8 @@ class Request
         fclose($stdin);
 
         $this
-            ->setUsername($data['username'] ?? '')
-            ->setPassword($data['password'] ?? '')
+            ->setUsername($data['username'] ? base64_decode($data['username']) : '')
+            ->setPassword($data['password'] ? base64_decode($data['password']) : '')
             ->setAction($data['action'] ?? '')
             ->setData($data['data'] ?? []);
 
