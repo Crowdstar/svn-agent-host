@@ -9,7 +9,7 @@ namespace CrowdStar\SVNAgent;
  */
 class Error
 {
-    const LOCK_FAILED = '2801';
+    const LOCK_FAILED = 'e2801';
 
     const ERRORS = [
         self::LOCK_FAILED => 'failed to gain lock',
