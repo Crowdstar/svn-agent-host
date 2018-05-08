@@ -6,6 +6,7 @@
   "license": "Commercial",
   "require": {
     "php": ">=7.0",
+    "arvenil/ninja-mutex": "~0.6",
     "monolog/monolog": "~1.11",
     "mrrio/shellwrap": "~0.4.0",
     "vlucas/phpdotenv": "~2.2"

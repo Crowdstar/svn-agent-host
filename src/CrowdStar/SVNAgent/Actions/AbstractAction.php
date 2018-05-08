@@ -4,6 +4,7 @@ namespace CrowdStar\SVNAgent\Actions;
 
 use Closure;
 use CrowdStar\SVNAgent\Config;
+use CrowdStar\SVNAgent\Error;
 use CrowdStar\SVNAgent\Exception;
 use CrowdStar\SVNAgent\Request;
 use CrowdStar\SVNAgent\Response;
@@ -11,6 +12,8 @@ use CrowdStar\SVNAgent\Traits\LoggerTrait;
 use Monolog\Logger;
 use MrRio\ShellWrap as sh;
 use MrRio\ShellWrapException;
+use NinjaMutex\Lock\FlockLock;
+use NinjaMutex\Mutex;
 
 /**
  * Class AbstractAction
@@ -67,7 +70,15 @@ abstract class AbstractAction
     public function process(): AbstractAction
     {
         $this->setResponse(new Response($this->getLogger()));
-        $this->processAction();
+
+        $mutex = new Mutex('svn-agent', new FlockLock($this->getConfig()->getRootDir()));
+        if ($mutex->acquireLock(0)) {
+            $this->processAction();
+            $mutex->releaseLock();
+        } else {
+            $this->setError(Error::LOCK_FAILED);
+        }
+
         $this->getLogger()->info('response: ' . $this->getResponse());
 
         return $this;
@@ -94,8 +105,7 @@ abstract class AbstractAction
             }
             $this->getResponse()->setResponse(implode("\n\n", $results));
         } catch (ShellWrapException $e) {
-            $this->getLogger()->error("error: {$e->getMessage()}");
-            $this->getResponse()->setError($e->getMessage());
+            $this->setError($e->getMessage());
         }
 
         return $this;

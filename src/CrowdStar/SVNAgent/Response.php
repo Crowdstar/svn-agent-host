@@ -81,7 +81,7 @@ class Response
     public function setError(string $error): Response
     {
         $this->error = $error;
-        $this->getLogger()->error($error);
+        $this->getLogger()->error('error: ' . $error);
 
         return $this;
     }
