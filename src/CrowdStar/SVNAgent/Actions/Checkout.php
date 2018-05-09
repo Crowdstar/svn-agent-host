@@ -16,22 +16,28 @@ class Checkout extends AbstractAction
      */
     public function processAction(): AbstractAction
     {
-        if (!is_readable($this->getConfig()->getSvnRootDir())) {
+        $url = $this->getConfig()->getSvnRoot() . $this->getRequest()->get('path');
+        $dir = $this->getConfig()->getSvnRootDir() . $this->getRequest()->get('path');
+        if (!is_dir($dir)) {
+            if (!is_dir(dirname($dir))) {
+                mkdir(dirname($dir), 0755, true);
+            }
+
             $this->setMessage('SVN checkout')->exec(
-                function () {
+                function () use ($url, $dir) {
                     sh::svn(
                         'checkout',
                         '--username',
                         $this->getRequest()->getUsername(),
                         '--password',
                         $this->getRequest()->getPassword(),
-                        $this->getConfig()->getSvnTrunk(),
-                        $this->getConfig()->getSvnRootDir()
+                        $url,
+                        $dir
                     );
                 }
             );
         } else {
-            $this->setError("Folder \"{$this->getConfig()->getSvnRootDir()}\" already exists");
+            $this->setError("Folder '{$dir}' already exists");
         }
 
         return $this;

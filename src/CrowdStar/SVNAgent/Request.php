@@ -141,4 +141,18 @@ class Request
 
         return $this;
     }
+
+    /**
+     * @param string $name
+     * @return mixed
+     * @throws Exception
+     */
+    public function get(string $name)
+    {
+        if (!array_key_exists($name, $this->data)) {
+            throw new Exception("field '{$name}' not passed in in the request");
+        }
+
+        return $this->data[$name];
+    }
 }

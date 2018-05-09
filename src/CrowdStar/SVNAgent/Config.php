@@ -21,7 +21,6 @@ class Config
     const SVN_AGENT_ROOT_DIR     = 'SVN_AGENT_ROOT_DIR';
     const SVN_AGENT_SVN_ROOT_DIR = 'SVN_AGENT_SVN_ROOT_DIR';
     const SVN_AGENT_SVN_ROOT     = 'SVN_AGENT_SVN_ROOT';
-    const SVN_AGENT_SVN_TRUNK    = 'SVN_AGENT_SVN_TRUNK';
     const SVN_AGENT_LOGFILE      = 'SVN_AGENT_LOGFILE';
     const SVN_AGENT_TIMEZONE     = 'SVN_AGENT_TIMEZONE';
 
@@ -29,7 +28,6 @@ class Config
         self::SVN_AGENT_ROOT_DIR,
         self::SVN_AGENT_SVN_ROOT_DIR,
         self::SVN_AGENT_SVN_ROOT,
-        self::SVN_AGENT_SVN_TRUNK,
         self::SVN_AGENT_LOGFILE,
         self::SVN_AGENT_TIMEZONE,
     ];
@@ -111,14 +109,6 @@ class Config
     public function getSvnRoot(): string
     {
         return $this->rtrim(getenv(self::SVN_AGENT_SVN_ROOT));
-    }
-
-    /**
-     * @return string
-     */
-    public function getSvnTrunk(): string
-    {
-        return $this->rtrim(getenv(self::SVN_AGENT_SVN_TRUNK));
     }
 
     /**
