@@ -103,7 +103,7 @@ abstract class AbstractAction
                 $c();
                 $results[] = (string) $sh;
             }
-            $this->getResponse()->setResponse(implode("\n\n", $results));
+            $this->setResponseMessage(implode("\n\n", $results));
         } catch (ShellWrapException $e) {
             $this->setError($e->getMessage());
         }
@@ -169,6 +169,17 @@ abstract class AbstractAction
     public function setResponse(Response $response): AbstractAction
     {
         $this->response = $response;
+
+        return $this;
+    }
+
+    /**
+     * @param string $responseMessage
+     * @return $this
+     */
+    protected function setResponseMessage(string $responseMessage): AbstractAction
+    {
+        $this->getResponse()->setResponse($responseMessage);
 
         return $this;
     }

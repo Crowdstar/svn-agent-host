@@ -16,11 +16,13 @@ class ActionFactory
     const SVN_CHECKOUT = 'checkout';
     const SVN_STATUS   = 'status';
     const SVN_CLEANUP  = 'cleanup';
+    const TEST_SLEEP   =  'sleep';
 
     const ACTION_CLASSES = [
         self::SVN_CHECKOUT => Checkout::class,
         self::SVN_STATUS   => Status::class,
         self::SVN_CLEANUP  => Cleanup::class,
+        self::TEST_SLEEP   => Sleep::class,
     ];
 
     /**
