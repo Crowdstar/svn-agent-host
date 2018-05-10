@@ -2,7 +2,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
-use CrowdStar\SVNAgent\Exception;
+use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Request;
 use Monolog\Logger;
 
@@ -29,7 +29,7 @@ class ActionFactory
      * @param Request $request
      * @param Logger|null $logger
      * @return AbstractAction
-     * @throws Exception
+     * @throws ClientException
      */
     public static function fromRequest(Request $request, Logger $logger = null): AbstractAction
     {
@@ -40,7 +40,7 @@ class ActionFactory
 
             return new $class($request, ($logger ?: $request->getLogger()));
         } else {
-            throw new Exception("class not found for SVN Agent action '{$action}'");
+            throw new ClientException("unsupported SVN Agent action '{$action}'");
         }
     }
 }

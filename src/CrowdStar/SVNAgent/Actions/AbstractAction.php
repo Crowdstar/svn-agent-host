@@ -5,7 +5,7 @@ namespace CrowdStar\SVNAgent\Actions;
 use Closure;
 use CrowdStar\SVNAgent\Config;
 use CrowdStar\SVNAgent\Error;
-use CrowdStar\SVNAgent\Exception;
+use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Request;
 use CrowdStar\SVNAgent\Response;
 use CrowdStar\SVNAgent\Traits\LoggerTrait;
@@ -54,7 +54,7 @@ abstract class AbstractAction
      *
      * @param Request $request
      * @param Logger|null $logger
-     * @throws Exception
+     * @throws ClientException
      */
     public function __construct(Request $request, Logger $logger = null)
     {
@@ -141,12 +141,12 @@ abstract class AbstractAction
     /**
      * @param Request $request
      * @return $this
-     * @throws Exception
+     * @throws ClientException
      */
     public function setRequest(Request $request): AbstractAction
     {
         if (!$request->getUsername() || !$request->getPassword()) {
-            throw new Exception('SVN credential missing');
+            throw new ClientException('SVN credential missing');
         }
 
         $this->request = $request;

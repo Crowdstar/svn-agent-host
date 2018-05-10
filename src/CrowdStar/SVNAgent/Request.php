@@ -2,6 +2,7 @@
 
 namespace CrowdStar\SVNAgent;
 
+use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Traits\LoggerTrait;
 use Monolog\Logger;
 
@@ -145,12 +146,12 @@ class Request
     /**
      * @param string $name
      * @return mixed
-     * @throws Exception
+     * @throws ClientException
      */
     public function get(string $name)
     {
         if (!array_key_exists($name, $this->data)) {
-            throw new Exception("field '{$name}' not passed in in the request");
+            throw new ClientException("field '{$name}' not passed in in the request");
         }
 
         return $this->data[$name];

@@ -3,10 +3,10 @@
 namespace CrowdStar\SVNAgent\Exceptions;
 
 /**
- * Class Exception
+ * Class ClientException
  *
  * @package CrowdStar\SVNAgent\Exceptions
  */
-class Exception extends \Exception
+class ClientException extends Exception
 {
 }
