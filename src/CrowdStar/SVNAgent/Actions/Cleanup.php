@@ -16,15 +16,16 @@ class Cleanup extends AbstractAction
      */
     public function processAction(): AbstractAction
     {
-        if (is_readable($this->getConfig()->getSvnRootDir())) {
-            chdir($this->getConfig()->getSvnRootDir());
+        $dir = $this->getSvnDir();
+        if (is_readable($dir)) {
+            chdir($dir);
             $this->setMessage('SVN cleanup')->exec(
                 function () {
                     ShellWrap::bash($this->getConfig()->getRootDir() . '/vendor/bin/svn-cleanup.sh');
                 }
             );
         } else {
-            $this->setError("Folder \"{$this->getConfig()->getSvnRootDir()}\" not exist");
+            $this->setError("Folder '{$dir}' not exist");
         }
 
         return $this;

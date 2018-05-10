@@ -6,6 +6,7 @@ use Closure;
 use CrowdStar\SVNAgent\Config;
 use CrowdStar\SVNAgent\Error;
 use CrowdStar\SVNAgent\Exceptions\ClientException;
+use CrowdStar\SVNAgent\PathHelper;
 use CrowdStar\SVNAgent\Request;
 use CrowdStar\SVNAgent\Response;
 use CrowdStar\SVNAgent\Traits\LoggerTrait;
@@ -30,11 +31,6 @@ abstract class AbstractAction
     protected $config;
 
     /**
-     * @var array
-     */
-    protected $data;
-
-    /**
      * @var Request
      */
     protected $request;
@@ -43,6 +39,11 @@ abstract class AbstractAction
      * @var Response
      */
     protected $response;
+
+    /**
+     * @var string
+     */
+    protected $path;
 
     /**
      * @var string
@@ -59,9 +60,9 @@ abstract class AbstractAction
     public function __construct(Request $request, Logger $logger = null)
     {
         $this
+            ->setConfig(Config::singleton())
             ->setRequest($request)
-            ->setLogger(($logger ?: $request->getLogger()), 'action')
-            ->setConfig(Config::singleton());
+            ->setLogger(($logger ?: $request->getLogger()), 'action');
     }
 
     /**
@@ -149,6 +150,8 @@ abstract class AbstractAction
             throw new ClientException('SVN credential missing');
         }
 
+        $this->setPath($request->get('path'));
+
         $this->request = $request;
 
         return $this;
@@ -180,6 +183,49 @@ abstract class AbstractAction
     protected function setResponseMessage(string $responseMessage): AbstractAction
     {
         $this->getResponse()->setResponse($responseMessage);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getPath(): string
+    {
+        return $this->path;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSvnUri(): string
+    {
+        return $this->getConfig()->getSvnRoot() . $this->getPath();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSvnDir(): string
+    {
+        return $this->getConfig()->getSvnRootDir() . $this->getPath();
+    }
+
+    /**
+     * @param string $path
+     * @return $this
+     * @throws ClientException
+     */
+    protected function setPath(string $path): AbstractAction
+    {
+        $path = PathHelper::trim($path);
+        if (empty($path) && !($this instanceof TestActionInterface)) {
+            throw new ClientException('SVN path is empty');
+        }
+
+        // SVN URL like https://svn.apache.org/repos/asf (without trailing slash) returns HTTP 301 response back.
+        // Here we make sure there are always slashes before and after given SVN path.
+        $this->path = DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR;
 
         return $this;
     }

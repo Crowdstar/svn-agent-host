@@ -16,33 +16,28 @@ class Checkout extends AbstractAction
      */
     public function processAction(): AbstractAction
     {
-        $path = trim($this->getRequest()->get('path'));
-        if (!empty($path)) {
-            $url = $this->getConfig()->getSvnRoot() . $path;
-            $dir = $this->getConfig()->getSvnRootDir() . $path;
-            if (!is_dir($dir)) {
-                if (!is_dir(dirname($dir))) {
-                    mkdir(dirname($dir), 0755, true);
-                }
-
-                $this->setMessage('SVN checkout')->exec(
-                    function () use ($url, $dir) {
-                        ShellWrap::svn(
-                            'checkout',
-                            '--username',
-                            $this->getRequest()->getUsername(),
-                            '--password',
-                            $this->getRequest()->getPassword(),
-                            $url,
-                            $dir
-                        );
-                    }
-                );
-            } else {
-                $this->setError("Folder '{$dir}' already exists");
+        $url = $this->getSvnUri();
+        $dir = $this->getSvnDir();
+        if (!is_dir($dir)) {
+            if (!is_dir(dirname($dir))) {
+                mkdir(dirname($dir), 0755, true);
             }
+
+            $this->setMessage('SVN checkout')->exec(
+                function () use ($url, $dir) {
+                    ShellWrap::svn(
+                        'checkout',
+                        '--username',
+                        $this->getRequest()->getUsername(),
+                        '--password',
+                        $this->getRequest()->getPassword(),
+                        $url,
+                        $dir
+                    );
+                }
+            );
         } else {
-            $this->setError('Path not passed in when trying to do SVN checkout');
+            $this->setError("Folder '{$dir}' already exists");
         }
 
         return $this;

@@ -16,14 +16,15 @@ class Status extends AbstractAction
      */
     public function processAction(): AbstractAction
     {
-        if (is_readable($this->getConfig()->getSvnRootDir())) {
+        $dir = $this->getSvnDir();
+        if (is_readable($dir)) {
             $this->setMessage('SVN status')->exec(
-                function () {
-                    ShellWrap::svn('status', $this->getConfig()->getSvnRootDir());
+                function () use ($dir) {
+                    ShellWrap::svn('status', $dir);
                 }
             );
         } else {
-            $this->setError("Folder \"{$this->getConfig()->getSvnRootDir()}\" not exist");
+            $this->setError("Folder '{$dir}' not exist");
         }
 
         return $this;
