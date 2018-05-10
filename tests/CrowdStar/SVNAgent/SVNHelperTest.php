@@ -20,22 +20,22 @@ class SVNHelperTest extends TestCase
         return [
             [
                 false,
-                'http://example.com',
+                'http://example.com/',
                 'not even a SVN path',
             ],
             [
                 true,
-                'https://svn.apache.org/repos/asf',
+                'https://github.com/Crowdstar/svn-agent-host/',
                 'root directory of the SVN repository',
             ],
             [
                 true,
-                'https://svn.apache.org/repos/asf/subversion/trunk',
+                'https://github.com/Crowdstar/svn-agent-host/trunk/',
                 'branch trunk of the SVN repository',
             ],
             [
                 false,
-                'https://svn.apache.org/repos/asf/subversion/trunk/directory-not-exist',
+                'https://github.com/Crowdstar/svn-agent-host/trunk/directory-not-exist/',
                 'a non-existing path under the SVN repository',
             ],
         ];
