@@ -92,7 +92,7 @@ class Config
      */
     public function getRootDir(): string
     {
-        return $this->rtrim(getenv(self::SVN_AGENT_ROOT_DIR));
+        return PathHelper::rtrim(getenv(self::SVN_AGENT_ROOT_DIR));
     }
 
     /**
@@ -100,7 +100,7 @@ class Config
      */
     public function getSvnRootDir(): string
     {
-        return $this->rtrim(getenv(self::SVN_AGENT_SVN_ROOT_DIR));
+        return PathHelper::rtrim(getenv(self::SVN_AGENT_SVN_ROOT_DIR));
     }
 
     /**
@@ -108,15 +108,6 @@ class Config
      */
     public function getSvnRoot(): string
     {
-        return $this->rtrim(getenv(self::SVN_AGENT_SVN_ROOT));
-    }
-
-    /**
-     * @param string $dir
-     * @return string
-     */
-    protected function rtrim(string $dir): string
-    {
-        return rtrim($dir, DIRECTORY_SEPARATOR);
+        return PathHelper::rtrim(getenv(self::SVN_AGENT_SVN_ROOT));
     }
 }
