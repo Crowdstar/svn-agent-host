@@ -2,7 +2,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
-use MrRio\ShellWrap as sh;
+use MrRio\ShellWrap;
 
 /**
  * Class Checkout
@@ -19,7 +19,7 @@ class Status extends AbstractAction
         if (is_readable($this->getConfig()->getSvnRootDir())) {
             $this->setMessage('SVN status')->exec(
                 function () {
-                    sh::svn('status', $this->getConfig()->getSvnRootDir());
+                    ShellWrap::svn('status', $this->getConfig()->getSvnRootDir());
                 }
             );
         } else {

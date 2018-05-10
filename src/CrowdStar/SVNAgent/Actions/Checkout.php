@@ -2,7 +2,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
-use MrRio\ShellWrap as sh;
+use MrRio\ShellWrap;
 
 /**
  * Class Checkout
@@ -27,7 +27,7 @@ class Checkout extends AbstractAction
 
                 $this->setMessage('SVN checkout')->exec(
                     function () use ($url, $dir) {
-                        sh::svn(
+                        ShellWrap::svn(
                             'checkout',
                             '--username',
                             $this->getRequest()->getUsername(),

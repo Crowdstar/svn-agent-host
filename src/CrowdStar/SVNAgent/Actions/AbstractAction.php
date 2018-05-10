@@ -10,7 +10,7 @@ use CrowdStar\SVNAgent\Request;
 use CrowdStar\SVNAgent\Response;
 use CrowdStar\SVNAgent\Traits\LoggerTrait;
 use Monolog\Logger;
-use MrRio\ShellWrap as sh;
+use MrRio\ShellWrap;
 use MrRio\ShellWrapException;
 use NinjaMutex\Lock\FlockLock;
 use NinjaMutex\Mutex;
@@ -95,7 +95,7 @@ abstract class AbstractAction
      */
     protected function exec(Closure ...$array): AbstractAction
     {
-        $sh      = new sh();
+        $sh      = new ShellWrap();
         $results = [];
         try {
             $this->getLogger()->info("now executing command: {$this->getMessage()}");

@@ -2,7 +2,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
-use MrRio\ShellWrap as sh;
+use MrRio\ShellWrap;
 
 /**
  * Class Checkout
@@ -20,7 +20,7 @@ class Cleanup extends AbstractAction
             chdir($this->getConfig()->getSvnRootDir());
             $this->setMessage('SVN cleanup')->exec(
                 function () {
-                    sh::bash($this->getConfig()->getRootDir() . '/vendor/bin/svn-cleanup.sh');
+                    ShellWrap::bash($this->getConfig()->getRootDir() . '/vendor/bin/svn-cleanup.sh');
                 }
             );
         } else {
