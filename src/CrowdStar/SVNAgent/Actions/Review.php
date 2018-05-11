@@ -6,6 +6,7 @@ use MrRio\ShellWrap;
 
 /**
  * Class Review
+ * Review local SVN changes under given directory.
  *
  * @package CrowdStar\SVNAgent\Actions
  */

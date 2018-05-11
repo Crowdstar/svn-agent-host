@@ -4,6 +4,7 @@ namespace CrowdStar\SVNAgent\Actions;
 
 /**
  * Class Sleep
+ * Sleep for 15 seconds without doing anything.
  *
  * @package CrowdStar\SVNAgent\Actions
  */

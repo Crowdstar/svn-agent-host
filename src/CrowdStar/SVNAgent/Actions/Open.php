@@ -6,6 +6,7 @@ use MrRio\ShellWrap;
 
 /**
  * Class Open
+ * Open given directory in Finder.
  *
  * @package CrowdStar\SVNAgent\Actions
  */

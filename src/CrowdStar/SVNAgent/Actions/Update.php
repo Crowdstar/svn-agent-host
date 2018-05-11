@@ -7,6 +7,7 @@ use MrRio\ShellWrap;
 
 /**
  * Class Update
+ * If given directory not exists, checkout SVN path to under it; otherwise, update SVN repository under that directory.
  *
  * @package CrowdStar\SVNAgent\Actions
  */

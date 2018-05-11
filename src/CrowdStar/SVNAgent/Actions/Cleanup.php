@@ -6,6 +6,7 @@ use MrRio\ShellWrap;
 
 /**
  * Class Cleanup
+ * Clean up and discard local SVN changes under given directory.
  *
  * @package CrowdStar\SVNAgent\Actions
  */

@@ -7,6 +7,7 @@ use MrRio\ShellWrapException;
 
 /**
  * Class Commit
+ * Commit all local changes under given directory to SVN.
  *
  * @package CrowdStar\SVNAgent\Actions
  */
