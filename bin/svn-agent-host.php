@@ -48,8 +48,10 @@ try {
     $response = (new Response())->setError($e->getMessage());
 } catch (Exception $e) {
     $response = (new Response())->setError('Backend issue. Please check with Home backend developers for helps.');
+    $config->getLogger()->error(get_class($e) . ': ' . $e->getMessage());
 } catch (\Exception $e) {
     $response = (new Response())->setError('Unknown issue. Please check with Home backend developers for helps.');
+    $config->getLogger()->error(get_class($e) . ': ' . $e->getMessage());
 }
 $response->sendResponse();
 
