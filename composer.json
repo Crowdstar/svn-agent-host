@@ -22,6 +22,7 @@
     }
   },
   "bin": [
+    "bin/kill-host-processes.sh",
     "bin/svn-agent-host.php",
     "bin/svn-cleanup.sh"
   ],
