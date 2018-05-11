@@ -2,6 +2,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\SVNHelper;
 use MrRio\ShellWrap;
 
 /**
@@ -37,7 +38,29 @@ class Checkout extends AbstractAction
                 }
             );
         } else {
-            $this->setError("Folder '{$dir}' already exists");
+            chdir($dir);
+
+            $sh = new ShellWrap();
+            ShellWrap::svn('info', '--show-item', 'url');
+            $currentUrl = trim((string) $sh);
+
+            if (SVNHelper::sameUrl($currentUrl, $url)) {
+                $this->setMessage('SVN update')->exec(
+                    function () use ($dir) {
+                        ShellWrap::svn(
+                            'update',
+                            '--username',
+                            $this->getRequest()->getUsername(),
+                            '--password',
+                            $this->getRequest()->getPassword()
+                        );
+                    }
+                );
+            } else {
+                $this->setError(
+                    "Folder '{$dir}' points to SVN URL $currentUrl which is different from expected URL $url"
+                );
+            }
         }
 
         return $this;

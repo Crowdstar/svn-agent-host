@@ -27,4 +27,14 @@ class SVNHelper
 
         return true;
     }
+
+    /**
+     * @param string $url1
+     * @param string $url2
+     * @return bool
+     */
+    public static function sameUrl(string $url1, string $url2): bool
+    {
+        return (PathHelper::rtrim($url1) == PathHelper::rtrim($url2));
+    }
 }
