@@ -13,16 +13,18 @@ use Monolog\Logger;
  */
 class ActionFactory
 {
-    const SVN_CHECKOUT = 'checkout';
-    const SVN_STATUS   = 'status';
-    const SVN_CLEANUP  = 'cleanup';
-    const TEST_SLEEP   =  'sleep';
+    const SVN_CLEANUP = 'cleanup';
+    const SVN_COMMIT  = 'commit';
+    const SVN_REVIEW  = 'review';
+    const SVN_UPDATE  = 'update';
+    const TEST_SLEEP  = 'sleep';
 
     const ACTION_CLASSES = [
-        self::SVN_CHECKOUT => Checkout::class,
-        self::SVN_STATUS   => Status::class,
-        self::SVN_CLEANUP  => Cleanup::class,
-        self::TEST_SLEEP   => Sleep::class,
+        self::SVN_CLEANUP => Cleanup::class,
+        self::SVN_COMMIT  => Commit::class,
+        self::SVN_REVIEW  => Review::class,
+        self::SVN_UPDATE  => Update::class,
+        self::TEST_SLEEP  => Sleep::class,
     ];
 
     /**

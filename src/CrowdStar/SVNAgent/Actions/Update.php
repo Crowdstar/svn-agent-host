@@ -6,11 +6,11 @@ use CrowdStar\SVNAgent\SVNHelper;
 use MrRio\ShellWrap;
 
 /**
- * Class Checkout
+ * Class Update
  *
  * @package CrowdStar\SVNAgent\Actions
  */
-class Checkout extends AbstractAction
+class Update extends AbstractAction
 {
     /**
      * @inheritdoc
