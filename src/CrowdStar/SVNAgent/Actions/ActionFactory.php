@@ -15,6 +15,7 @@ class ActionFactory
 {
     const SVN_CLEANUP = 'cleanup';
     const SVN_COMMIT  = 'commit';
+    const SVN_OPEN    = 'open';
     const SVN_REVIEW  = 'review';
     const SVN_UPDATE  = 'update';
     const TEST_SLEEP  = 'sleep';
@@ -22,6 +23,7 @@ class ActionFactory
     const ACTION_CLASSES = [
         self::SVN_CLEANUP => Cleanup::class,
         self::SVN_COMMIT  => Commit::class,
+        self::SVN_OPEN    => Open::class,
         self::SVN_REVIEW  => Review::class,
         self::SVN_UPDATE  => Update::class,
         self::TEST_SLEEP  => Sleep::class,
