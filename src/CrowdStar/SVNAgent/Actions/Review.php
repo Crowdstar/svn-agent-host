@@ -5,11 +5,11 @@ namespace CrowdStar\SVNAgent\Actions;
 use MrRio\ShellWrap;
 
 /**
- * Class Status
+ * Class Review
  *
  * @package CrowdStar\SVNAgent\Actions
  */
-class Status extends AbstractAction
+class Review extends AbstractAction
 {
     /**
      * @inheritdoc
@@ -18,7 +18,7 @@ class Status extends AbstractAction
     {
         $dir = $this->getSvnDir();
         if (is_readable($dir)) {
-            $this->setMessage('SVN status')->exec(
+            $this->setMessage('SVN review')->exec(
                 function () use ($dir) {
                     ShellWrap::svn('status', $dir);
                 }
