@@ -72,7 +72,7 @@ abstract class AbstractAction
     {
         $this->setResponse(new Response($this->getLogger()));
 
-        $mutex = new Mutex('svn-agent', new FlockLock($this->getConfig()->getRootDir()));
+        $mutex = $this->getMutex();
         if ($mutex->acquireLock(0)) {
             $this->processAction();
             $mutex->releaseLock();
@@ -247,6 +247,14 @@ abstract class AbstractAction
         $this->message = $message;
 
         return $this;
+    }
+
+    /**
+     * @return Mutex
+     */
+    protected function getMutex(): Mutex
+    {
+        return new Mutex(getenv(Config::SVN_AGENT_MUTEX_NAME), new FlockLock($this->getConfig()->getRootDir()));
     }
 
     /**

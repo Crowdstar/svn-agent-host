@@ -21,6 +21,7 @@ class Config
     const SVN_AGENT_ROOT_DIR     = 'SVN_AGENT_ROOT_DIR';
     const SVN_AGENT_SVN_ROOT_DIR = 'SVN_AGENT_SVN_ROOT_DIR';
     const SVN_AGENT_SVN_ROOT     = 'SVN_AGENT_SVN_ROOT';
+    const SVN_AGENT_MUTEX_NAME   = 'SVN_AGENT_MUTEX_NAME';
     const SVN_AGENT_LOGFILE      = 'SVN_AGENT_LOGFILE';
     const SVN_AGENT_TIMEZONE     = 'SVN_AGENT_TIMEZONE';
 
@@ -28,6 +29,7 @@ class Config
         self::SVN_AGENT_ROOT_DIR,
         self::SVN_AGENT_SVN_ROOT_DIR,
         self::SVN_AGENT_SVN_ROOT,
+        self::SVN_AGENT_MUTEX_NAME,
         self::SVN_AGENT_LOGFILE,
         self::SVN_AGENT_TIMEZONE,
     ];

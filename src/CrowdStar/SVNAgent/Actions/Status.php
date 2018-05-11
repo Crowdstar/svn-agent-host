@@ -5,7 +5,7 @@ namespace CrowdStar\SVNAgent\Actions;
 use MrRio\ShellWrap;
 
 /**
- * Class Checkout
+ * Class Status
  *
  * @package CrowdStar\SVNAgent\Actions
  */
