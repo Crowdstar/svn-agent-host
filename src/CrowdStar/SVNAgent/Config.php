@@ -23,6 +23,7 @@ class Config
     const SVN_AGENT_SVN_ROOT     = 'SVN_AGENT_SVN_ROOT';
     const SVN_AGENT_MUTEX_NAME   = 'SVN_AGENT_MUTEX_NAME';
     const SVN_AGENT_LOGFILE      = 'SVN_AGENT_LOGFILE';
+    const SVN_AGENT_EXTENSION_ID = 'SVN_AGENT_EXTENSION_ID';
     const SVN_AGENT_TIMEZONE     = 'SVN_AGENT_TIMEZONE';
 
     const REQUIRED_ENVIRONMENT_VARIABLES = [
@@ -31,6 +32,7 @@ class Config
         self::SVN_AGENT_SVN_ROOT,
         self::SVN_AGENT_MUTEX_NAME,
         self::SVN_AGENT_LOGFILE,
+        self::SVN_AGENT_EXTENSION_ID,
         self::SVN_AGENT_TIMEZONE,
     ];
 

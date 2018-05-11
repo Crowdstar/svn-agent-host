@@ -150,7 +150,9 @@ abstract class AbstractAction
             throw new ClientException('SVN credential missing');
         }
 
-        $this->setPath($request->get('path'));
+        if (!($this instanceof PathNotRequiredActionInterface) && !($this instanceof TestActionInterface)) {
+            $this->setPath($request->get('path'));
+        }
 
         $this->request = $request;
 
@@ -219,7 +221,7 @@ abstract class AbstractAction
     protected function setPath(string $path): AbstractAction
     {
         $path = PathHelper::trim($path);
-        if (empty($path) && !($this instanceof TestActionInterface)) {
+        if (empty($path)) {
             throw new ClientException('SVN path is empty');
         }
 
