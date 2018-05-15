@@ -4,5 +4,7 @@
 set -ex
 
 # pwd
-svn st | grep '^?' | awk '{print $2}' | xargs rm -rf
 svn cleanup
+svn st | grep '^?' | awk '{print $2}' | xargs rm -rf
+svn st | grep '^!' | awk '{print $2}' | xargs svn revert -R
+svn st | grep '^M' | awk '{print $2}' | xargs svn revert -R
