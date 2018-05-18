@@ -62,7 +62,7 @@ abstract class AbstractAction
         $this
             ->setConfig(Config::singleton())
             ->setRequest($request)
-            ->setLogger(($logger ?: $request->getLogger()), 'action');
+            ->setLogger(($logger ?: $request->getLogger()));
     }
 
     /**

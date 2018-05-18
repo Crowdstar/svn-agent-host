@@ -13,33 +13,9 @@ use Monolog\Logger;
 trait LoggerTrait
 {
     /**
-     * @var string
-     */
-    protected $loggerName = '';
-
-    /**
      * @var Logger
      */
     protected $logger;
-
-    /**
-     * @return string
-     */
-    public function getLoggerName(): string
-    {
-        return $this->loggerName;
-    }
-
-    /**
-     * @param string $loggerName
-     * @return $this
-     */
-    public function setLoggerName(string $loggerName)
-    {
-        $this->loggerName = $loggerName;
-
-        return $this;
-    }
 
     /**
      * @return Logger
@@ -51,14 +27,11 @@ trait LoggerTrait
 
     /**
      * @param Logger|null $logger
-     * @param string $loggerName
      * @return $this
      */
-    public function setLogger($logger, string $loggerName = null)
+    public function setLogger($logger)
     {
-        $logger       = $logger ?: Config::singleton()->getLogger();
-        $loggerName   = $loggerName ?? $this->getLoggerName();
-        $this->logger = ($loggerName ? $logger->withName($loggerName) : $logger);
+        $this->logger = $logger ?: Config::singleton()->getLogger();
 
         return $this;
     }

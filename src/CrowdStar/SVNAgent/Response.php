@@ -31,7 +31,7 @@ class Response
      */
     public function __construct(Logger $logger = null)
     {
-        $this->setLogger($logger, 'response');
+        $this->setLogger($logger);
     }
 
     /**

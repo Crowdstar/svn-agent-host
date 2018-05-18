@@ -42,7 +42,7 @@ class Request
      */
     public function __construct(Logger $logger = null)
     {
-        $this->setLogger($logger, 'request');
+        $this->setLogger($logger);
     }
 
     /**

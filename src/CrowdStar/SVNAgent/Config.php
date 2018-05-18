@@ -6,6 +6,7 @@ use CrowdStar\SVNAgent\Traits\LoggerTrait;
 use Dotenv\Dotenv;
 use Exception;
 use Monolog\ErrorHandler;
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
@@ -82,8 +83,10 @@ class Config
 
         date_default_timezone_set(getenv(self::SVN_AGENT_TIMEZONE));
 
-        $logger = new Logger('SVN Agent');
-        $logger->pushHandler(new StreamHandler(getenv(self::SVN_AGENT_LOGFILE), Logger::DEBUG));
+        $logger  = new Logger(getmypid());
+        $handler = new StreamHandler(getenv(self::SVN_AGENT_LOGFILE), Logger::DEBUG);
+        $handler->setFormatter(new LineFormatter(null, null, false, true));
+        $logger->pushHandler($handler);
         $this->setLogger($logger);
 
         ErrorHandler::register($this->getLogger());
