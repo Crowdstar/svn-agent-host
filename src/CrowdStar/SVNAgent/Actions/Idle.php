@@ -3,13 +3,18 @@
 namespace CrowdStar\SVNAgent\Actions;
 
 /**
- * Class Sleep
- * Sleep for 15 seconds without doing anything.
+ * Class Idle
+ * To idle for a while without doing anything.
  *
  * @package CrowdStar\SVNAgent\Actions
  */
-class Sleep extends AbstractAction implements TestActionInterface
+class Idle extends AbstractAction implements TestActionInterface
 {
+    /**
+     * Maximum number of seconds to idle.
+     */
+    const MAX_SECONDS = 300;
+
     /**
      * @var int
      */
@@ -20,8 +25,10 @@ class Sleep extends AbstractAction implements TestActionInterface
      */
     public function processAction(): AbstractAction
     {
-        sleep($this->getSeconds());
-        $this->setMessage('sleep')->setResponseMessage("slept for {$this->getSeconds()} seconds.");
+        $time = time();
+        while ((time() - $time) < min($this->getSeconds(), self::MAX_SECONDS)) {
+        }
+        $this->setMessage('idle')->setResponseMessage("to idle for {$this->getSeconds()} seconds.");
 
         return $this;
     }
@@ -38,7 +45,7 @@ class Sleep extends AbstractAction implements TestActionInterface
      * @param int $seconds
      * @return $this
      */
-    public function setSeconds(int $seconds): Sleep
+    public function setSeconds(int $seconds): Idle
     {
         $this->seconds = $seconds;
 

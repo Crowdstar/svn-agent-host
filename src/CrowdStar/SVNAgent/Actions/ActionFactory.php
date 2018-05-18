@@ -19,7 +19,7 @@ class ActionFactory
     const SVN_REVIEW  = 'review';
     const SVN_UNLOCK  = 'unlock';
     const SVN_UPDATE  = 'update';
-    const TEST_SLEEP  = 'sleep';
+    const TEST_IDLE   = 'idle';
 
     const ACTION_CLASSES = [
         self::SVN_CLEANUP => Cleanup::class,
@@ -28,7 +28,7 @@ class ActionFactory
         self::SVN_REVIEW  => Review::class,
         self::SVN_UNLOCK  => Unlock::class,
         self::SVN_UPDATE  => Update::class,
-        self::TEST_SLEEP  => Sleep::class,
+        self::TEST_IDLE   => Idle::class,
     ];
 
     /**
