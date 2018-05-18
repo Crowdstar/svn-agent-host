@@ -25,10 +25,11 @@ class Idle extends AbstractAction implements TestActionInterface
      */
     public function processAction(): AbstractAction
     {
-        $time = time();
-        while ((time() - $time) < min($this->getSeconds(), self::MAX_SECONDS)) {
+        $time    = time();
+        $seconds = min($this->getSeconds(), self::MAX_SECONDS);
+        while ((time() - $time) < $seconds) {
         }
-        $this->setMessage('idle')->setResponseMessage("to idle for {$this->getSeconds()} seconds.");
+        $this->setMessage('idle')->setResponseMessage("to idle for {$seconds} seconds.");
 
         return $this;
     }
