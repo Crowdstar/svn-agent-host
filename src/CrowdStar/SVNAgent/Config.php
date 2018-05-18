@@ -19,6 +19,11 @@ class Config
 {
     use LoggerTrait;
 
+    /**
+     * Default timeout to execute given action. In seconds.
+     */
+    const DEFAULT_TIMEOUT = 60;
+
     const SVN_AGENT_ROOT_DIR     = 'SVN_AGENT_ROOT_DIR';
     const SVN_AGENT_SVN_ROOT_DIR = 'SVN_AGENT_SVN_ROOT_DIR';
     const SVN_AGENT_SVN_ROOT     = 'SVN_AGENT_SVN_ROOT';

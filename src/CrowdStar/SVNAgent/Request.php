@@ -26,6 +26,11 @@ class Request
     protected $password;
 
     /**
+     * @var int
+     */
+    protected $timeout;
+
+    /**
      * @var string
      */
     protected $action;
@@ -58,11 +63,19 @@ class Request
         $this
             ->setUsername($data['username'] ? base64_decode($data['username']) : '')
             ->setPassword($data['password'] ? base64_decode($data['password']) : '')
+            ->setTimeout($data['timeout'] ? $data['timeout'] : Config::DEFAULT_TIMEOUT)
             ->setAction($data['action'] ?? '')
             ->setData($data['data'] ?? []);
 
-        $this->getLogger()->info('request action: ' . $this->getAction());
-        $this->getLogger()->info('request data: ' . json_encode($this->getData()));
+        // As soon as we have request data parsed, we set timeout accordingly.
+        set_time_limit($this->getTimeout());
+
+        $this->getLogger()->info('action requested', ['action' => $this->getAction(), 'timeout' => $this->timeout]);
+        if ($this->getData()) {
+            $this->getLogger()->info('request data received', $this->getData());
+        } else {
+            $this->getLogger()->info('request has no additional data include');
+        }
 
         return $this;
     }
@@ -101,6 +114,25 @@ class Request
     public function setPassword(string $password): Request
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimeout(): int
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * @param int $timeout
+     * @return $this
+     */
+    public function setTimeout(int $timeout): Request
+    {
+        $this->timeout = $timeout;
 
         return $this;
     }
