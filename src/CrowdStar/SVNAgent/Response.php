@@ -87,12 +87,20 @@ class Response
     }
 
     /**
+     * @return bool
+     */
+    public function hasError(): bool
+    {
+        return !empty($this->getError());
+    }
+
+    /**
      * @return string
      */
     public function __toString(): string
     {
         $data = [];
-        if ($this->getError()) {
+        if ($this->hasError()) {
             $data['error'] = $this->getError();
         } else {
             $data['response'] = $this->getResponse();

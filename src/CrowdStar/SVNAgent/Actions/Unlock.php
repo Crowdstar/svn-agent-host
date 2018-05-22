@@ -3,7 +3,6 @@
 namespace CrowdStar\SVNAgent\Actions;
 
 use CrowdStar\SVNAgent\Config;
-use CrowdStar\SVNAgent\Response;
 use MrRio\ShellWrap;
 use ReflectionClass;
 
@@ -14,15 +13,13 @@ use ReflectionClass;
  *
  * @package CrowdStar\SVNAgent\Actions
  */
-class Unlock extends AbstractAction implements PathNotRequiredActionInterface
+class Unlock extends AbstractAction implements LocklessActionInterface, PathNotRequiredActionInterface
 {
     /**
-     * @return AbstractAction
+     * @inheritdoc
      */
-    public function process(): AbstractAction
+    public function processAction(): AbstractAction
     {
-        $this->setResponse(new Response($this->getLogger()));
-
         $this->setMessage('unlock')->exec(
             function () {
                 $this->getLogger()->info('current pid is: ' . getmypid());
@@ -35,16 +32,6 @@ class Unlock extends AbstractAction implements PathNotRequiredActionInterface
             }
         );
 
-        $this->getLogger()->info('response: ' . $this->getResponse());
-
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function processAction(): AbstractAction
-    {
         return $this;
     }
 

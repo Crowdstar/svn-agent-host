@@ -26,7 +26,10 @@ class Request
     protected $password;
 
     /**
+     * Timeout for running lockable action through method \CrowdStar\SVNAgent\Actions\AbstractAction::process().
+     *
      * @var int
+     * @see \CrowdStar\SVNAgent\Actions\AbstractAction::process()
      */
     protected $timeout;
 
@@ -51,33 +54,39 @@ class Request
     }
 
     /**
+     * @param Logger|null $logger
      * @return $this
      */
-    public function readRequest(): Request
+    public static function readRequest(Logger $logger = null): Request
     {
+        $request = new Request($logger);
+
         $stdin = fopen('php://stdin', 'r');
         $len   = current(unpack('L', fread($stdin, 4)));
         $data  = $len ? json_decode(fread($stdin, $len), true) : [];
         fclose($stdin);
 
-        $this
+        $request
             ->setUsername($data['username'] ? base64_decode($data['username']) : '')
             ->setPassword($data['password'] ? base64_decode($data['password']) : '')
             ->setTimeout($data['timeout'] ? $data['timeout'] : Config::DEFAULT_TIMEOUT)
             ->setAction($data['action'] ?? '')
             ->setData($data['data'] ?? []);
 
-        // As soon as we have request data parsed, we set timeout accordingly.
-        set_time_limit($this->getTimeout());
-
-        $this->getLogger()->info('action requested', ['action' => $this->getAction(), 'timeout' => $this->timeout]);
-        if ($this->getData()) {
-            $this->getLogger()->info('request data received', $this->getData());
+        $request->getLogger()->info(
+            'action requested',
+            [
+                'action'  => $request->getAction(),
+                'timeout' => $request->getTimeout(),
+            ]
+        );
+        if ($request->getData()) {
+            $request->getLogger()->info('request data received', $request->getData());
         } else {
-            $this->getLogger()->info('request has no additional data include');
+            $request->getLogger()->info('request has no additional data include');
         }
 
-        return $this;
+        return $request;
     }
 
     /**

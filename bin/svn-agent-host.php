@@ -33,7 +33,6 @@ if (!$loaded) {
 use CrowdStar\SVNAgent\Actions\ActionFactory;
 use CrowdStar\SVNAgent\Config;
 use CrowdStar\SVNAgent\Exceptions\ClientException;
-use CrowdStar\SVNAgent\Exceptions\Exception;
 use CrowdStar\SVNAgent\Request;
 use CrowdStar\SVNAgent\Response;
 
@@ -41,17 +40,13 @@ $config = Config::singleton()->init($dir);
 
 $config->getLogger()->info('Native messaging host SVN Agent started');
 
-$request  = new Request();
 try {
-    $response = ActionFactory::fromRequest($request->readRequest())->process()->getResponse();
+    $action = ActionFactory::fromRequest(Request::readRequest());
 } catch (ClientException $e) {
     $response = (new Response())->setError($e->getMessage());
-} catch (Exception $e) {
-    $response = (new Response())->setError('Backend issue. Please check with Home backend developers for helps.');
-    $config->getLogger()->error(get_class($e) . ': ' . $e->getMessage());
-} catch (\Exception $e) {
-    $response = (new Response())->setError('Unknown issue. Please check with Home backend developers for helps.');
-    $config->getLogger()->error(get_class($e) . ': ' . $e->getMessage());
+}
+if (!empty($action)) {
+    $response = $action->run();
 }
 $response->sendResponse();
 

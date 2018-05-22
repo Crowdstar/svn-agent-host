@@ -6,6 +6,7 @@ use Closure;
 use CrowdStar\SVNAgent\Config;
 use CrowdStar\SVNAgent\Error;
 use CrowdStar\SVNAgent\Exceptions\ClientException;
+use CrowdStar\SVNAgent\Exceptions\Exception;
 use CrowdStar\SVNAgent\PathHelper;
 use CrowdStar\SVNAgent\Request;
 use CrowdStar\SVNAgent\Response;
@@ -61,8 +62,33 @@ abstract class AbstractAction
     {
         $this
             ->setConfig(Config::singleton())
+            ->setLogger(($logger ?: $request->getLogger()))
             ->setRequest($request)
-            ->setLogger(($logger ?: $request->getLogger()));
+            ->init();
+    }
+
+    /**
+     * @return Response
+     */
+    public function run(): Response
+    {
+        try {
+            $response = $this->process()->getResponse();
+        } catch (ClientException $e) {
+            $response = (new Response())->setError($e->getMessage());
+        } catch (Exception $e) {
+            $response = (new Response())->setError(
+                'Backend issue. Please check with Home backend developers for helps.'
+            );
+            $this->getLogger()->error(get_class($e) . ': ' . $e->getMessage());
+        } catch (\Exception $e) {
+            $response = (new Response())->setError(
+                'Unknown issue. Please check with Home backend developers for helps.'
+            );
+            $this->getLogger()->error(get_class($e) . ': ' . $e->getMessage());
+        }
+
+        return $response;
     }
 
     /**
@@ -72,12 +98,18 @@ abstract class AbstractAction
     {
         $this->setResponse(new Response($this->getLogger()));
 
-        $mutex = $this->getMutex();
-        if ($mutex->acquireLock(0)) {
+        if ($this instanceof LocklessActionInterface) {
             $this->processAction();
-            $mutex->releaseLock();
         } else {
-            $this->setError(Error::LOCK_FAILED);
+            set_time_limit($this->getRequest()->getTimeout());
+
+            $mutex = $this->getMutex();
+            if ($mutex->acquireLock(0)) {
+                $this->processAction();
+                $mutex->releaseLock();
+            } else {
+                $this->setError(Error::LOCK_FAILED);
+            }
         }
 
         $this->getLogger()->info('response: ' . $this->getResponse());
@@ -142,18 +174,9 @@ abstract class AbstractAction
     /**
      * @param Request $request
      * @return $this
-     * @throws ClientException
      */
     public function setRequest(Request $request): AbstractAction
     {
-        if (!$request->getUsername() || !$request->getPassword()) {
-            throw new ClientException('SVN credential missing');
-        }
-
-        if (!($this instanceof PathNotRequiredActionInterface) && !($this instanceof TestActionInterface)) {
-            $this->setPath($request->get('path'));
-        }
-
         $this->request = $request;
 
         return $this;
@@ -266,6 +289,36 @@ abstract class AbstractAction
     protected function setError(string $error): AbstractAction
     {
         $this->getResponse()->setError($error);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     * @throws ClientException
+     */
+    protected function init(): AbstractAction
+    {
+        if (!($this instanceof PathNotRequiredActionInterface)) {
+            $this->setPath($this->getRequest()->get('path'));
+        }
+
+        return $this->validate();
+    }
+
+    /**
+     * @return $this
+     * @throws ClientException
+     */
+    protected function validate(): AbstractAction
+    {
+        if (!$this->getRequest()->getUsername() || !$this->getRequest()->getPassword()) {
+            throw new ClientException('SVN credential missing');
+        }
+
+        if (!$this->path && !($this instanceof PathNotRequiredActionInterface)) {
+            throw new ClientException('field "path" not passed in as should');
+        }
 
         return $this;
     }

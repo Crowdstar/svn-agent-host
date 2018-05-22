@@ -8,7 +8,7 @@ namespace CrowdStar\SVNAgent\Actions;
  *
  * @package CrowdStar\SVNAgent\Actions
  */
-class Idle extends AbstractAction implements TestActionInterface
+class Idle extends AbstractAction implements PathNotRequiredActionInterface, TestActionInterface
 {
     /**
      * Maximum number of seconds to idle.
