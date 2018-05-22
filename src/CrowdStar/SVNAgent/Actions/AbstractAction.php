@@ -294,6 +294,14 @@ abstract class AbstractAction
     }
 
     /**
+     * @return bool
+     */
+    protected function hasError(): bool
+    {
+        return $this->getResponse()->hasError();
+    }
+
+    /**
      * @return $this
      * @throws ClientException
      */

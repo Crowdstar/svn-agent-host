@@ -2,6 +2,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\Exceptions\Exception;
 use CrowdStar\SVNAgent\SVNHelper;
 use MrRio\ShellWrap;
 
@@ -39,28 +40,31 @@ class Update extends AbstractAction
                 }
             );
         } else {
-            chdir($dir);
+            try {
+                $currentUrl = SVNHelper::getUrl($dir);
+            } catch (Exception $e) {
+                $this->setError($e->getMessage());
+            }
 
-            $sh = new ShellWrap();
-            ShellWrap::svn('info', '--show-item', 'url');
-            $currentUrl = trim((string) $sh);
-
-            if (SVNHelper::sameUrl($currentUrl, $url)) {
-                $this->setMessage('SVN update')->exec(
-                    function () use ($dir) {
-                        ShellWrap::svn(
-                            'update',
-                            '--username',
-                            $this->getRequest()->getUsername(),
-                            '--password',
-                            $this->getRequest()->getPassword()
-                        );
-                    }
-                );
-            } else {
-                $this->setError(
-                    "Folder '{$dir}' points to SVN URL $currentUrl which is different from expected URL $url"
-                );
+            if (!$this->hasError()) {
+                if (SVNHelper::sameUrl($currentUrl, $url)) {
+                    chdir($dir);
+                    $this->setMessage('SVN update')->exec(
+                        function () {
+                            ShellWrap::svn(
+                                'update',
+                                '--username',
+                                $this->getRequest()->getUsername(),
+                                '--password',
+                                $this->getRequest()->getPassword()
+                            );
+                        }
+                    );
+                } else {
+                    $this->setError(
+                        "Folder '{$dir}' points to SVN URL $currentUrl which is different from expected URL $url"
+                    );
+                }
             }
         }
 
