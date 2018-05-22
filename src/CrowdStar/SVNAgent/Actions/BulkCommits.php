@@ -30,7 +30,7 @@ class BulkCommits extends AbstractAction implements LocklessActionInterface, Pat
         $request = clone $this->getRequest();
         $request->setAction(ActionFactory::SVN_COMMIT);
 
-        $responseData = array_combine($this->getPaths(), 'uncommitted');
+        $responseData = array_fill_keys($this->getPaths(), 'uncommitted');
         foreach ($this->getPaths() as $path) {
             $request->setData(['path' => $path]);
             $response = (new Commit($request, $this->getLogger()))->run();

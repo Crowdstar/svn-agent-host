@@ -15,6 +15,7 @@ class Commit extends AbstractAction
 {
     /**
      * @inheritdoc
+     * @todo use a single script file to run all commands.
      */
     public function processAction(): AbstractAction
     {
@@ -46,6 +47,13 @@ class Commit extends AbstractAction
                         ]
                     );
                 }
+            );
+            ShellWrap::svn(
+                'up',
+                [
+                    'username' => $this->getRequest()->getUsername(),
+                    'password' => $this->getRequest()->getPassword(),
+                ]
             );
         } else {
             $this->setError("Folder '{$dir}' not exist");
