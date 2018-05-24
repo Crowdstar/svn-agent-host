@@ -33,10 +33,10 @@ abstract class AbstractBulkAction extends AbstractAction implements
 
     /**
      * @param array $paths
-     * @return BulkReview
+     * @return $this
      * @throws ClientException
      */
-    public function setPaths(array $paths): BulkReview
+    public function setPaths(array $paths): AbstractBulkAction
     {
         if (count($paths) > self::MAX_PATHS) {
             throw new ClientException('up to ' . self::MAX_PATHS . ' paths can be handled together');
