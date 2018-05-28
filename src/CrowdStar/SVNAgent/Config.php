@@ -20,6 +20,11 @@ class Config
     use LoggerTrait;
 
     /**
+     * The current system version.
+     */
+    const VERSION = '1.0.0';
+
+    /**
      * Default timeout to execute given action. In seconds.
      */
     const DEFAULT_TIMEOUT = 60;

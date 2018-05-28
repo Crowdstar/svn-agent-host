@@ -23,6 +23,7 @@ class ActionFactory
     const SVN_UNLOCK      = 'unlock';
     const SVN_UPDATE      = 'update';
     const TEST_IDLE       = 'idle';
+    const VERSION         = 'version';
 
     const ACTION_CLASSES = [
         self::SVN_BULK_REVIEW => BulkReview::class,
@@ -35,6 +36,7 @@ class ActionFactory
         self::SVN_UNLOCK      => Unlock::class,
         self::SVN_UPDATE      => Update::class,
         self::TEST_IDLE       => Idle::class,
+        self::VERSION         => Version::class,
     ];
 
     /**
