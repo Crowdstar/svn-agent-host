@@ -19,9 +19,10 @@ class Create extends AbstractAction
     public function processAction(): AbstractAction
     {
         $url = $this->getSvnUri();
+        $dir = $this->getSvnDir();
         if (!SVNHelper::urlExists($url, $this->getRequest())) {
             $this->setMessage('SVN mkdir')->exec(
-                function () use ($url) {
+                function () use ($url, $dir) {
                     ShellWrap::svn(
                         'mkdir',
                         $url,
@@ -32,12 +33,27 @@ class Create extends AbstractAction
                             'm'        => 'path added through SVN Agent',
                         ]
                     );
+                },
+                function () use ($url, $dir) {
+                    if (!is_dir(dirname($dir))) {
+                        mkdir(dirname($dir), 0755, true);
+                    }
+
+                    ShellWrap::svn(
+                        'checkout',
+                        '--username',
+                        $this->getRequest()->getUsername(),
+                        '--password',
+                        $this->getRequest()->getPassword(),
+                        $url,
+                        $dir
+                    );
                 }
             );
         }
 
         if (!$this->hasError()) {
-            $this->setResponseMessage("SVN path '{$url}' created. You can now check it out locally.");
+            $this->setResponseMessage("SVN path '{$url}' is created and has been checked out locally.");
         }
 
         return $this;
