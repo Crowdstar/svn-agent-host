@@ -2,6 +2,8 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\Response;
+
 /**
  * Class BulkReview
  * Review all local changes under given directories to SVN.
@@ -21,7 +23,7 @@ class BulkReview extends AbstractBulkAction
         $responseData = [];
         foreach ($this->getPaths() as $path) {
             $request->setData(['path' => $path]);
-            $response = (new Review($request, $this->getLogger()))->run();
+            $response = (new Review($request, new Response($this->getLogger()), $this->getLogger()))->run();
             if ($response->hasError()) {
                 $this->setError("Failed to review path {$path}:\n{$response->getError()}");
                 break;

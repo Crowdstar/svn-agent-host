@@ -55,15 +55,17 @@ abstract class AbstractAction
      * AbstractAction constructor.
      *
      * @param Request $request
+     * @param Response|null $response
      * @param Logger|null $logger
      * @throws ClientException
      */
-    public function __construct(Request $request, Logger $logger = null)
+    public function __construct(Request $request, Response $response = null, Logger $logger = null)
     {
         $this
             ->setConfig(Config::singleton())
             ->setLogger(($logger ?: $request->getLogger()))
             ->setRequest($request)
+            ->setResponse($response ?: new Response($this->getLogger()))
             ->init();
     }
 
@@ -73,31 +75,30 @@ abstract class AbstractAction
     public function run(): Response
     {
         try {
-            $response = $this->process()->getResponse();
+            $this->process()->getResponse();
         } catch (ClientException $e) {
-            $response = (new Response())->setError($e->getMessage());
+            $this->getResponse()->setError($e->getMessage());
         } catch (Exception $e) {
-            $response = (new Response())->setError(
+            $this->getResponse()->setError(
                 'Backend issue. Please check with Home backend developers for helps.'
             );
             $this->getLogger()->error(get_class($e) . ': ' . $e->getMessage());
         } catch (\Exception $e) {
-            $response = (new Response())->setError(
+            $this->getResponse()->setError(
                 'Unknown issue. Please check with Home backend developers for helps.'
             );
             $this->getLogger()->error(get_class($e) . ': ' . $e->getMessage());
         }
 
-        return $response;
+        return $this->getResponse();
     }
 
     /**
      * @return AbstractAction
+     * @throws ClientException
      */
     public function process(): AbstractAction
     {
-        $this->setResponse(new Response($this->getLogger()));
-
         if ($this instanceof LocklessActionInterface) {
             $this->processAction();
         } else {
@@ -110,6 +111,12 @@ abstract class AbstractAction
             } else {
                 $this->setError(Error::LOCK_FAILED);
             }
+        }
+
+        // Process post actions once current action is processed.
+        // TODO: handle response messages/errors properly when multiple actions there.
+        foreach ($this->getPostActions() as $action) {
+            $action->process();
         }
 
         $this->getLogger()->info('response: ' . $this->getResponse());
@@ -329,5 +336,14 @@ abstract class AbstractAction
         }
 
         return $this;
+    }
+
+    /**
+     * @return AbstractAction[]
+     * @throws ClientException
+     */
+    protected function getPostActions(): array
+    {
+        return [];
     }
 }

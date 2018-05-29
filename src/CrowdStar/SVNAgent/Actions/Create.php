@@ -10,6 +10,7 @@ use MrRio\ShellWrap;
  * If given directory not exists, create it in SVN.
  *
  * @package CrowdStar\SVNAgent\Actions
+ * @todo Update response message/error after SVN patch checked out locally.
  */
 class Create extends AbstractAction
 {
@@ -19,10 +20,9 @@ class Create extends AbstractAction
     public function processAction(): AbstractAction
     {
         $url = $this->getSvnUri();
-        $dir = $this->getSvnDir();
         if (!SVNHelper::urlExists($url, $this->getRequest())) {
             $this->setMessage('SVN mkdir')->exec(
-                function () use ($url, $dir) {
+                function () use ($url) {
                     ShellWrap::svn(
                         'mkdir',
                         $url,
@@ -33,29 +33,24 @@ class Create extends AbstractAction
                             'm'        => 'path added through SVN Agent',
                         ]
                     );
-                },
-                function () use ($url, $dir) {
-                    if (!is_dir(dirname($dir))) {
-                        mkdir(dirname($dir), 0755, true);
-                    }
-
-                    ShellWrap::svn(
-                        'checkout',
-                        '--username',
-                        $this->getRequest()->getUsername(),
-                        '--password',
-                        $this->getRequest()->getPassword(),
-                        $url,
-                        $dir
-                    );
                 }
             );
         }
 
         if (!$this->hasError()) {
-            $this->setResponseMessage("SVN path '{$url}' is created and has been checked out locally.");
+            $this->setResponseMessage("SVN path '{$url}' created. You can now check it out locally.");
         }
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getPostActions(): array
+    {
+        return [
+            new Update($this->getRequest(), $this->getResponse(), $this->getLogger()),
+        ];
     }
 }

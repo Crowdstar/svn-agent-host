@@ -2,6 +2,8 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\Response;
+
 /**
  * Class BulkCommits
  * Commit all local changes under given directories to SVN.
@@ -21,7 +23,7 @@ class BulkCommits extends AbstractBulkAction
         $responseData = array_fill_keys($this->getPaths(), 'uncommitted');
         foreach ($this->getPaths() as $path) {
             $request->setData(['path' => $path]);
-            $response = (new Commit($request, $this->getLogger()))->run();
+            $response = (new Commit($request, new Response($this->getLogger()), $this->getLogger()))->run();
             if ($response->hasError()) {
                 $responseData[$path] = $response->getError();
                 break;

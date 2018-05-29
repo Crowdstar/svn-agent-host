@@ -54,7 +54,7 @@ class ActionFactory
         if (array_key_exists($action, self::ACTION_CLASSES)) {
             $class = self::ACTION_CLASSES[$action];
 
-            return new $class($request, ($logger ?: $request->getLogger()));
+            return new $class($request, null, ($logger ?: $request->getLogger()));
         } else {
             throw new ClientException("unsupported SVN Agent action '{$action}'");
         }
