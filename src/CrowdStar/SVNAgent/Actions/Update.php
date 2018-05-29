@@ -26,47 +26,63 @@ class Update extends AbstractAction
                 mkdir(dirname($dir), 0755, true);
             }
 
-            $this->setMessage('SVN checkout')->exec(
-                function () use ($url, $dir) {
-                    ShellWrap::svn(
-                        'checkout',
-                        '--username',
-                        $this->getRequest()->getUsername(),
-                        '--password',
-                        $this->getRequest()->getPassword(),
-                        $url,
-                        $dir
-                    );
-                }
-            );
+            $this->checkout($url, $dir);
         } else {
-            try {
-                $currentUrl = SVNHelper::getUrl($dir);
-            } catch (Exception $e) {
-                $this->setError($e->getMessage());
-            }
-
-            if (!$this->hasError()) {
-                if (SVNHelper::sameUrl($currentUrl, $url)) {
-                    chdir($dir);
-                    $this->setMessage('SVN update')->exec(
-                        function () {
-                            ShellWrap::svn(
-                                'update',
-                                '--username',
-                                $this->getRequest()->getUsername(),
-                                '--password',
-                                $this->getRequest()->getPassword()
-                            );
-                        }
-                    );
-                } else {
-                    $this->setError(
-                        "Folder '{$dir}' points to SVN URL $currentUrl which is different from expected URL $url"
-                    );
+            if (SVNHelper::pathExists($dir)) {
+                try {
+                    $currentUrl = SVNHelper::getUrl($dir);
+                } catch (Exception $e) {
+                    $this->setError($e->getMessage());
                 }
+
+                if (!$this->hasError()) {
+                    if (SVNHelper::sameUrl($currentUrl, $url)) {
+                        chdir($dir);
+                        $this->setMessage('SVN update')->exec(
+                            function () {
+                                ShellWrap::svn(
+                                    'update',
+                                    '--username',
+                                    $this->getRequest()->getUsername(),
+                                    '--password',
+                                    $this->getRequest()->getPassword()
+                                );
+                            }
+                        );
+                    } else {
+                        $this->setError(
+                            "Folder '{$dir}' points to SVN URL $currentUrl which is different from expected URL $url"
+                        );
+                    }
+                }
+            } else {
+                $this->checkout($url, $dir);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @param string $url
+     * @param string $dir
+     * @return Update
+     */
+    protected function checkout(string $url, string $dir): Update
+    {
+        $this->setMessage('SVN checkout')->exec(
+            function () use ($url, $dir) {
+                ShellWrap::svn(
+                    'checkout',
+                    '--username',
+                    $this->getRequest()->getUsername(),
+                    '--password',
+                    $this->getRequest()->getPassword(),
+                    $url,
+                    $dir
+                );
+            }
+        );
 
         return $this;
     }
