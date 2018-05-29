@@ -18,6 +18,7 @@ class ActionFactory
     const SVN_COMMIT             = 'commit';
     const SVN_COMMITS            = 'commits';
     const SVN_CREATE             = 'create';
+    const SVN_EXIST              = 'exist';
     const SVN_OPEN               = 'open';
     const SVN_REVIEW             = 'review';
     const SVN_UNLOCK             = 'unlock';
@@ -32,6 +33,7 @@ class ActionFactory
         self::SVN_COMMIT             => Commit::class,
         self::SVN_COMMITS            => BulkCommits::class,
         self::SVN_CREATE             => Create::class,
+        self::SVN_EXIST              => Exist::class,
         self::SVN_OPEN               => Open::class,
         self::SVN_REVIEW             => Review::class,
         self::SVN_UNLOCK             => Unlock::class,
