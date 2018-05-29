@@ -10,6 +10,7 @@ use CrowdStar\SVNAgent\Exceptions\Exception;
 use CrowdStar\SVNAgent\PathHelper;
 use CrowdStar\SVNAgent\Request;
 use CrowdStar\SVNAgent\Response;
+use CrowdStar\SVNAgent\SVNHelper;
 use CrowdStar\SVNAgent\Traits\LoggerTrait;
 use Monolog\Logger;
 use MrRio\ShellWrap;
@@ -339,8 +340,24 @@ abstract class AbstractAction
     }
 
     /**
-     * @return AbstractAction[]
+     * @return AbstractAction
      * @throws ClientException
+     */
+    protected function initializeSvnPathWhenNeeded(): AbstractAction
+    {
+        if (!SVNHelper::pathExists($this->getSvnDir())) {
+            //TODO: better error handling when calling other actions from current action.
+            (new Create($this->getRequest(), new Response($this->getLogger()), $this->getLogger()))
+                ->processAction();
+            (new Update($this->getRequest(), new Response($this->getLogger()), $this->getLogger()))
+                ->processAction();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return AbstractAction[]
      */
     protected function getPostActions(): array
     {

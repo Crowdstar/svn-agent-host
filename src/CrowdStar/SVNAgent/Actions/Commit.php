@@ -2,8 +2,6 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
-use CrowdStar\SVNAgent\Response;
-use CrowdStar\SVNAgent\SVNHelper;
 use MrRio\ShellWrap;
 use MrRio\ShellWrapException;
 
@@ -25,13 +23,7 @@ class Commit extends AbstractAction
         if (is_readable($dir)) {
             chdir($dir);
 
-            if (!SVNHelper::pathExists($dir)) {
-                //TODO: better error handling when calling other actions from current action.
-                (new Create($this->getRequest(), new Response($this->getLogger()), $this->getLogger()))
-                    ->processAction();
-                (new Update($this->getRequest(), new Response($this->getLogger()), $this->getLogger()))
-                    ->processAction();
-            }
+            $this->initializeSvnPathWhenNeeded();
 
             // @see https://stackoverflow.com/a/11066348/2752269 svn delete removed files
             ShellWrap::svn(
