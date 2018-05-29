@@ -46,15 +46,21 @@ class Commit extends AbstractAction
                             'm'        => 'changes committed through SVN Agent',
                         ]
                     );
+
+                    // Delete the local folder after committed.
+                    // TODO: backup it first before deleting it.
+                    chdir('..');
+                    ShellWrap::rm('-rf', $dir);
                 }
             );
-            ShellWrap::svn(
-                'up',
-                [
-                    'username' => $this->getRequest()->getUsername(),
-                    'password' => $this->getRequest()->getPassword(),
-                ]
-            );
+
+            //ShellWrap::svn(
+            //    'up',
+            //    [
+            //        'username' => $this->getRequest()->getUsername(),
+            //        'password' => $this->getRequest()->getPassword(),
+            //    ]
+            //);
         } else {
             $this->setError("Folder '{$dir}' not exist");
         }
