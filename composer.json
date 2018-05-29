@@ -24,7 +24,8 @@
   "bin": [
     "bin/kill-host-processes.sh",
     "bin/svn-agent-host.php",
-    "bin/svn-cleanup.sh"
+    "bin/svn-cleanup.sh",
+    "bin/svn-save-credentials.sh"
   ],
   "config": {
     "discard-changes": true,
