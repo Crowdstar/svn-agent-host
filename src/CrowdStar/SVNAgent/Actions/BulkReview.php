@@ -2,6 +2,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\BulkResponse;
 use CrowdStar\SVNAgent\Response;
 
 /**
@@ -10,38 +11,30 @@ use CrowdStar\SVNAgent\Response;
  *
  * @package CrowdStar\SVNAgent\Actions
  */
-class BulkReview extends AbstractBulkAction
+class BulkReview extends AbstractBulkAction implements BulkActionInterface
 {
     /**
      * @inheritdoc
      */
     public function processAction(): AbstractAction
     {
-        $request = clone $this->getRequest();
+        /** @var BulkResponse $response */
+        $response = $this->getResponse();
+        $request  = clone $this->getRequest();
         $request->setAction(ActionFactory::SVN_REVIEW);
 
-        $responseData = [];
+        $skip = false;
         foreach ($this->getPaths() as $path) {
-            $request->setData(['path' => $path]);
-            $response = (new Review($request, new Response($this->getLogger()), $this->getLogger()))->run();
-            if ($response->hasError()) {
-                $this->setError("Failed to review path {$path}:\n{$response->getError()}");
-                break;
+            if (!$skip) {
+                $request->setData(['path' => $path]);
+                $r = (new Review($request, new Response($this->getLogger()), $this->getLogger()))->run();
+                $response->addResponse($r);
+                if ($r->hasError()) {
+                    $skip = true;
+                }
             } else {
-                $responseData[$path] = $response->getResponse();
+                $response->addResponse((new Response())->setMessage('skipped because error found'));
             }
-        }
-
-        if (!$this->hasError()) {
-            $this->setResponseMessage(
-                array_reduce(
-                    array_keys($responseData),
-                    function ($carry, $path) use ($responseData) {
-                        return ($carry ? "{$carry}\n\n" : "") . "{$path}:\n{$responseData[$path]}";
-                    },
-                    ''
-                )
-            );
         }
 
         return $this;

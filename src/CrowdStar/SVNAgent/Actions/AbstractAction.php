@@ -3,6 +3,8 @@
 namespace CrowdStar\SVNAgent\Actions;
 
 use Closure;
+use CrowdStar\SVNAgent\AbstractResponse;
+use CrowdStar\SVNAgent\BulkResponse;
 use CrowdStar\SVNAgent\Config;
 use CrowdStar\SVNAgent\Error;
 use CrowdStar\SVNAgent\Exceptions\ClientException;
@@ -38,7 +40,7 @@ abstract class AbstractAction
     protected $request;
 
     /**
-     * @var Response
+     * @var AbstractResponse
      */
     protected $response;
 
@@ -56,24 +58,32 @@ abstract class AbstractAction
      * AbstractAction constructor.
      *
      * @param Request $request
-     * @param Response|null $response
+     * @param AbstractResponse|null $response
      * @param Logger|null $logger
      * @throws ClientException
      */
-    public function __construct(Request $request, Response $response = null, Logger $logger = null)
+    public function __construct(Request $request, AbstractResponse $response = null, Logger $logger = null)
     {
         $this
             ->setConfig(Config::singleton())
             ->setLogger(($logger ?: $request->getLogger()))
-            ->setRequest($request)
-            ->setResponse($response ?: new Response($this->getLogger()))
-            ->init();
+            ->setRequest($request);
+
+        if (!$response) {
+            if ($this instanceof BulkActionInterface) {
+                $response = new BulkResponse($this->getLogger());
+            } else {
+                $response = new Response($this->getLogger());
+            }
+        }
+
+        $this->setResponse($response)->init();
     }
 
     /**
-     * @return Response
+     * @return AbstractResponse
      */
-    public function run(): Response
+    public function run(): AbstractResponse
     {
         try {
             $this->process()->getResponse();
@@ -133,6 +143,7 @@ abstract class AbstractAction
     /**
      * @param Closure ...$array
      * @return AbstractAction
+     * @throws Exception
      */
     protected function exec(Closure ...$array): AbstractAction
     {
@@ -191,18 +202,18 @@ abstract class AbstractAction
     }
 
     /**
-     * @return Response
+     * @return AbstractResponse
      */
-    public function getResponse(): Response
+    public function getResponse(): AbstractResponse
     {
         return $this->response;
     }
 
     /**
-     * @param Response $response
+     * @param AbstractResponse $response
      * @return $this
      */
-    public function setResponse(Response $response): AbstractAction
+    public function setResponse(AbstractResponse $response): AbstractAction
     {
         $this->response = $response;
 
@@ -210,12 +221,25 @@ abstract class AbstractAction
     }
 
     /**
-     * @param string $responseMessage
+     * @param string $message
      * @return $this
+     * @throws Exception
      */
-    protected function setResponseMessage(string $responseMessage): AbstractAction
+    protected function setResponseMessage(string $message): AbstractAction
     {
-        $this->getResponse()->setResponse($responseMessage);
+        /** @var Response $response */
+        $response = $this->getResponse();
+        if (!($response instanceof Response)) {
+            throw new Exception(
+                sprintf(
+                    'The response property in this %s object should be a %s object but is a %s object',
+                    get_class($this),
+                    Response::class,
+                    get_class($this->getResponse())
+                )
+            );
+        }
+        $response->setMessage($message);
 
         return $this;
     }

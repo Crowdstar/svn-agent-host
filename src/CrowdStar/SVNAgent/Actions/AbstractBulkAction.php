@@ -52,9 +52,7 @@ abstract class AbstractBulkAction extends AbstractAction implements
      */
     protected function init(): AbstractAction
     {
-        $paths = $this->getRequest()->get('paths');
-
-        return $this->setPaths($paths ? explode(PATH_SEPARATOR, $paths) : [])->validate();
+        return $this->setPaths($this->getRequest()->get('paths'))->validate();
     }
 
     /**

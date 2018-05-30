@@ -2,6 +2,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\BulkResponse;
 use CrowdStar\SVNAgent\Response;
 
 /**
@@ -10,45 +11,33 @@ use CrowdStar\SVNAgent\Response;
  *
  * @package CrowdStar\SVNAgent\Actions
  */
-class BulkCommits extends AbstractBulkAction
+class BulkCommits extends AbstractBulkAction implements BulkActionInterface
 {
     /**
      * @inheritdoc
      */
     public function processAction(): AbstractAction
     {
-        $request = clone $this->getRequest();
+        /** @var BulkResponse $response */
+        $response = $this->getResponse();
+        $request  = clone $this->getRequest();
         $request->setAction(ActionFactory::SVN_COMMIT);
 
-        $responseData = array_fill_keys($this->getPaths(), 'uncommitted');
+        $skip = false;
         foreach ($this->getPaths() as $path) {
-            $request->setData(['path' => $path]);
-            $response = (new Commit($request, new Response($this->getLogger()), $this->getLogger()))->run();
-            if ($response->hasError()) {
-                $responseData[$path] = $response->getError();
-                break;
+            if (!$skip) {
+                $request->setData(['path' => $path]);
+                $r = (new Commit($request, new Response($this->getLogger()), $this->getLogger()))->run();
+                if ($r->hasError()) {
+                    $response->addResponse($r);
+                    $skip = true;
+                } else {
+                    $response->addResponse((new Response())->setMessage('committed'));
+                }
             } else {
-                $responseData[$path] = 'committed';
+                $response->addResponse((new Response())->setMessage('uncommitted'));
             }
         }
-
-        // This is just to combine response messages to a string in the format like:
-        //     /svn/path/1: committed.
-        //     /svn/path/2: committed.
-        //     /svn/path/3: committed.
-        // or
-        //     /svn/path/1: committed.
-        //     /svn/path/2: Folder '/svn/path/2' not exist.
-        //     /svn/path/3: uncommitted.
-        $this->setResponseMessage(
-            array_reduce(
-                array_keys($responseData),
-                function ($carry, $path) use ($responseData) {
-                    return ($carry ? "{$carry}\n" : "") . "{$path}: $responseData[$path].";
-                },
-                ''
-            )
-        );
 
         return $this;
     }
