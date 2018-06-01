@@ -13,7 +13,7 @@ use MrRio\ShellWrap;
  *
  * @package CrowdStar\SVNAgent\Actions
  */
-class Update extends AbstractAction
+class Update extends AbstractAction implements PathBasedActionInterface
 {
     /**
      * @inheritdoc

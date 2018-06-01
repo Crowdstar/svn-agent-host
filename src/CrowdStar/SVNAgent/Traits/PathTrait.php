@@ -31,7 +31,7 @@ trait PathTrait
      * @return $this
      * @throws ClientException
      */
-    protected function setPath(string $path)
+    public function setPath(string $path)
     {
         $path = PathHelper::trim($path);
         if (empty($path)) {

@@ -11,7 +11,7 @@ use MrRio\ShellWrap;
  *
  * @package CrowdStar\SVNAgent\Actions
  */
-class Review extends AbstractAction
+class Review extends AbstractAction implements PathBasedActionInterface
 {
     /**
      * @inheritdoc

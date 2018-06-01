@@ -12,7 +12,7 @@ use MrRio\ShellWrap;
  *
  * @package CrowdStar\SVNAgent\Actions
  */
-class Create extends AbstractAction
+class Create extends AbstractAction implements PathBasedActionInterface
 {
     use PathBasedResponseTrait;
 

@@ -11,7 +11,7 @@ use MrRio\ShellWrap;
  *
  * @package CrowdStar\SVNAgent\Actions
  */
-class Cleanup extends AbstractAction
+class Cleanup extends AbstractAction implements PathBasedActionInterface
 {
     use SimpleResponseTrait;
 

@@ -12,7 +12,7 @@ use MrRio\ShellWrapException;
  *
  * @package CrowdStar\SVNAgent\Actions
  */
-class Commit extends AbstractAction
+class Commit extends AbstractAction implements PathBasedActionInterface
 {
     use PathBasedResponseTrait;
 

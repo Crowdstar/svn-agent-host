@@ -22,15 +22,11 @@ class ErrorResponse extends AbstractResponse
     /**
      * ErrorResponse constructor.
      *
-     * @param string|null $error
+     * @param string $error
      */
-    public function __construct(string $error = null)
+    public function __construct(string $error)
     {
-        $this->initLogger();
-
-        if (isset($error)) {
-            $this->setError($error);
-        }
+        $this->initLogger()->setError($error);
     }
 
     /**

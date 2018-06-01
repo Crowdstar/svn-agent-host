@@ -10,6 +10,7 @@ use CrowdStar\SVNAgent\Exceptions\Exception;
 use CrowdStar\SVNAgent\Request;
 use CrowdStar\SVNAgent\Responses\AbstractResponse;
 use CrowdStar\SVNAgent\Responses\ErrorResponse;
+use CrowdStar\SVNAgent\Responses\PathBasedErrorResponse;
 use CrowdStar\SVNAgent\Responses\Response;
 use CrowdStar\SVNAgent\SVNHelper;
 use CrowdStar\SVNAgent\Traits\LoggerTrait;
@@ -265,11 +266,16 @@ abstract class AbstractAction
 
     /**
      * @param string $error
-     * @return $this
+     * @return AbstractAction
+     * @throws ClientException
      */
     protected function setError(string $error): AbstractAction
     {
-        $this->setResponse(new ErrorResponse($error));
+        if ($this instanceof PathBasedActionInterface) {
+            $this->setResponse((new PathBasedErrorResponse($error))->setPath($this->getPath()));
+        } else {
+            $this->setResponse(new ErrorResponse($error));
+        }
 
         return $this;
     }
