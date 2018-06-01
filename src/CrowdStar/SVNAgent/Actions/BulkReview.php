@@ -2,8 +2,8 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\Responses\BasicResponse;
 use CrowdStar\SVNAgent\Responses\BulkResponse;
-use CrowdStar\SVNAgent\Responses\Response;
 
 /**
  * Class BulkReview
@@ -25,7 +25,9 @@ class BulkReview extends AbstractBulkAction implements BulkActionInterface
 
         foreach ($this->getPaths() as $path) {
             $request->setData(['path' => $path]);
-            $response->addResponse((new Review($request, new Response($this->getLogger()), $this->getLogger()))->run());
+            $response->addResponse(
+                (new Review($request, new BasicResponse($this->getLogger()), $this->getLogger()))->run()
+            );
         }
 
         return $this;

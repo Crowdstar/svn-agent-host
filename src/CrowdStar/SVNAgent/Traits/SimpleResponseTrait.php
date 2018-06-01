@@ -3,7 +3,7 @@
 namespace CrowdStar\SVNAgent\Traits;
 
 use CrowdStar\SVNAgent\Actions\AbstractAction;
-use CrowdStar\SVNAgent\Responses\Response;
+use CrowdStar\SVNAgent\Responses\BasicResponse;
 
 /**
  * Trait SimpleResponseTrait
@@ -18,6 +18,6 @@ trait SimpleResponseTrait
      */
     protected function initResponse(): AbstractAction
     {
-        return $this->setResponse(new Response());
+        return $this->setResponse(new BasicResponse());
     }
 }

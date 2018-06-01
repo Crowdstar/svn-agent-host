@@ -9,9 +9,9 @@ use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Exceptions\Exception;
 use CrowdStar\SVNAgent\Request;
 use CrowdStar\SVNAgent\Responses\AbstractResponse;
+use CrowdStar\SVNAgent\Responses\BasicResponse;
 use CrowdStar\SVNAgent\Responses\ErrorResponse;
 use CrowdStar\SVNAgent\Responses\PathBasedErrorResponse;
-use CrowdStar\SVNAgent\Responses\Response;
 use CrowdStar\SVNAgent\SVNHelper;
 use CrowdStar\SVNAgent\Traits\LoggerTrait;
 use CrowdStar\SVNAgent\Traits\PathTrait;
@@ -75,16 +75,12 @@ abstract class AbstractAction
         try {
             $this->process()->getResponse();
         } catch (ClientException $e) {
-            $this->getResponse()->setError($e->getMessage());
+            $this->setError($e->getMessage());
         } catch (Exception $e) {
-            $this->getResponse()->setError(
-                'Backend issue. Please check with Home backend developers for helps.'
-            );
+            $this->setError('Backend issue. Please check with Home backend developers for helps.');
             $this->getLogger()->error(get_class($e) . ': ' . $e->getMessage());
         } catch (\Exception $e) {
-            $this->getResponse()->setError(
-                'Unknown issue. Please check with Home backend developers for helps.'
-            );
+            $this->setError('Unknown issue. Please check with Home backend developers for helps.');
             $this->getLogger()->error(get_class($e) . ': ' . $e->getMessage());
         }
 
@@ -331,9 +327,9 @@ abstract class AbstractAction
     {
         if (!SVNHelper::pathExists($this->getSvnDir())) {
             //TODO: better error handling when calling other actions from current action.
-            (new Create($this->getRequest(), new Response($this->getLogger()), $this->getLogger()))
+            (new Create($this->getRequest(), new BasicResponse($this->getLogger()), $this->getLogger()))
                 ->processAction();
-            (new Update($this->getRequest(), new Response($this->getLogger()), $this->getLogger()))
+            (new Update($this->getRequest(), new BasicResponse($this->getLogger()), $this->getLogger()))
                 ->processAction();
         }
 

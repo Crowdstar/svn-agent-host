@@ -34,7 +34,7 @@ use CrowdStar\SVNAgent\Actions\ActionFactory;
 use CrowdStar\SVNAgent\Config;
 use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Request;
-use CrowdStar\SVNAgent\Responses\Response;
+use CrowdStar\SVNAgent\Responses\ErrorResponse;
 
 $config = Config::singleton()->init($dir);
 
@@ -43,7 +43,7 @@ $config->getLogger()->info('Native messaging host SVN Agent started');
 try {
     $action = ActionFactory::fromRequest(Request::readRequest());
 } catch (ClientException $e) {
-    $response = (new Response())->setError($e->getMessage());
+    $response = new ErrorResponse($e->getMessage());
 }
 if (!empty($action)) {
     $response = $action->run();

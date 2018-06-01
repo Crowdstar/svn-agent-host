@@ -3,11 +3,11 @@
 namespace CrowdStar\SVNAgent\Responses;
 
 /**
- * Class Response
+ * Class BasicResponse
  *
  * @package CrowdStar\SVNAgent\Responses
  */
-class Response extends AbstractResponse
+class BasicResponse extends AbstractResponse
 {
     /**
      * @var string
@@ -26,7 +26,7 @@ class Response extends AbstractResponse
      * @param string $message
      * @return $this
      */
-    public function setMessage(string $message): Response
+    public function setMessage(string $message): BasicResponse
     {
         $this->message = $message;
 
