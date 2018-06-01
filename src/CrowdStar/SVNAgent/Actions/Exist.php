@@ -2,6 +2,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\Traits\SimpleResponseTrait;
 use CrowdStar\SVNAgent\SVNHelper;
 
 /**
@@ -11,6 +12,8 @@ use CrowdStar\SVNAgent\SVNHelper;
  */
 class Exist extends AbstractAction
 {
+    use SimpleResponseTrait;
+
     const TYPE_FOLDER = 'folder';
     const TYPE_URL    = 'url';
 
@@ -24,7 +27,7 @@ class Exist extends AbstractAction
             case self::TYPE_FOLDER:
                 $dir = $this->getSvnDir();
                 if (is_dir($dir)) {
-                    $this->setResponseMessage("Folder {$dir} exists");
+                    $this->prepareResponse("Folder {$dir} exists");
                 } else {
                     $this->setError("Folder {$dir} not exists");
                 }
@@ -32,7 +35,7 @@ class Exist extends AbstractAction
             case self::TYPE_URL:
                 $url = $this->getSvnUri();
                 if (SVNHelper::urlExists($url, $this->getRequest())) {
-                    $this->setResponseMessage("URL {$url} exists");
+                    $this->prepareResponse("URL {$url} exists");
                 } else {
                     $this->setError("URL {$url} not exists");
                 }

@@ -2,6 +2,8 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\Traits\SimpleResponseTrait;
+
 /**
  * Class Idle
  * To idle for a while without doing anything.
@@ -10,6 +12,8 @@ namespace CrowdStar\SVNAgent\Actions;
  */
 class Idle extends AbstractAction implements PathNotRequiredActionInterface, TestActionInterface
 {
+    use SimpleResponseTrait;
+
     /**
      * Maximum number of seconds to idle.
      */
@@ -29,7 +33,7 @@ class Idle extends AbstractAction implements PathNotRequiredActionInterface, Tes
         $seconds = min($this->getSeconds(), self::MAX_SECONDS);
         while ((time() - $time) < $seconds) {
         }
-        $this->setMessage('idle')->setResponseMessage("to idle for {$seconds} seconds.");
+        $this->setMessage('idle')->prepareResponse("to idle for {$seconds} seconds.");
 
         return $this;
     }

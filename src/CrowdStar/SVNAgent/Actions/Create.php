@@ -2,6 +2,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\Traits\PathBasedResponseTrait;
 use CrowdStar\SVNAgent\SVNHelper;
 use MrRio\ShellWrap;
 
@@ -10,10 +11,11 @@ use MrRio\ShellWrap;
  * If given directory not exists, create it in SVN.
  *
  * @package CrowdStar\SVNAgent\Actions
- * @todo Update response message/error after SVN patch checked out locally.
  */
 class Create extends AbstractAction
 {
+    use PathBasedResponseTrait;
+
     /**
      * @inheritdoc
      */
@@ -35,10 +37,6 @@ class Create extends AbstractAction
                     );
                 }
             );
-        }
-
-        if (!$this->hasError()) {
-            $this->setResponseMessage("SVN path '{$url}' created. You can now check it out locally.");
         }
 
         return $this;

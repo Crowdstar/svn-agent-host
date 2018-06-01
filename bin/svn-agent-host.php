@@ -34,7 +34,7 @@ use CrowdStar\SVNAgent\Actions\ActionFactory;
 use CrowdStar\SVNAgent\Config;
 use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Request;
-use CrowdStar\SVNAgent\Response;
+use CrowdStar\SVNAgent\Responses\Response;
 
 $config = Config::singleton()->init($dir);
 

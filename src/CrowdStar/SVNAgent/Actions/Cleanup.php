@@ -2,6 +2,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\Traits\SimpleResponseTrait;
 use MrRio\ShellWrap;
 
 /**
@@ -12,6 +13,8 @@ use MrRio\ShellWrap;
  */
 class Cleanup extends AbstractAction
 {
+    use SimpleResponseTrait;
+
     /**
      * @inheritdoc
      */

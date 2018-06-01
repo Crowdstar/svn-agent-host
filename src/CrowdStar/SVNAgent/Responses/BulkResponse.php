@@ -1,21 +1,23 @@
 <?php
 
-namespace CrowdStar\SVNAgent;
+namespace CrowdStar\SVNAgent\Responses;
+
+use CrowdStar\SVNAgent\Exceptions\Exception;
 
 /**
  * Class BulkResponse
  *
- * @package CrowdStar\SVNAgent
+ * @package CrowdStar\SVNAgent\Responses
  */
 class BulkResponse extends AbstractResponse
 {
     /**
-     * @var Response[]
+     * @var AbstractResponse[]
      */
     protected $responses = [];
 
     /**
-     * @return Response[]
+     * @return AbstractResponse[]
      */
     public function getResponses(): array
     {
@@ -23,7 +25,7 @@ class BulkResponse extends AbstractResponse
     }
 
     /**
-     * @param Response[] $responses
+     * @param AbstractResponse[] $responses
      * @return $this
      */
     public function setResponses(array $responses): BulkResponse
@@ -32,10 +34,10 @@ class BulkResponse extends AbstractResponse
     }
 
     /**
-     * @param Response $response
+     * @param AbstractResponse $response
      * @return $this
      */
-    public function addResponse(Response $response): BulkResponse
+    public function addResponse(AbstractResponse $response): BulkResponse
     {
         $this->responses[] = $response;
 
@@ -47,29 +49,23 @@ class BulkResponse extends AbstractResponse
      */
     public function toArray(): array
     {
-        $data = [];
-        if ($this->hasError()) {
-            $data['error'] = $this->getError();
-        } else {
-            $hasError = array_reduce(
-                $this->getResponses(),
-                function (bool $carry, Response $response) {
-                    return ($carry || $response->hasError());
-                },
-                false
-            );
-            if ($hasError) {
-                $data['error'] = Error::BULK_FAILED;
-            }
-
-            $data['response'] = array_map(
-                function (Response $response) {
+        return [
+            'success'  => true,
+            'response' => array_map(
+                function (AbstractResponse $response) {
                     return $response->toArray();
                 },
                 $this->getResponses()
-            );
-        }
+            ),
+        ];
+    }
 
-        return $data;
+    /**
+     * @inheritdoc
+     * @throws Exception
+     */
+    public function process(string $output)
+    {
+        throw new Exception('Bulk actions should not need to use method process() to process responses by itself');
     }
 }

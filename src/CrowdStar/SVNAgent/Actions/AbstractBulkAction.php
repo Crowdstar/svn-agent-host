@@ -3,6 +3,7 @@
 namespace CrowdStar\SVNAgent\Actions;
 
 use CrowdStar\SVNAgent\Exceptions\ClientException;
+use CrowdStar\SVNAgent\Responses\BulkResponse;
 
 /**
  * Class AbstractBulkAction
@@ -50,9 +51,17 @@ abstract class AbstractBulkAction extends AbstractAction implements
     /**
      * @inheritdoc
      */
+    protected function initResponse(): AbstractAction
+    {
+        return $this->setResponse(new BulkResponse());
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function init(): AbstractAction
     {
-        return $this->setPaths($this->getRequest()->get('paths'))->validate();
+        return $this->setPaths($this->getRequest()->get('paths'))->validate()->initResponse();
     }
 
     /**

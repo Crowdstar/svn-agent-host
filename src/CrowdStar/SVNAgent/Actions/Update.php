@@ -3,6 +3,7 @@
 namespace CrowdStar\SVNAgent\Actions;
 
 use CrowdStar\SVNAgent\Exceptions\Exception;
+use CrowdStar\SVNAgent\Responses\UpdateResponse;
 use CrowdStar\SVNAgent\SVNHelper;
 use MrRio\ShellWrap;
 
@@ -16,6 +17,7 @@ class Update extends AbstractAction
 {
     /**
      * @inheritdoc
+     * @todo process responses for SVN checkout only.
      */
     public function processAction(): AbstractAction
     {
@@ -67,6 +69,7 @@ class Update extends AbstractAction
      * @param string $url
      * @param string $dir
      * @return Update
+     * @throws Exception
      */
     protected function checkout(string $url, string $dir): Update
     {
@@ -85,5 +88,13 @@ class Update extends AbstractAction
         );
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function initResponse(): AbstractAction
+    {
+        return $this->setResponse(new UpdateResponse($this->getPath()));
     }
 }

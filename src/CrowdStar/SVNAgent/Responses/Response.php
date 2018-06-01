@@ -1,11 +1,11 @@
 <?php
 
-namespace CrowdStar\SVNAgent;
+namespace CrowdStar\SVNAgent\Responses;
 
 /**
  * Class Response
  *
- * @package CrowdStar\SVNAgent
+ * @package CrowdStar\SVNAgent\Responses
  */
 class Response extends AbstractResponse
 {
@@ -38,13 +38,19 @@ class Response extends AbstractResponse
      */
     public function toArray(): array
     {
-        $data = [];
-        if ($this->hasError()) {
-            $data['error'] = $this->getError();
-        } else {
-            $data['response'] = $this->getMessage();
-        }
+        return [
+            'success' => true,
+            'message' => $this->getMessage(),
+        ];
+    }
 
-        return $data;
+    /**
+     * @inheritdoc
+     */
+    public function process(string $output)
+    {
+        $this->setMessage($output);
+
+        return $this;
     }
 }

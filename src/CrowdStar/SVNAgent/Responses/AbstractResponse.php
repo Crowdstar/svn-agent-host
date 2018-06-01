@@ -1,34 +1,14 @@
 <?php
 
-namespace CrowdStar\SVNAgent;
-
-use CrowdStar\SVNAgent\Traits\LoggerTrait;
-use Monolog\Logger;
+namespace CrowdStar\SVNAgent\Responses;
 
 /**
  * Class AbstractResponse
  *
- * @package CrowdStar\SVNAgent
+ * @package CrowdStar\SVNAgent\Responses
  */
 abstract class AbstractResponse
 {
-    use LoggerTrait;
-
-    /**
-     * @var string
-     */
-    protected $error = '';
-
-    /**
-     * Response constructor.
-     *
-     * @param Logger|null $logger
-     */
-    public function __construct(Logger $logger = null)
-    {
-        $this->setLogger($logger);
-    }
-
     /**
      * @return $this
      */
@@ -45,41 +25,21 @@ abstract class AbstractResponse
     /**
      * @return string
      */
-    public function getError(): string
-    {
-        return $this->error;
-    }
-
-    /**
-     * @param string $error
-     * @return $this
-     */
-    public function setError(string $error): AbstractResponse
-    {
-        $this->error = $error;
-        $this->getLogger()->error('error: ' . $error);
-
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function hasError(): bool
-    {
-        return !empty($this->getError());
-    }
-
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return json_encode($this->toArray());
     }
 
-    /**
+        /**
      * @return array
      */
     abstract public function toArray(): array;
+
+    /**
+     * Process console output.
+     *
+     * @param string $output
+     * @return $this
+     */
+    abstract public function process(string $output);
 }

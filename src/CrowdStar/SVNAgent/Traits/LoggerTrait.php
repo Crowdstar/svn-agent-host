@@ -35,4 +35,18 @@ trait LoggerTrait
 
         return $this;
     }
+
+    /**
+     * Use default logger if not yet setup.
+     *
+     * @return $this
+     */
+    protected function initLogger()
+    {
+        if (!$this->logger) {
+            $this->setLogger(null);
+        }
+
+        return $this;
+    }
 }

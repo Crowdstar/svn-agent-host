@@ -2,6 +2,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\Responses\ReviewResponse;
 use MrRio\ShellWrap;
 
 /**
@@ -31,5 +32,13 @@ class Review extends AbstractAction
         }
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function initResponse(): AbstractAction
+    {
+        return $this->setResponse(new ReviewResponse($this->getPath()));
     }
 }

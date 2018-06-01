@@ -3,17 +3,17 @@
 namespace CrowdStar\SVNAgent\Actions;
 
 use Closure;
-use CrowdStar\SVNAgent\AbstractResponse;
-use CrowdStar\SVNAgent\BulkResponse;
 use CrowdStar\SVNAgent\Config;
 use CrowdStar\SVNAgent\Error;
 use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Exceptions\Exception;
-use CrowdStar\SVNAgent\PathHelper;
 use CrowdStar\SVNAgent\Request;
-use CrowdStar\SVNAgent\Response;
+use CrowdStar\SVNAgent\Responses\AbstractResponse;
+use CrowdStar\SVNAgent\Responses\ErrorResponse;
+use CrowdStar\SVNAgent\Responses\Response;
 use CrowdStar\SVNAgent\SVNHelper;
 use CrowdStar\SVNAgent\Traits\LoggerTrait;
+use CrowdStar\SVNAgent\Traits\PathTrait;
 use Monolog\Logger;
 use MrRio\ShellWrap;
 use MrRio\ShellWrapException;
@@ -27,7 +27,7 @@ use NinjaMutex\Mutex;
  */
 abstract class AbstractAction
 {
-    use LoggerTrait;
+    use LoggerTrait, PathTrait;
 
     /**
      * @var Config
@@ -47,11 +47,6 @@ abstract class AbstractAction
     /**
      * @var string
      */
-    protected $path;
-
-    /**
-     * @var string
-     */
     protected $message;
 
     /**
@@ -67,17 +62,8 @@ abstract class AbstractAction
         $this
             ->setConfig(Config::singleton())
             ->setLogger(($logger ?: $request->getLogger()))
-            ->setRequest($request);
-
-        if (!$response) {
-            if ($this instanceof BulkActionInterface) {
-                $response = new BulkResponse($this->getLogger());
-            } else {
-                $response = new Response($this->getLogger());
-            }
-        }
-
-        $this->setResponse($response)->init();
+            ->setRequest($request)
+            ->init();
     }
 
     /**
@@ -141,21 +127,23 @@ abstract class AbstractAction
     abstract public function processAction(): AbstractAction;
 
     /**
-     * @param Closure ...$array
+     * @param Closure $closure
      * @return AbstractAction
      * @throws Exception
      */
-    protected function exec(Closure ...$array): AbstractAction
+    protected function exec(Closure $closure): AbstractAction
     {
-        $sh      = new ShellWrap();
-        $results = [];
-        try {
+        if (!empty($this->getMessage())) {
             $this->getLogger()->info("now executing command: {$this->getMessage()}");
-            foreach ($array as $c) {
-                $c();
-                $results[] = (string) $sh;
-            }
-            $this->setResponseMessage(implode("\n\n", $results));
+        } else {
+            $this->getLogger()->info("now executing command defined in class " . __CLASS__);
+        }
+
+        $sh = new ShellWrap();
+        try {
+            $closure();
+            $results[] = (string) $sh;
+            $this->prepareResponse((string) $sh);
         } catch (ShellWrapException $e) {
             $this->setError($e->getMessage());
         }
@@ -221,35 +209,15 @@ abstract class AbstractAction
     }
 
     /**
-     * @param string $message
+     * @param string $output
      * @return $this
      * @throws Exception
      */
-    protected function setResponseMessage(string $message): AbstractAction
+    protected function prepareResponse(string $output): AbstractAction
     {
-        /** @var Response $response */
-        $response = $this->getResponse();
-        if (!($response instanceof Response)) {
-            throw new Exception(
-                sprintf(
-                    'The response property in this %s object should be a %s object but is a %s object',
-                    get_class($this),
-                    Response::class,
-                    get_class($this->getResponse())
-                )
-            );
-        }
-        $response->setMessage($message);
+        $this->getResponse()->process($output);
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getPath(): string
-    {
-        return $this->path;
     }
 
     /**
@@ -266,25 +234,6 @@ abstract class AbstractAction
     protected function getSvnDir(): string
     {
         return $this->getConfig()->getSvnRootDir() . $this->getPath();
-    }
-
-    /**
-     * @param string $path
-     * @return $this
-     * @throws ClientException
-     */
-    protected function setPath(string $path): AbstractAction
-    {
-        $path = PathHelper::trim($path);
-        if (empty($path)) {
-            throw new ClientException('SVN path is empty');
-        }
-
-        // SVN URL like https://svn.apache.org/repos/asf (without trailing slash) returns HTTP 301 response back.
-        // Here we make sure there are always slashes before and after given SVN path.
-        $this->path = DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR;
-
-        return $this;
     }
 
     /**
@@ -320,7 +269,7 @@ abstract class AbstractAction
      */
     protected function setError(string $error): AbstractAction
     {
-        $this->getResponse()->setError($error);
+        $this->setResponse(new ErrorResponse($error));
 
         return $this;
     }
@@ -330,8 +279,13 @@ abstract class AbstractAction
      */
     protected function hasError(): bool
     {
-        return $this->getResponse()->hasError();
+        return ($this->getResponse() instanceof ErrorResponse);
     }
+
+    /**
+     * @return AbstractAction
+     */
+    abstract protected function initResponse(): AbstractAction;
 
     /**
      * @return $this
@@ -343,7 +297,7 @@ abstract class AbstractAction
             $this->setPath($this->getRequest()->get('path'));
         }
 
-        return $this->validate();
+        return $this->validate()->initResponse();
     }
 
     /**

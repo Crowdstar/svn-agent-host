@@ -2,6 +2,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\Traits\SimpleResponseTrait;
 use MrRio\ShellWrap;
 
 /**
@@ -13,6 +14,8 @@ use MrRio\ShellWrap;
  */
 class UpdateCredentials extends AbstractAction implements PathNotRequiredActionInterface
 {
+    use SimpleResponseTrait;
+
     /**
      * @inheritdoc
      */

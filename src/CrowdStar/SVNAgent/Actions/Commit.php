@@ -2,6 +2,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\Traits\PathBasedResponseTrait;
 use MrRio\ShellWrap;
 use MrRio\ShellWrapException;
 
@@ -13,6 +14,8 @@ use MrRio\ShellWrapException;
  */
 class Commit extends AbstractAction
 {
+    use PathBasedResponseTrait;
+
     /**
      * @inheritdoc
      * @todo use a single script file to run all commands.

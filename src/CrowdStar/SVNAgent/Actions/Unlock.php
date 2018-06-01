@@ -3,6 +3,7 @@
 namespace CrowdStar\SVNAgent\Actions;
 
 use CrowdStar\SVNAgent\Config;
+use CrowdStar\SVNAgent\Traits\SimpleResponseTrait;
 use MrRio\ShellWrap;
 use ReflectionClass;
 
@@ -15,6 +16,8 @@ use ReflectionClass;
  */
 class Unlock extends AbstractAction implements LocklessActionInterface, PathNotRequiredActionInterface
 {
+    use SimpleResponseTrait;
+
     /**
      * @inheritdoc
      */

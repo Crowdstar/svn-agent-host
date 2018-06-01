@@ -2,8 +2,8 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
-use CrowdStar\SVNAgent\BulkResponse;
-use CrowdStar\SVNAgent\Response;
+use CrowdStar\SVNAgent\Responses\BulkResponse;
+use CrowdStar\SVNAgent\Responses\Response;
 
 /**
  * Class BulkReview
@@ -23,18 +23,9 @@ class BulkReview extends AbstractBulkAction implements BulkActionInterface
         $request  = clone $this->getRequest();
         $request->setAction(ActionFactory::SVN_REVIEW);
 
-        $skip = false;
         foreach ($this->getPaths() as $path) {
-            if (!$skip) {
-                $request->setData(['path' => $path]);
-                $r = (new Review($request, new Response($this->getLogger()), $this->getLogger()))->run();
-                $response->addResponse($r);
-                if ($r->hasError()) {
-                    $skip = true;
-                }
-            } else {
-                $response->addResponse((new Response())->setMessage('skipped because error found'));
-            }
+            $request->setData(['path' => $path]);
+            $response->addResponse((new Review($request, new Response($this->getLogger()), $this->getLogger()))->run());
         }
 
         return $this;
