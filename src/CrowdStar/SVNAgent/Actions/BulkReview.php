@@ -25,9 +25,7 @@ class BulkReview extends AbstractBulkAction implements BulkActionInterface
 
         foreach ($this->getPaths() as $path) {
             $request->setData(['path' => $path]);
-            $response->addResponse(
-                (new Review($request, new BasicResponse($this->getLogger()), $this->getLogger()))->run()
-            );
+            $response->addResponse((new Review($request, $this->getLogger()))->run());
         }
 
         return $this;

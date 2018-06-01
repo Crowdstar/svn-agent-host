@@ -54,11 +54,10 @@ abstract class AbstractAction
      * AbstractAction constructor.
      *
      * @param Request $request
-     * @param AbstractResponse|null $response
      * @param Logger|null $logger
      * @throws ClientException
      */
-    public function __construct(Request $request, AbstractResponse $response = null, Logger $logger = null)
+    public function __construct(Request $request, Logger $logger = null)
     {
         $this
             ->setConfig(Config::singleton())
@@ -107,13 +106,22 @@ abstract class AbstractAction
             }
         }
 
-        // Process post actions once current action is processed.
-        // TODO: handle response messages/errors properly when multiple actions there.
-        foreach ($this->getPostActions() as $action) {
-            $action->process();
-        }
-
         $this->getLogger()->info('response: ' . $this->getResponse());
+
+        // Process post actions once current action is processed.
+        if (!$this->hasError() && !empty($this->getPostActions())) {
+            foreach ($this->getPostActions() as $action) {
+                $action->process();
+
+                // don't process rest actions when error happens.
+                if ($action->hasError()) {
+                    break;
+                }
+            }
+
+            // Send response back from last executed post action instead.
+            $this->setResponse($action->getResponse());
+        }
 
         return $this;
     }
@@ -327,10 +335,8 @@ abstract class AbstractAction
     {
         if (!SVNHelper::pathExists($this->getSvnDir())) {
             //TODO: better error handling when calling other actions from current action.
-            (new Create($this->getRequest(), new BasicResponse($this->getLogger()), $this->getLogger()))
-                ->processAction();
-            (new Update($this->getRequest(), new BasicResponse($this->getLogger()), $this->getLogger()))
-                ->processAction();
+            (new Create($this->getRequest(), $this->getLogger()))->processAction();
+            (new Update($this->getRequest(), $this->getLogger()))->processAction();
         }
 
         return $this;

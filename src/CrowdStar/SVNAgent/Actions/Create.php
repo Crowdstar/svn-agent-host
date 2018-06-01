@@ -47,8 +47,6 @@ class Create extends AbstractAction implements PathBasedActionInterface
      */
     protected function getPostActions(): array
     {
-        return [
-            new Update($this->getRequest(), $this->getResponse(), $this->getLogger()),
-        ];
+        return [new Update($this->getRequest(), $this->getLogger())];
     }
 }
