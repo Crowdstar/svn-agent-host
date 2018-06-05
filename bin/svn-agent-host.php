@@ -15,7 +15,8 @@ $loaded = false;
 $dirs   = [
     __DIR__,
     dirname(__DIR__, 1),
-    dirname(__DIR__, 4),
+    dirname(__DIR__, 2), // under folder vendor/bin/.
+    dirname(__DIR__, 4), // under folder vendor/crowdstar/svn-agent-host/bin/.
 ];
 foreach ($dirs as $dir) {
     $file = $dir . '/vendor/autoload.php';
