@@ -47,7 +47,7 @@ A native messaging host to handle SVN commands received from specific Chrome ext
 }
 ```
 
-## 1.2. Partially Failed
+### 1.2. Partially Failed
 
 ```json
 {
@@ -76,7 +76,7 @@ A native messaging host to handle SVN commands received from specific Chrome ext
 }
 ```
 
-## 1.3. Failed
+### 1.3. Failed
 
 ```json
 {
@@ -85,9 +85,9 @@ A native messaging host to handle SVN commands received from specific Chrome ext
 }
 ```
 
-# 2. Bulk Commit
+## 2. Bulk Commit
 
-## 2.1. Successful
+### 2.1. Successful
 
 ```json
 {
@@ -105,7 +105,7 @@ A native messaging host to handle SVN commands received from specific Chrome ext
 }
 ```
 
-## 2.2. Partially Failed
+### 2.2. Partially Failed
 
 ```json
 {
@@ -124,7 +124,7 @@ A native messaging host to handle SVN commands received from specific Chrome ext
 }
 ```
 
-## 2.3. Failed
+### 2.3. Failed
 
 ```json
 {
@@ -133,9 +133,9 @@ A native messaging host to handle SVN commands received from specific Chrome ext
 }
 ```
 
-# 3. Review
+## 3. Review
 
-## 3.1. Successful
+### 3.1. Successful
 
 ```json
 {
@@ -154,7 +154,7 @@ A native messaging host to handle SVN commands received from specific Chrome ext
 }
 ```
 
-## 3.2. Failed
+### 3.2. Failed
 
 ```json
 {
@@ -163,9 +163,9 @@ A native messaging host to handle SVN commands received from specific Chrome ext
 }
 ```
 
-# 4. Commit
+## 4. Commit
 
-## 4.1. Successful
+### 4.1. Successful
 
 ```json
 {
@@ -174,7 +174,7 @@ A native messaging host to handle SVN commands received from specific Chrome ext
 }
 ```
 
-## 4.2. Failed
+### 4.2. Failed
 
 ```json
 {
@@ -182,9 +182,9 @@ A native messaging host to handle SVN commands received from specific Chrome ext
     "message": "error message"
 }
 ```
-# 5. Checkout
+## 5. Checkout
 
-## 5.1. Successful
+### 5.1. Successful
 
 ```json
 {
@@ -204,7 +204,7 @@ A native messaging host to handle SVN commands received from specific Chrome ext
 }
 ```
 
-## 5.2. Failed
+### 5.2. Failed
 
 ```json
 {
