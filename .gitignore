@@ -13,3 +13,6 @@
 
 # Ignore phplint files
 /phplint.cache
+
+# Ignore file phpunit.xml
+/phpunit.xml
