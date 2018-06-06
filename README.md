@@ -7,84 +7,208 @@ A native messaging host to handle SVN commands received from specific Chrome ext
 
 # Native Messaging Responses
 
-There are two different type of responses:
+## 1. Bulk Review
 
-## 1. Responses for Simple Actions
-
-e.g, create, review, commit, etc.
-
-Responses are return in following format:
+### 1.1. Successful
 
 ```json
 {
-    "response": "response message here"
-}
-```
-
-In case error happens, responses are returned in the format of:
-
-```json
-{
-    "error": "error message here"
-}
-```
-
-Error message could also be some pre-defined error code from class _\CrowdStar\SVNAgent\Error_. In this case, you will
-need to customize your error message on client side:
-
-```json
-{
-    "error": "e2801"
-}
-```
-
-
-## 2. Responses for Bulk Actions
-
-Bulk actions are a set of simple actions. Here are some bulk actions implemented already: bulk review, bulk commit.
-
-Responses are return as an array of simple action responses. The array is in the same order as input data:
-
-```json
-{
+    "success": true,
     "response": [
         {
-            "response": "response message here"
+            "path": "/svn/path/1/",
+            "success": true,
+            "actions": [
+                {
+                    "type": "?",
+                    "file": "file1.dat"
+                },
+                {
+                    "type": "?",
+                    "file": "file2.dat"
+                }
+            ]
         },
         {
-            "response": "response message here"
-        },
-        {
-            "response": "response message here"
+            "path": "/svn/path/2/",
+            "success": true,
+            "actions": [
+                {
+                    "type": "!",
+                    "file": "file1.dat"
+                },
+                {
+                    "type": "!",
+                    "file": "file2.dat"
+                }
+            ]
         }
     ]
 }
 ```
 
-In case error happens when processing a simple action, there are two fields returned in the response: field _error_
-contains an error code "e2811", while field _response_ contains an array of simple action responses:
+## 1.2. Partially Failed
 
 ```json
 {
-    "error": "e2811",
+    "success": true,
     "response": [
         {
-            "response": "response message here"
+            "path": "/svn/path/1/",
+            "success": false,
+            "message": "error message"
         },
         {
-            "error": "error message here"
-        },
-        {
-            "response": "skipped and not processed"
+            "path": "/svn/path/2/",
+            "success": true,
+            "actions": [
+                {
+                    "type": "!",
+                    "file": "file1.dat"
+                },
+                {
+                    "type": "!",
+                    "file": "file2.dat"
+                }
+            ]
         }
     ]
 }
 ```
 
-For any other error happens, responses are returned in the format of:
+## 1.3. Failed
 
 ```json
 {
-    "error": "error message here"
+    "success": false,
+    "message": "error message"
+}
+```
+
+# 2. Bulk Commit
+
+## 2.1. Successful
+
+```json
+{
+    "success": true,
+    "response": [
+        {
+            "path": "/svn/path/1/",
+            "success": true
+        },
+        {
+            "path": "/svn/path/2/",
+            "success": true
+        }
+    ]
+}
+```
+
+## 2.2. Partially Failed
+
+```json
+{
+    "success": true,
+    "response": [
+        {
+            "path": "/svn/path/1/",
+            "success": true
+        },
+        {
+            "path": "/svn/path/2/",
+            "success": false,
+            "message": "error message"
+        }
+    ]
+}
+```
+
+## 2.3. Failed
+
+```json
+{
+    "success": false,
+    "message": "error message"
+}
+```
+
+# 3. Review
+
+## 3.1. Successful
+
+```json
+{
+    "success": true,
+    "path": "/svn/path/",
+    "actions": [
+        {
+            "type": "?",
+            "file": "file1.dat"
+        },
+        {
+            "type": "?",
+            "file": "file2.dat"
+        }
+    ]
+}
+```
+
+## 3.2. Failed
+
+```json
+{
+    "success": false,
+    "message": "error message"
+}
+```
+
+# 4. Commit
+
+## 4.1. Successful
+
+```json
+{
+    "success": true,
+    "path": "/svn/path/"
+}
+```
+
+## 4.2. Failed
+
+```json
+{
+    "success": false,
+    "message": "error message"
+}
+```
+# 5. Checkout
+
+## 5.1. Successful
+
+```json
+{
+    "success": true,
+    "path": "/svn/path/",
+    "revision": 48973,
+    "actions": [
+        {
+            "type": "A",
+            "file": "file1.dat"
+        },
+        {
+            "type": "A",
+            "file": "file2.dat"
+        }
+    ]
+}
+```
+
+## 5.2. Failed
+
+```json
+{
+    "success": false,
+    "message": "error message"
 }
 ```
