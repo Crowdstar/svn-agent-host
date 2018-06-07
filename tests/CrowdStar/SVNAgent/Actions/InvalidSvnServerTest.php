@@ -41,11 +41,11 @@ class InvalidSvnServerTest extends AbstractSvnTestCase
     {
         /**
          * SVN responses:
-         * 1. from 1.10.0 on Mac:
+         * 1. from version 1.10.0 on Mac:
          *    svn: E170013: Unable to connect to a repository at URL 'http://127.0.0.1/path/1'
          *    svn: E175009: The XML response contains invalid XML
          *    svn: E130003: Malformed XML: no element found at line 1
-         * 2. from Travis CI:
+         * 2. from version 1.8.8 Travis CI:
          *    svn: E175002: Unexpected HTTP status 405 'Method Not Allowed' on '/path/1'
          *
          *    svn: E175002: Additional errors:

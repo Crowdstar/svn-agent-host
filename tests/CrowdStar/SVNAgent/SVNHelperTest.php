@@ -2,6 +2,7 @@
 
 namespace CrowdStar\Tests\SVNAgent;
 
+use CrowdStar\SVNAgent\Request;
 use CrowdStar\SVNAgent\SVNHelper;
 
 /**
@@ -9,12 +10,12 @@ use CrowdStar\SVNAgent\SVNHelper;
  *
  * @package CrowdStar\Tests\SVNAgent
  */
-class SVNHelperTest extends TestCase
+class SVNHelperTest extends AbstractSvnTestCase
 {
     /**
      * @return array
      */
-    public function dataPathExists(): array
+    public function dataUrlExists(): array
     {
         return [
             [
@@ -36,14 +37,18 @@ class SVNHelperTest extends TestCase
     }
 
     /**
-     * @dataProvider dataPathExists
-     * @covers SVNHelper::pathExists()
+     * @dataProvider dataUrlExists
+     * @covers SVNHelper::urlExists()
      * @param bool $expected
      * @param string $path
      * @param string $message
      */
-    public function testPathExists(bool $expected, string $path, string $message)
+    public function testUrlExists(bool $expected, string $path, string $message)
     {
-        $this->assertSame($expected, SVNHelper::pathExists($path), $message);
+        $this->assertSame(
+            $expected,
+            SVNHelper::urlExists($path, (new Request())->init(self::getBasicRequestData())),
+            $message
+        );
     }
 }
