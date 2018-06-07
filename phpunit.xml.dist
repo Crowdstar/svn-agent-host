@@ -3,4 +3,8 @@
     <testsuite name="default">
         <directory suffix="Test.php">tests/CrowdStar</directory>
     </testsuite>
+    <php>
+        <env name="SVN_USERNAME" value="username"/>
+        <env name="SVN_PASSWORD" value="password"/>
+    </php>
 </phpunit>

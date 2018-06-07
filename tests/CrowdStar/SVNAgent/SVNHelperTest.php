@@ -3,7 +3,6 @@
 namespace CrowdStar\Tests\SVNAgent;
 
 use CrowdStar\SVNAgent\SVNHelper;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Class SVNHelperTest

@@ -2,40 +2,13 @@
 
 namespace CrowdStar\SVNAgent\Responses;
 
-use CrowdStar\SVNAgent\Exceptions\ClientException;
-use CrowdStar\SVNAgent\Traits\PathTrait;
-
 /**
  * Class PathBasedResponse
  *
  * @package CrowdStar\SVNAgent\Responses
  */
-class PathBasedResponse extends AbstractResponse
+class PathBasedResponse extends AbstractPathBasedResponse
 {
-    use PathTrait;
-
-    /**
-     * CommitResponse constructor.
-     *
-     * @param string|null $path
-     * @throws ClientException
-     */
-    public function __construct(string $path)
-    {
-        $this->setPath($path);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function toArray(): array
-    {
-        return [
-            'success' => true,
-            'path'    => $this->getPath(),
-        ];
-    }
-
     /**
      * @inheritdoc
      */

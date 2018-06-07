@@ -80,12 +80,13 @@ class Config
 
     /**
      * @param string $path
+     * @param string $file
      * @return Config
      * @throws Exception
      */
-    public function init(string $path): Config
+    public function init(string $path, string $file = '.env'): Config
     {
-        $dotenv = (new Dotenv($path));
+        $dotenv = (new Dotenv($path, $file));
         $dotenv->overload();
         foreach (self::REQUIRED_ENVIRONMENT_VARIABLES as $var) {
             $dotenv->required($var)->notEmpty();

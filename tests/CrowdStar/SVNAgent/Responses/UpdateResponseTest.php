@@ -4,7 +4,7 @@ namespace CrowdStar\Tests\SVNAgent\Responses;
 
 use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Responses\UpdateResponse;
-use PHPUnit\Framework\TestCase;
+use CrowdStar\Tests\SVNAgent\TestCase;
 
 /**
  * Class UpdateResponseTest
@@ -31,7 +31,7 @@ EOT;
             ],
             3,
             $output,
-            'a simple SVN status output that has nothing updated.',
+            'SVN output that has nothing updated.',
         ];
 
         // Sample output copied from http://svnbook.red-bean.com/en/1.8/svn.ref.svn.c.update.html
@@ -71,7 +71,7 @@ EOT;
             ],
             30,
             $output,
-            'a simple SVN status output that contains deleted, modified and added files.',
+            'SVN output that contains deleted, modified and added files.',
         ];
 
         return $data;
@@ -88,8 +88,8 @@ EOT;
      */
     public function testProcess(array $expectedActions, int $expectedRevision, string $output, string $message)
     {
-        $repsonse = (new UpdateResponse('/dummy/path'))->process($output);
-        $this->assertEquals($expectedActions, $repsonse->getActions()->toArray(), ($message . ' (compare actions)'));
-        $this->assertEquals($expectedRevision, $repsonse->getRevision(), ($message . ' (compare revisions)'));
+        $response = (new UpdateResponse('/dummy/path'))->process($output);
+        $this->assertEquals($expectedActions, $response->getActions()->toArray(), ($message . ' (compare actions)'));
+        $this->assertEquals($expectedRevision, $response->getRevision(), ($message . ' (compare revisions)'));
     }
 }

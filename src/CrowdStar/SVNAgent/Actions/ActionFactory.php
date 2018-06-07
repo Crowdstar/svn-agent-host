@@ -4,7 +4,7 @@ namespace CrowdStar\SVNAgent\Actions;
 
 use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Request;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ActionFactory
@@ -45,11 +45,11 @@ class ActionFactory
 
     /**
      * @param Request $request
-     * @param Logger|null $logger
+     * @param LoggerInterface|null $logger
      * @return AbstractAction
      * @throws ClientException
      */
-    public static function fromRequest(Request $request, Logger $logger = null): AbstractAction
+    public static function fromRequest(Request $request, LoggerInterface $logger = null): AbstractAction
     {
         $action = $request->getAction();
 

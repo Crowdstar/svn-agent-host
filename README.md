@@ -5,6 +5,32 @@
 
 A native messaging host to handle SVN commands received from specific Chrome extension.
 
+# Run Unit Tests
+
+First, please have a local SVN server setup:
+
+```bash
+docker run --rm -d --name svn-server -p 80:80 elleflorio/svn-server
+docker exec -t svn-server htpasswd -b /etc/subversion/passwd username password
+docker exec -t svn-server svnadmin create /home/svn/project1
+docker exec -t svn-server chmod -R 777 /home/svn/project1
+```
+
+An SVN repository now is available at _http://127.0.0.1/svn/project1_ (not _http://localhost/svn/project1_), and you can
+access it with following credentials:
+
+```text
+username: username
+password: password
+```
+
+Now please run Composer to install PHPUnit, and then run unit tests:
+
+```bash
+composer install -n
+./vendor/bin/phpunit
+```
+
 # Native Messaging Responses
 
 ## 1. Bulk Review

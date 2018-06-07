@@ -5,9 +5,15 @@ php:
   - 7.1
   - 7.0
 
-sudo: false
+services:
+  - docker
 
-install:
+before_install:
+  - docker run --rm -d --name svn-server -p 80:80 elleflorio/svn-server
+  - docker ps -a
+  - docker exec -t svn-server htpasswd -b /etc/subversion/passwd username password
+  - docker exec -t svn-server svnadmin create /home/svn/project1
+  - docker exec -t svn-server chmod -R 777 /home/svn/project1
   - composer install -n
 
 script:

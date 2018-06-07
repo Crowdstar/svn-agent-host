@@ -21,6 +21,11 @@
       "CrowdStar\\SVNAgent\\": "src/CrowdStar/SVNAgent/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "CrowdStar\\Tests\\SVNAgent\\": "tests/CrowdStar/SVNAgent/"
+    }
+  },
   "bin": [
     "bin/kill-host-processes.sh",
     "bin/svn-agent-host.php",

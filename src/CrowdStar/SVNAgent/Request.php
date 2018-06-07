@@ -4,7 +4,7 @@ namespace CrowdStar\SVNAgent;
 
 use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Traits\LoggerTrait;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Request
@@ -46,47 +46,58 @@ class Request
     /**
      * Request constructor.
      *
-     * @param Logger|null $logger
+     * @param LoggerInterface|null $logger
      */
-    public function __construct(Logger $logger = null)
+    public function __construct(LoggerInterface $logger = null)
     {
         $this->setLogger($logger);
     }
 
     /**
-     * @param Logger|null $logger
-     * @return $this
+     * @param LoggerInterface|null $logger
+     * @return Request
      */
-    public static function readRequest(Logger $logger = null): Request
+    public static function readRequest(LoggerInterface $logger = null): Request
     {
-        $request = new Request($logger);
+        $request = new static($logger);
 
         $stdin = fopen('php://stdin', 'r');
         $len   = current(unpack('L', fread($stdin, 4)));
         $data  = $len ? json_decode(fread($stdin, $len), true) : [];
         fclose($stdin);
 
-        $request
+        $request->init($data);
+
+        return $request;
+    }
+
+    /**
+     * @param array $data
+     * @return $this
+     */
+    public function init(array $data): Request
+    {
+        $this
             ->setUsername($data['username'] ? base64_decode($data['username']) : '')
             ->setPassword($data['password'] ? base64_decode($data['password']) : '')
             ->setTimeout($data['timeout'] ? $data['timeout'] : Config::DEFAULT_TIMEOUT)
             ->setAction($data['action'] ?? '')
             ->setData($data['data'] ?? []);
 
-        $request->getLogger()->info(
+        $this->getLogger()->info(
             'action requested',
             [
-                'action'  => $request->getAction(),
-                'timeout' => $request->getTimeout(),
+                'action'  => $this->getAction(),
+                'timeout' => $this->getTimeout(),
             ]
         );
-        if ($request->getData()) {
-            $request->getLogger()->info('request data received', $request->getData());
+        if ($this->getData()) {
+            $this->getLogger()->info('request data received', $this->getData());
         } else {
-            $request->getLogger()->info('request has no additional data include');
+            $this->getLogger()->info('request has no additional data include');
         }
 
-        return $request;
+        return $this;
     }
 
     /**

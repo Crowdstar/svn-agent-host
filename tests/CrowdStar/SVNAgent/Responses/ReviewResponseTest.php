@@ -4,7 +4,7 @@ namespace CrowdStar\Tests\SVNAgent\Responses;
 
 use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Responses\ReviewResponse;
-use PHPUnit\Framework\TestCase;
+use CrowdStar\Tests\SVNAgent\TestCase;
 
 /**
  * Class ReviewResponseTest

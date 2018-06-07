@@ -3,7 +3,7 @@
 namespace CrowdStar\SVNAgent\Traits;
 
 use CrowdStar\SVNAgent\Config;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Trait LoggerTrait
@@ -13,20 +13,20 @@ use Monolog\Logger;
 trait LoggerTrait
 {
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     * @return Logger
+     * @return LoggerInterface
      */
-    public function getLogger(): Logger
+    public function getLogger(): LoggerInterface
     {
         return $this->logger;
     }
 
     /**
-     * @param Logger|null $logger
+     * @param LoggerInterface|null $logger
      * @return $this
      */
     public function setLogger($logger)

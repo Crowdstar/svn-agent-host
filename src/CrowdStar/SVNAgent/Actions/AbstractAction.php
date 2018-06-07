@@ -9,17 +9,16 @@ use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Exceptions\Exception;
 use CrowdStar\SVNAgent\Request;
 use CrowdStar\SVNAgent\Responses\AbstractResponse;
-use CrowdStar\SVNAgent\Responses\BasicResponse;
 use CrowdStar\SVNAgent\Responses\ErrorResponse;
 use CrowdStar\SVNAgent\Responses\PathBasedErrorResponse;
 use CrowdStar\SVNAgent\SVNHelper;
 use CrowdStar\SVNAgent\Traits\LoggerTrait;
 use CrowdStar\SVNAgent\Traits\PathTrait;
-use Monolog\Logger;
 use MrRio\ShellWrap;
 use MrRio\ShellWrapException;
 use NinjaMutex\Lock\FlockLock;
 use NinjaMutex\Mutex;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class AbstractAction
@@ -54,10 +53,10 @@ abstract class AbstractAction
      * AbstractAction constructor.
      *
      * @param Request $request
-     * @param Logger|null $logger
+     * @param LoggerInterface|null $logger
      * @throws ClientException
      */
-    public function __construct(Request $request, Logger $logger = null)
+    public function __construct(Request $request, LoggerInterface $logger = null)
     {
         $this
             ->setConfig(Config::singleton())
@@ -68,6 +67,7 @@ abstract class AbstractAction
 
     /**
      * @return AbstractResponse
+     * @throws ClientException
      */
     public function run(): AbstractResponse
     {
@@ -228,7 +228,7 @@ abstract class AbstractAction
     /**
      * @return string
      */
-    protected function getSvnUri(): string
+    public function getSvnUri(): string
     {
         return $this->getConfig()->getSvnRoot() . $this->getPath();
     }
@@ -236,7 +236,7 @@ abstract class AbstractAction
     /**
      * @return string
      */
-    protected function getSvnDir(): string
+    public function getSvnDir(): string
     {
         return $this->getConfig()->getSvnRootDir() . $this->getPath();
     }

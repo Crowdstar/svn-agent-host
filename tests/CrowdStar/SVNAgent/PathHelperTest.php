@@ -3,7 +3,6 @@
 namespace CrowdStar\Tests\SVNAgent;
 
 use CrowdStar\SVNAgent\PathHelper;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Class PathHelperTest

@@ -3,6 +3,7 @@
 namespace CrowdStar\SVNAgent\Actions;
 
 use CrowdStar\SVNAgent\Exceptions\Exception;
+use CrowdStar\SVNAgent\Responses\CheckoutResponse;
 use CrowdStar\SVNAgent\Responses\UpdateResponse;
 use CrowdStar\SVNAgent\SVNHelper;
 use MrRio\ShellWrap;
@@ -73,6 +74,7 @@ class Update extends AbstractAction implements PathBasedActionInterface
      */
     protected function checkout(string $url, string $dir): Update
     {
+        $this->setResponse(new CheckoutResponse($this->getPath()));
         $this->setMessage('SVN checkout')->exec(
             function () use ($url, $dir) {
                 ShellWrap::svn(

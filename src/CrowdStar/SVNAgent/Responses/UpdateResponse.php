@@ -7,40 +7,8 @@ namespace CrowdStar\SVNAgent\Responses;
  *
  * @package CrowdStar\SVNAgent\Responses
  */
-class UpdateResponse extends ReviewResponse
+class UpdateResponse extends AbstractVersionedResponse
 {
-    /**
-     * @var int
-     */
-    protected $revision;
-
-    /**
-     * @return int
-     */
-    public function getRevision(): int
-    {
-        return $this->revision;
-    }
-
-    /**
-     * @param int $revision
-     * @return UpdateResponse
-     */
-    public function setRevision(int $revision): UpdateResponse
-    {
-        $this->revision = $revision;
-
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function toArray(): array
-    {
-        return parent::toArray() + ['revision' => $this->getRevision()];
-    }
-
     /**
      * @inheritdoc
      */
