@@ -6,6 +6,7 @@ use CrowdStar\SVNAgent\Actions\AbstractAction;
 use CrowdStar\SVNAgent\Actions\Create;
 use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Request;
+use CrowdStar\SVNAgent\Responses\PathBasedResponse;
 use CrowdStar\Tests\SVNAgent\AbstractSvnTestCase;
 
 /**
@@ -38,16 +39,23 @@ class InvalidSvnServerTest extends AbstractSvnTestCase
      */
     public function dataProcess(): array
     {
+        /**
+         * SVN responses:
+         * 1. from 1.10.0 on Mac:
+         *    svn: E170013: Unable to connect to a repository at URL 'http://127.0.0.1/path/1'
+         *    svn: E175009: The XML response contains invalid XML
+         *    svn: E130003: Malformed XML: no element found at line 1
+         * 2. from Travis CI:
+         *    svn: E175002: Unexpected HTTP status 405 'Method Not Allowed' on '/path/1'
+         *
+         *    svn: E175002: Additional errors:
+         *    svn: E175002: PROPFIND request on '/path/1' failed: 405 Method Not Allowed
+         */
         return [
             [
                 [
                     'success'  => false,
-                    'error'    => <<<EOT
-svn: E170013: Unable to connect to a repository at URL 'http://127.0.0.1/path/1'
-svn: E175009: The XML response contains invalid XML
-svn: E130003: Malformed XML: no element found at line 1
-EOT
-                    ,
+                    'error'    => '/: (Unable to connect to a repository at URL|Unexpected HTTP status 405)/',
                     'path'     => '/path/1/',
                 ],
                 [
@@ -58,6 +66,7 @@ EOT
         ];
     }
 
+
     /**
      * @dataProvider dataProcess
      * @covers AbstractAction::run()
@@ -65,12 +74,16 @@ EOT
      * @covers Create::processAction()
      * @param array $expected
      * @param array $requestData
-     * @param string $message
      * @throws ClientException
      * @group svn-server
      */
-    public function testProcessAction(array $expected, array $requestData, string $message)
+    public function testProcessAction(array $expected, array $requestData)
     {
-        $this->assertEquals($expected, (new Create((new Request())->init($requestData)))->run()->toArray(), $message);
+        /** @var PathBasedResponse $response */
+        $response = (new Create((new Request())->init($requestData)))->run()->toArray();
+        foreach (['success', 'path'] as $field) {
+            $this->assertSame($expected[$field], $response[$field]);
+        }
+        $this->assertRegExp($expected['error'], $response['error']);
     }
 }

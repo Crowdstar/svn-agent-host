@@ -39,7 +39,7 @@ abstract class AbstractSvnTestCase extends TestCase
     public static function setUpUnknownSvnHost()
     {
         self::$svnRoot = getenv(Config::SVN_AGENT_SVN_ROOT, '');
-        putenv(Config::SVN_AGENT_SVN_ROOT . '=' . 'http://a-non-existing-server-akjozonh9y3z9vyq.com');
+        putenv(Config::SVN_AGENT_SVN_ROOT . '=' . 'http://t6dkr8gkvc6o8bvf97.com');
     }
 
     /**

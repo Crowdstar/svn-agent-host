@@ -24,17 +24,12 @@ class SVNHelperTest extends TestCase
             ],
             [
                 true,
-                'https://github.com/Crowdstar/svn-agent-host/',
+                'http://127.0.0.1/svn/project1',
                 'root directory of the SVN repository',
             ],
             [
-                true,
-                'https://github.com/Crowdstar/svn-agent-host/trunk/',
-                'branch trunk of the SVN repository',
-            ],
-            [
                 false,
-                'https://github.com/Crowdstar/svn-agent-host/trunk/directory-not-exist/',
+                'http://127.0.0.1/svn/project1/directory-not-exist/',
                 'a non-existing path under the SVN repository',
             ],
         ];

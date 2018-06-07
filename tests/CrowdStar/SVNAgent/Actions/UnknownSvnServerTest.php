@@ -6,6 +6,7 @@ use CrowdStar\SVNAgent\Actions\AbstractAction;
 use CrowdStar\SVNAgent\Actions\Create;
 use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Request;
+use CrowdStar\SVNAgent\Responses\PathBasedResponse;
 use CrowdStar\Tests\SVNAgent\AbstractSvnTestCase;
 
 /**
@@ -38,15 +39,20 @@ class UnknownSvnServerTest extends AbstractSvnTestCase
      */
     public function dataProcess(): array
     {
+        /**
+         * SVN responses:
+         * 1. from 1.10.0 on Mac:
+         *    svn: E170013: Unable to connect to a repository at URL 'http://t6dkr8gkvc6o8bvf97.com/path/1'
+         *    svn: E670008: nodename nor servname provided, or not known
+         * 2. from Travis CI:
+         *    svn: E670002: Unable to connect to a repository at URL 'http://t6dkr8gkvc6o8bvf97.com/path/1'
+         *    svn: E670002: Name or service not known
+         */
         return [
             [
                 [
                     'success'  => false,
-                    'error'    => <<<EOT
-svn: E170013: Unable to connect to a repository at URL 'http://a-non-existing-server-akjozonh9y3z9vyq.com/path/1'
-svn: E670008: nodename nor servname provided, or not known
-EOT
-                    ,
+                    'error'    => ": Unable to connect to a repository at URL 'http://t6dkr8gkvc6o8bvf97.com/path/1'\n",
                     'path'     => '/path/1/',
                 ],
                 [
@@ -64,12 +70,16 @@ EOT
      * @covers Create::processAction()
      * @param array $expected
      * @param array $requestData
-     * @param string $message
      * @throws ClientException
      * @group svn-server
      */
-    public function testProcessAction(array $expected, array $requestData, string $message)
+    public function testProcessAction(array $expected, array $requestData)
     {
-        $this->assertEquals($expected, (new Create((new Request())->init($requestData)))->run()->toArray(), $message);
+        /** @var PathBasedResponse $response */
+        $response = (new Create((new Request())->init($requestData)))->run()->toArray();
+        foreach (['success', 'path'] as $field) {
+            $this->assertSame($expected[$field], $response[$field]);
+        }
+        $this->assertContains($expected['error'], $response['error']);
     }
 }
