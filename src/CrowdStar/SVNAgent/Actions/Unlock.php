@@ -29,7 +29,7 @@ class Unlock extends AbstractAction implements LocklessActionInterface, PathNotR
                 (new ShellWrap())(
                     $this->getConfig()->getRootDir() . '/vendor/bin/kill-host-processes.sh',
                     getmypid(),
-                    getenv(Config::SVN_AGENT_EXTENSION_ID),
+                    $this->getConfig()->getExtensionId(),
                     $this->getLockFilePath()
                 );
             }
