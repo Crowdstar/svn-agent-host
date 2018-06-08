@@ -2,6 +2,8 @@
 
 namespace CrowdStar\SVNAgent;
 
+use Bugsnag\Client;
+use Bugsnag\Handler;
 use CrowdStar\SVNAgent\Traits\LoggerTrait;
 use Dotenv\Dotenv;
 use Exception;
@@ -22,20 +24,21 @@ class Config
     /**
      * The current system version.
      */
-    const VERSION = '1.0.0';
+    const VERSION = '0.1.0';
 
     /**
      * Default timeout to execute given action. In seconds.
      */
     const DEFAULT_TIMEOUT = 60;
 
-    const SVN_AGENT_ROOT_DIR     = 'SVN_AGENT_ROOT_DIR';
-    const SVN_AGENT_SVN_ROOT_DIR = 'SVN_AGENT_SVN_ROOT_DIR';
-    const SVN_AGENT_SVN_ROOT     = 'SVN_AGENT_SVN_ROOT';
-    const SVN_AGENT_MUTEX_NAME   = 'SVN_AGENT_MUTEX_NAME';
-    const SVN_AGENT_LOGFILE      = 'SVN_AGENT_LOGFILE';
-    const SVN_AGENT_EXTENSION_ID = 'SVN_AGENT_EXTENSION_ID';
-    const SVN_AGENT_TIMEZONE     = 'SVN_AGENT_TIMEZONE';
+    const SVN_AGENT_ROOT_DIR        = 'SVN_AGENT_ROOT_DIR';
+    const SVN_AGENT_SVN_ROOT_DIR    = 'SVN_AGENT_SVN_ROOT_DIR';
+    const SVN_AGENT_SVN_ROOT        = 'SVN_AGENT_SVN_ROOT';
+    const SVN_AGENT_MUTEX_NAME      = 'SVN_AGENT_MUTEX_NAME';
+    const SVN_AGENT_LOGFILE         = 'SVN_AGENT_LOGFILE';
+    const SVN_AGENT_BUGSNAG_API_KEY = 'SVN_AGENT_BUGSNAG_API_KEY';
+    const SVN_AGENT_EXTENSION_ID    = 'SVN_AGENT_EXTENSION_ID';
+    const SVN_AGENT_TIMEZONE        = 'SVN_AGENT_TIMEZONE';
 
     const REQUIRED_ENVIRONMENT_VARIABLES = [
         self::SVN_AGENT_ROOT_DIR,
@@ -43,6 +46,7 @@ class Config
         self::SVN_AGENT_SVN_ROOT,
         self::SVN_AGENT_MUTEX_NAME,
         self::SVN_AGENT_LOGFILE,
+        self::SVN_AGENT_BUGSNAG_API_KEY,
         self::SVN_AGENT_EXTENSION_ID,
         self::SVN_AGENT_TIMEZONE,
     ];
@@ -101,6 +105,20 @@ class Config
         $this->setLogger($logger);
 
         ErrorHandler::register($this->getLogger());
+
+        if (getenv(self::SVN_AGENT_BUGSNAG_API_KEY)) {
+            $bugsnag = Client::make(getenv(self::SVN_AGENT_BUGSNAG_API_KEY));
+            $bugsnag->registerCallback(function ($report) {
+                $report->setMetaData(
+                    [
+                        'account' => [
+                            'user' => $_SERVER['USER'],
+                        ]
+                    ]
+                );
+            });
+            Handler::registerWithPrevious($bugsnag);
+        }
 
         return $this;
     }
