@@ -4,6 +4,7 @@ namespace CrowdStar\SVNAgent;
 
 use Bugsnag\Client;
 use Bugsnag\Handler;
+use Bugsnag\Report;
 use CrowdStar\SVNAgent\Traits\LoggerTrait;
 use Dotenv\Dotenv;
 use Exception;
@@ -107,15 +108,15 @@ class Config
 
         if (getenv(self::SVN_AGENT_BUGSNAG_API_KEY)) {
             $bugsnag = Client::make(getenv(self::SVN_AGENT_BUGSNAG_API_KEY));
-            $bugsnag->registerCallback(function ($report) {
-                $report->setMetaData(
-                    [
-                        'account' => [
+            $bugsnag->registerCallback(
+                function (Report $report) {
+                    $report->setUser(
+                        [
                             'user' => $_SERVER['USER'],
                         ]
-                    ]
-                );
-            });
+                    );
+                }
+            );
             Handler::registerWithPrevious($bugsnag);
         }
 
