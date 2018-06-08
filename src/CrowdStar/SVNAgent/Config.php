@@ -46,7 +46,6 @@ class Config
         self::SVN_AGENT_SVN_ROOT,
         self::SVN_AGENT_MUTEX_NAME,
         self::SVN_AGENT_LOGFILE,
-        self::SVN_AGENT_BUGSNAG_API_KEY,
         self::SVN_AGENT_EXTENSION_ID,
         self::SVN_AGENT_TIMEZONE,
     ];
