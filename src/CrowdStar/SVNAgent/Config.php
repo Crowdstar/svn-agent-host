@@ -105,7 +105,10 @@ class Config
 
         ErrorHandler::register($this->getLogger());
 
-        if (getenv(self::SVN_AGENT_BUGSNAG_API_KEY)) {
+        // Report errors to Bugsnag only if the host program is invoked from specific Chrome extension.
+        if ((2 == $_SERVER['argc'])
+            && ("chrome-extension://{$this->getExtensionId()}/" == $_SERVER['argv'][1])
+            && getenv(self::SVN_AGENT_BUGSNAG_API_KEY)) {
             $bugsnag = Client::make(getenv(self::SVN_AGENT_BUGSNAG_API_KEY));
             $bugsnag->registerCallback(
                 function (Report $report) {
@@ -144,5 +147,13 @@ class Config
     public function getSvnRoot(): string
     {
         return PathHelper::rtrim(getenv(self::SVN_AGENT_SVN_ROOT));
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtensionId(): string
+    {
+        return getenv(self::SVN_AGENT_EXTENSION_ID);
     }
 }
