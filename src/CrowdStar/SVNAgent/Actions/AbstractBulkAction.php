@@ -4,6 +4,8 @@ namespace CrowdStar\SVNAgent\Actions;
 
 use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Responses\BulkResponse;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class AbstractBulkAction
@@ -11,6 +13,7 @@ use CrowdStar\SVNAgent\Responses\BulkResponse;
  * @package CrowdStar\SVNAgent\Actions
  */
 abstract class AbstractBulkAction extends AbstractAction implements
+    BulkActionInterface,
     LocklessActionInterface,
     PathNotRequiredActionInterface
 {
@@ -23,6 +26,11 @@ abstract class AbstractBulkAction extends AbstractAction implements
      * @var array
      */
     protected $paths = [];
+
+    /**
+     * @var string
+     */
+    protected $basicAction;
 
     /**
      * @return array
@@ -44,6 +52,36 @@ abstract class AbstractBulkAction extends AbstractAction implements
         }
 
         $this->paths = $paths;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getBasicAction(): string
+    {
+        return $this->basicAction;
+    }
+
+    /**
+     * @param string $basicAction
+     * @return AbstractBulkAction
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    protected function setBasicAction(string $basicAction): AbstractBulkAction
+    {
+        if (!array_key_exists($basicAction, ActionFactory::ACTION_CLASSES)) {
+            throw new Exception("unsupported basic action '{$basicAction}'");
+        }
+        $className = ActionFactory::ACTION_CLASSES[$basicAction];
+        $class     = new ReflectionClass($className);
+        if ($class->implementsInterface(BulkActionInterface::class)) {
+            throw new Exception("bulk action class '{$className}' cannot be used as basic action");
+        }
+
+        $this->basicAction = $basicAction;
 
         return $this;
     }

@@ -14,6 +14,7 @@ use Psr\Log\LoggerInterface;
 class ActionFactory
 {
     const SVN_BULK_REVIEW        = 'bulk-review';
+    const SVN_BULK_UPDATE        = 'bulk-update';
     const SVN_CLEANUP            = 'cleanup';
     const SVN_COMMIT             = 'commit';
     const SVN_COMMITS            = 'commits';
@@ -29,6 +30,7 @@ class ActionFactory
 
     const ACTION_CLASSES = [
         self::SVN_BULK_REVIEW        => BulkReview::class,
+        self::SVN_BULK_UPDATE        => BulkUpdate::class,
         self::SVN_CLEANUP            => Cleanup::class,
         self::SVN_COMMIT             => Commit::class,
         self::SVN_COMMITS            => BulkCommits::class,

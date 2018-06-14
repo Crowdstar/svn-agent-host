@@ -39,7 +39,7 @@ abstract class AbstractSvnTestCase extends TestCase
     public static function setUpUnknownSvnHost()
     {
         self::$svnRoot = getenv(Config::SVN_AGENT_SVN_ROOT, '');
-        putenv(Config::SVN_AGENT_SVN_ROOT . '=' . 'http://t6dkr8gkvc6o8bvf97.com');
+        putenv(Config::SVN_AGENT_SVN_ROOT . '=' . 'http://t6dkr8gkvc6o8bvf97.test');
     }
 
     /**
@@ -75,6 +75,35 @@ abstract class AbstractSvnTestCase extends TestCase
                 ]
             );
         }
+    }
+
+    /**
+     * @param string ...$paths
+     * @throws ClientException
+     */
+    protected static function deletePaths(string ...$paths)
+    {
+        foreach ($paths as $path) {
+            self::deletePath($path);
+        }
+    }
+
+    /**
+     * @param string $path
+     * @return Request
+     */
+    protected function getPathBasedRequest(string $path): Request
+    {
+        return (new Request())->init(['data' => ['path' => $path]] + $this->getBasicRequestData());
+    }
+
+    /**
+     * @param string ...$paths
+     * @return Request
+     */
+    protected function getPathsBasedRequest(string ...$paths): Request
+    {
+        return (new Request())->init(['data' => ['paths' => $paths]] + $this->getBasicRequestData());
     }
 
     /**

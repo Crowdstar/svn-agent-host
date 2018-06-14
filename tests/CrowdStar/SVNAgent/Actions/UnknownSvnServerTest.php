@@ -42,17 +42,17 @@ class UnknownSvnServerTest extends AbstractSvnTestCase
         /**
          * SVN responses:
          * 1. from version 1.10.0 on Mac:
-         *    svn: E170013: Unable to connect to a repository at URL 'http://t6dkr8gkvc6o8bvf97.com/path/1'
+         *    svn: E170013: Unable to connect to a repository at URL 'http://t6dkr8gkvc6o8bvf97.test/path/1'
          *    svn: E670008: nodename nor servname provided, or not known
          * 2. from version 1.8.8 on Travis CI:
-         *    svn: E670002: Unable to connect to a repository at URL 'http://t6dkr8gkvc6o8bvf97.com/path/1'
+         *    svn: E670002: Unable to connect to a repository at URL 'http://t6dkr8gkvc6o8bvf97.test/path/1'
          *    svn: E670002: Name or service not known
          */
         return [
             [
                 [
                     'success'  => false,
-                    'error'    => ": Unable to connect to a repository at URL 'http://t6dkr8gkvc6o8bvf97.com/path/1'\n",
+                    'error'    => "Unable to connect to a repository at URL 'http://t6dkr8gkvc6o8bvf97.test/path/1'\n",
                     'path'     => '/path/1/',
                 ],
                 [
