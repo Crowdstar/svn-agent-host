@@ -48,6 +48,7 @@ class BulkActionsTest extends AbstractSvnTestCase
         }
 
         $bulkResponse = $bulkAction->run()->toArray();
+        print_r($bulkResponse);
         foreach ($bulkResponse['response'] as $key => $response) {
             $this->assertInternalType('int', $response['revision'], 'revision #s are always integers.');
             $this->assertGreaterThan(0, $response['revision'], 'revision #s are always positive integers.');
