@@ -19,7 +19,7 @@ class CheckoutResponse extends AbstractVersionedResponse
             if (preg_match('/Checked out revision ([\d]+)\.$/m', trim($output), $matches)) {
                 $this->setRevision(intval($matches[1]));
             } else {
-                //TODO: report error to the developers.
+                $this->getLogger()->error("unable to fetch revision # from output when doing SVN checkout: {$output}");
                 $this->setRevision(-1);
             }
 
@@ -33,7 +33,7 @@ class CheckoutResponse extends AbstractVersionedResponse
                 $lines
             );
         } else {
-            //TODO: report error to the developers.
+            $this->getLogger()->error("unrecognized output to fetch revision # from command SVN checkout: {$output}");
             $this->setRevision(-1);
         }
 

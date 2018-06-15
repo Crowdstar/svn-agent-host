@@ -8,7 +8,7 @@
     "arvenil/ninja-mutex": "~0.6",
     "bugsnag/bugsnag": "~3.13.0",
     "monolog/monolog": "~1.11",
-    "mrrio/shellwrap": "~0.4.0",
+    "mrrio/shellwrap": "dev-master",
     "vlucas/phpdotenv": "~2.2"
   },
   "require-dev": {
@@ -26,6 +26,12 @@
       "CrowdStar\\Tests\\SVNAgent\\": "tests/CrowdStar/SVNAgent/"
     }
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/deminy/shellwrap.git"
+    }
+  ],
   "bin": [
     "bin/kill-host-processes.sh",
     "bin/svn-agent-host.php",

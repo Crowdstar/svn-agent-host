@@ -10,3 +10,8 @@ ini_set('display_startup_errors', '1');
 Config::singleton()
     ->setLogger(new NullLogger())
     ->init(dirname(__DIR__), '.env.example');
+
+// Allow to use customized Subversion for testing purpose.
+if (!empty($_ENV['SVN_PATH'])) {
+    putenv("PATH={$_ENV['SVN_PATH']}:{$_SERVER['PATH']}");
+}

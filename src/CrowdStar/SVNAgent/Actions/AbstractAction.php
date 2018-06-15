@@ -147,7 +147,6 @@ abstract class AbstractAction
         $sh = new ShellWrap();
         try {
             $closure();
-            $results[] = (string) $sh;
             $this->prepareResponse((string) $sh);
         } catch (ShellWrapException $e) {
             $this->setError($e->getMessage());

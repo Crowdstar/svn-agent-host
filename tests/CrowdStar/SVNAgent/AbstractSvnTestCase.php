@@ -58,6 +58,9 @@ abstract class AbstractSvnTestCase extends TestCase
      */
     protected static function deletePath(string $path)
     {
+        // Change directory first so that current directory is always valid.
+        chdir($_SERVER['HOME']);
+
         $request = (new Request())->init(self::getBasicRequestData() + ['data' => ['path' => $path]]);
         $action  = new Open($request);
 

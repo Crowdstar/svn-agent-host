@@ -2,6 +2,9 @@
 
 namespace CrowdStar\SVNAgent\Responses;
 
+use CrowdStar\SVNAgent\Config;
+use Psr\Log\LoggerInterface;
+
 /**
  * Class AbstractResponse
  *
@@ -30,7 +33,15 @@ abstract class AbstractResponse
         return json_encode($this->toArray());
     }
 
-        /**
+    /**
+     * @return LoggerInterface
+     */
+    protected function getLogger(): LoggerInterface
+    {
+        return Config::singleton()->getLogger();
+    }
+
+    /**
      * @return array
      */
     abstract public function toArray(): array;

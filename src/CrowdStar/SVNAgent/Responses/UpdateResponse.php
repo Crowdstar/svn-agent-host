@@ -43,11 +43,11 @@ class UpdateResponse extends AbstractVersionedResponse
             if (preg_match('/' . preg_quote($end) . '([\d]+)\.$/m', $output, $matches)) {
                 $this->setRevision(intval($matches[1]));
             } else {
-                //TODO: report error to the developers.
+                $this->getLogger()->error("unable to fetch revision # from output when doing SVN update: {$output}");
                 $this->setRevision(-1);
             }
         } else {
-            //TODO: report error to the developers.
+            $this->getLogger()->error("unrecognized output to fetch revision # from command SVN update: {$output}");
             $this->setRevision(-1);
         }
 

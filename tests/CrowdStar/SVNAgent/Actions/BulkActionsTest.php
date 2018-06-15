@@ -45,11 +45,9 @@ class BulkActionsTest extends AbstractSvnTestCase
         // Here we create 3 SVN paths: /path/1, /path/2 and /path/3
         foreach (['path/0', '/path/1', 'path/2/'] as $path) {
             $response = (new Create($this->getPathBasedRequest($path)))->run();
-            print_r($response);
         }
 
         $bulkResponse = $bulkAction->run()->toArray();
-        print_r($bulkResponse);
         foreach ($bulkResponse['response'] as $key => $response) {
             $this->assertInternalType('int', $response['revision'], 'revision #s are always integers.');
             $this->assertGreaterThan(0, $response['revision'], 'revision #s are always positive integers.');

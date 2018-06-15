@@ -14,6 +14,46 @@ use MrRio\ShellWrapException;
 class SVNHelper
 {
     /**
+     * @return string
+     */
+    public function getSvnVersion(): string
+    {
+        return preg_replace('/^.*\s+version\s+([\d\.]+)\s+\(.+$/', '$1', $this->getRawSvnVersion());
+    }
+
+    /**
+     * @return string
+     */
+    protected function getRawSvnVersion(): string
+    {
+        // Output of command "svn --version | sed -n 1p":
+        //     1. on macOS High Sierra: svn, version 1.10.0 (r1827917)
+        //     2. in Travis CI:         svn, version 1.8.8 (r1568071)
+        return trim(ShellWrap::svn('--version | sed -n 1p'));
+    }
+
+    /**
+     * @param string $dir
+     * @return string
+     * @throws Exception
+     */
+    public function getUrl(string $dir): string
+    {
+        if (is_dir($dir)) {
+            $sh = new ShellWrap();
+            try {
+                ShellWrap::svn("info '{$dir}' | grep '^URL: ' | awk '{print \$NF}'");
+            } catch (ShellWrapException $e) {
+                throw new Exception("unable to fetch SVN information from directory {$dir} " . $e->getMessage());
+            }
+
+            return trim((string) $sh);
+        } else {
+            throw new Exception("directory '{$dir}' not exists");
+        }
+    }
+
+    /**
      * @param string $path
      * @return bool
      * @see https://stackoverflow.com/a/868068/2752269 Check that an svn repository url does not exist
@@ -61,31 +101,5 @@ class SVNHelper
     public static function sameUrl(string $url1, string $url2): bool
     {
         return (PathHelper::rtrim($url1) == PathHelper::rtrim($url2));
-    }
-
-    /**
-     * @param string $dir
-     * @return string
-     * @throws Exception
-     */
-    public static function getUrl(string $dir): string
-    {
-        if (is_dir($dir)) {
-            $oldDir = getcwd();
-            chdir($dir);
-
-            $sh = new ShellWrap();
-            try {
-                ShellWrap::svn('info', '--show-item', 'url');
-            } catch (ShellWrapException $e) {
-                throw new Exception("unable to fetch SVN information from directory {$dir}");
-            }
-
-            chdir($oldDir);
-
-            return trim((string) $sh);
-        } else {
-            throw new Exception("directory '{$dir}' not exists");
-        }
     }
 }

@@ -29,9 +29,9 @@ class Commit extends AbstractAction implements PathBasedActionInterface
             $this->initializeSvnPathWhenNeeded();
 
             // @see https://stackoverflow.com/a/11066348/2752269 svn delete removed files
-            ShellWrap::svn(
-                'status | grep \'^!\' | awk \'{print $2}\' | xargs svn delete'
-            );
+            if (trim(ShellWrap::svn('status | grep \'^!\' | awk \'{print $2}\''))) {
+                ShellWrap::svn('status | grep \'^!\' | awk \'{print $2}\' | xargs svn delete');
+            }
             try {
                 // @see https://stackoverflow.com/a/4046862/2752269 How do I 'svn add' all unversioned files to SVN?
                 ShellWrap::svn(

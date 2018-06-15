@@ -33,7 +33,7 @@ class Update extends AbstractAction implements PathBasedActionInterface
         } else {
             if (SVNHelper::pathExists($dir)) {
                 try {
-                    $currentUrl = SVNHelper::getUrl($dir);
+                    $currentUrl = (new SVNHelper())->getUrl($dir);
                 } catch (Exception $e) {
                     $this->setError($e->getMessage());
                 }

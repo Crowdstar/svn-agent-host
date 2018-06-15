@@ -7,8 +7,9 @@
         <listener class="\CrowdStar\Tests\SVNAgent\TestListener" file="tests/CrowdStar/SVNAgent/TestListener.php" />
     </listeners>
     <php>
-        <env name="SVN_USERNAME" value="username"/>
-        <env name="SVN_PASSWORD" value="password"/>
-        <env name="DEBUG" value="1"/>
+        <env name="SVN_USERNAME"  value="username"/>
+        <env name="SVN_PASSWORD"  value="password"/>
+        <!-- <env name="SVN_PATH" value="/usr/local/opt/subversion@1.8/bin"/> -->
+        <env name="DEBUG"         value=""/>
     </php>
 </phpunit>

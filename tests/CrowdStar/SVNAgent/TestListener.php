@@ -3,6 +3,7 @@
 namespace CrowdStar\Tests\SVNAgent;
 
 use CrowdStar\SVNAgent\Config;
+use CrowdStar\SVNAgent\SVNHelper;
 use Exception;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Test;
@@ -63,8 +64,17 @@ class TestListener implements \PHPUnit\Framework\TestListener
      */
     public function startTestSuite(TestSuite $suite)
     {
+
         if (!empty($_ENV['DEBUG'])) {
-            file_put_contents(Config::singleton()->getLogFile(), '');
+            $logFile = Config::singleton()->getLogFile();
+            if (!file_exists(dirname($logFile))) {
+                mkdir(dirname($logFile), 0755, true);
+            }
+
+            file_put_contents(
+                Config::singleton()->getLogFile(),
+                'SVN version: '. (new SVNHelper())->getSvnVersion() . "\n\n"
+            );
         }
     }
 
