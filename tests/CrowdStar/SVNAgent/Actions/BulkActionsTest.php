@@ -43,8 +43,9 @@ class BulkActionsTest extends AbstractSvnTestCase
         }
 
         // Here we create 3 SVN paths: /path/1, /path/2 and /path/3
-        for ($i = 0; $i < 3; $i++) {
-            (new Create($this->getPathBasedRequest("path/{$i}")))->run();
+        foreach (['path/0', '/path/1', 'path/2/'] as $path) {
+            $response = (new Create($this->getPathBasedRequest($path)))->run();
+            print_r($response);
         }
 
         $bulkResponse = $bulkAction->run()->toArray();

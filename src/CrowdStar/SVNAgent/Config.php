@@ -99,7 +99,7 @@ class Config
         date_default_timezone_set(getenv(self::SVN_AGENT_TIMEZONE));
 
         $logger  = new Logger(getmypid());
-        $handler = new StreamHandler(getenv(self::SVN_AGENT_LOGFILE), Logger::DEBUG);
+        $handler = new StreamHandler($this->getLogFile(), Logger::DEBUG);
         $handler->setFormatter(new LineFormatter(null, null, false, true));
         $logger->pushHandler($handler);
         $this->setLogger($logger);
@@ -148,6 +148,14 @@ class Config
     public function getSvnRoot(): string
     {
         return PathHelper::rtrim(getenv(self::SVN_AGENT_SVN_ROOT));
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogFile(): string
+    {
+        return getenv(self::SVN_AGENT_LOGFILE);
     }
 
     /**

@@ -3,8 +3,12 @@
     <testsuite name="default">
         <directory suffix="Test.php">tests/CrowdStar</directory>
     </testsuite>
+    <listeners>
+        <listener class="\CrowdStar\Tests\SVNAgent\TestListener" file="tests/CrowdStar/SVNAgent/TestListener.php" />
+    </listeners>
     <php>
         <env name="SVN_USERNAME" value="username"/>
         <env name="SVN_PASSWORD" value="password"/>
+        <env name="DEBUG" value="1"/>
     </php>
 </phpunit>
