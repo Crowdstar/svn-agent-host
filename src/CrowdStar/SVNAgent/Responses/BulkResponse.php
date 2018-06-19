@@ -31,6 +31,8 @@ class BulkResponse extends AbstractResponse
     public function setResponses(array $responses): BulkResponse
     {
         $this->responses = $responses;
+
+        return $this;
     }
 
     /**

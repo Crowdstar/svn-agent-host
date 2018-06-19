@@ -6,7 +6,6 @@ use CrowdStar\SVNAgent\Actions\AbstractAction;
 use CrowdStar\SVNAgent\Actions\Create;
 use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Request;
-use CrowdStar\SVNAgent\Responses\PathBasedResponse;
 use CrowdStar\Tests\SVNAgent\AbstractSvnTestCase;
 
 /**
@@ -75,7 +74,6 @@ class UnknownSvnServerTest extends AbstractSvnTestCase
      */
     public function testProcessAction(array $expected, array $requestData)
     {
-        /** @var PathBasedResponse $response */
         $response = (new Create((new Request())->init($requestData)))->run()->toArray();
         foreach (['success', 'path'] as $field) {
             $this->assertSame($expected[$field], $response[$field]);

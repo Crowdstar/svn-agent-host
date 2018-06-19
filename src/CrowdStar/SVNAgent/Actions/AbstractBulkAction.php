@@ -4,6 +4,7 @@ namespace CrowdStar\SVNAgent\Actions;
 
 use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Responses\BulkResponse;
+use CrowdStar\SVNAgent\Exceptions\Exception;
 use ReflectionClass;
 use ReflectionException;
 

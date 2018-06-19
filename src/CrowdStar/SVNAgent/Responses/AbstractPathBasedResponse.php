@@ -17,7 +17,7 @@ abstract class AbstractPathBasedResponse extends AbstractResponse
     /**
      * CommitResponse constructor.
      *
-     * @param string|null $path
+     * @param string $path
      * @throws ClientException
      */
     public function __construct(string $path)
