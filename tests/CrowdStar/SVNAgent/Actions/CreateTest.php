@@ -24,14 +24,6 @@ class CreateTest extends AbstractSvnTestCase
     }
 
     /**
-     * @inheritdoc
-     */
-    public static function tearDownAfterClass()
-    {
-        // self::deletePath('path');
-    }
-
-    /**
      * @return array
      */
     public function dataProcess(): array

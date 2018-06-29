@@ -122,6 +122,18 @@ abstract class AbstractSvnTestCase extends TestCase
     }
 
     /**
+     * @return array
+     */
+    protected static function getBasicRequestDataWithIncorrectCredentials(): array
+    {
+        return [
+            'username' => uniqid() . '-',
+            'password' => uniqid() . '-',
+            'timeout'  => 30,
+        ];
+    }
+
+    /**
      * @return string
      */
     protected static function getSvnUsername(): string

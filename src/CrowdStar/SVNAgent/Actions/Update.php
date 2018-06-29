@@ -24,6 +24,16 @@ class Update extends AbstractAction implements PathBasedActionInterface
     {
         $url = $this->getSvnUri();
         $dir = $this->getSvnDir();
+
+        // Try to create the SVN path first if it doesn't yet exist.
+        $create = new Create($this->getRequest(), $this->getLogger());
+        $create->processAction();
+        if ($create->hasError()) {
+            $this->setResponse($create->getResponse());
+
+            return $this;
+        }
+
         if (!is_dir($dir)) {
             if (!is_dir(dirname($dir))) {
                 mkdir(dirname($dir), 0755, true);

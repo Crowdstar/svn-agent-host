@@ -11,6 +11,7 @@ use MrRio\ShellWrap;
  * If given directory not exists, create it in SVN.
  *
  * @package CrowdStar\SVNAgent\Actions
+ * @deprecated Please use action \CrowdStar\SVNAgent\Actions\Update instead.
  */
 class Create extends AbstractAction implements PathBasedActionInterface
 {
