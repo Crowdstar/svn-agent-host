@@ -114,7 +114,7 @@ class UpdateTest extends AbstractSvnTestCase
                 'error'   => implode(
                     '',
                     [
-                        "Folder '/Users/deminy/svn-agent/svn/path/2/' points to SVN URL ",
+                        "Folder '{$_SERVER['HOME']}/svn-agent/svn/path/2/' points to SVN URL ",
                         "http://127.0.0.1/svn/project1/path/1 which is different from expected URL ",
                         "http://127.0.0.1/svn/project1/path/2/",
                     ]
