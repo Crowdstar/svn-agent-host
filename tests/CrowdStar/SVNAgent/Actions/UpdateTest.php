@@ -71,10 +71,11 @@ class UpdateTest extends AbstractSvnTestCase
      * @covers AbstractAction::process()
      * @covers Update::processAction()
      * @group svn-server
-     * @runTestsInSeparateProcesses
      */
     public function testProcessActionWithIncorrectCredentials()
     {
+        $this->markTestSkipped('this test breaks itself or others from time to time in Travis CI');
+
         $action = new Update((new Request())->init(
             ['data' => ['path' => 'path/incorrect-credentials']] + $this->getBasicRequestDataWithIncorrectCredentials()
         ));
