@@ -71,6 +71,7 @@ class UpdateTest extends AbstractSvnTestCase
      * @covers AbstractAction::process()
      * @covers Update::processAction()
      * @group svn-server
+     * @runTestsInSeparateProcesses
      */
     public function testProcessActionWithIncorrectCredentials()
     {
