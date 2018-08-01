@@ -228,11 +228,27 @@ class BulkActionsTest extends AbstractSvnTestCase
         );
     }
 
+    public function testMaxPaths()
+    {
+        $paths = array_map(
+            function (int $i): string {
+                return "/path/${i}";
+            },
+            range(1, 40)
+        );
+        ;
+        $this->assertCount(
+            40,
+            (new BulkUpdate($this->getPathsBasedRequest(...$paths)))->getPaths(),
+            'up to 40 paths can be handled together'
+        );
+    }
+
     /**
      * @expectedException \CrowdStar\SVNAgent\Exceptions\ClientException
      * @expectedExceptionMessage up to 40 paths can be handled together
      */
-    public function testMaxPaths()
+    public function testMaxPathsWithException()
     {
         $paths = array_map(
             function (int $i): string {
@@ -240,6 +256,6 @@ class BulkActionsTest extends AbstractSvnTestCase
             },
             range(1, 41)
         );
-        (new BulkUpdate($this->getPathsBasedRequest(...$paths)))->run();
+        new BulkUpdate($this->getPathsBasedRequest(...$paths));
     }
 }
