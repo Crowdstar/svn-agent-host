@@ -227,4 +227,19 @@ class BulkActionsTest extends AbstractSvnTestCase
             'compare bulk review results.'
         );
     }
+
+    /**
+     * @expectedException \CrowdStar\SVNAgent\Exceptions\ClientException
+     * @expectedExceptionMessage up to 40 paths can be handled together
+     */
+    public function testMaxPaths()
+    {
+        $paths = array_map(
+            function (int $i): string {
+                return "/path/${i}";
+            },
+            range(1, 41)
+        );
+        (new BulkUpdate($this->getPathsBasedRequest(...$paths)))->run();
+    }
 }

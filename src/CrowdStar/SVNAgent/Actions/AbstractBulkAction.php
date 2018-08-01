@@ -21,7 +21,7 @@ abstract class AbstractBulkAction extends AbstractAction implements
     /**
      * Maximum number of paths to handle.
      */
-    const MAX_PATHS = 15;
+    const MAX_PATHS = 40;
 
     /**
      * @var array
