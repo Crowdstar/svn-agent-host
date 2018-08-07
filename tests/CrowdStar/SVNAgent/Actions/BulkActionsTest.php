@@ -2,6 +2,7 @@
 
 namespace CrowdStar\Tests\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\Actions\AbstractBulkAction;
 use CrowdStar\SVNAgent\Actions\AbstractPathBasedBulkAction;
 use CrowdStar\SVNAgent\Actions\BulkCommits;
 use CrowdStar\SVNAgent\Actions\BulkReview;
@@ -228,6 +229,9 @@ class BulkActionsTest extends AbstractSvnTestCase
         );
     }
 
+    /**
+     * @covers AbstractBulkAction::setPaths
+     */
     public function testMaxPaths()
     {
         $paths = array_map(
@@ -245,6 +249,7 @@ class BulkActionsTest extends AbstractSvnTestCase
     }
 
     /**
+     * @covers AbstractBulkAction::setPaths
      * @expectedException \CrowdStar\SVNAgent\Exceptions\ClientException
      * @expectedExceptionMessage up to 40 paths can be handled together
      */
