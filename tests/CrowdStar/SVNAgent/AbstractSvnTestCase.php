@@ -29,7 +29,8 @@ abstract class AbstractSvnTestCase extends TestCase
     public static function setUpInvalidSvnHost()
     {
         self::$svnRoot = getenv(Config::SVN_AGENT_SVN_ROOT, '');
-        putenv(Config::SVN_AGENT_SVN_ROOT . '=' . 'http://127.0.0.1');
+        // Change SVN root from "http://example.com/svn/project1" to "http://example.com" (domain name may vary here).
+        putenv(Config::SVN_AGENT_SVN_ROOT . '=' . dirname(Config::singleton()->getSvnRoot(), 2));
     }
 
     /**

@@ -4,6 +4,7 @@ namespace CrowdStar\Tests\SVNAgent\Actions;
 
 use CrowdStar\SVNAgent\Actions\AbstractAction;
 use CrowdStar\SVNAgent\Actions\Update;
+use CrowdStar\SVNAgent\Config;
 use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Request;
 use CrowdStar\Tests\SVNAgent\AbstractSvnTestCase;
@@ -117,8 +118,8 @@ class UpdateTest extends AbstractSvnTestCase
                     '',
                     [
                         "Folder '{$_SERVER['HOME']}/svn-agent/svn/path/2/' points to SVN URL ",
-                        "http://127.0.0.1/svn/project1/path/1 which is different from expected URL ",
-                        "http://127.0.0.1/svn/project1/path/2/",
+                        Config::singleton()->getSvnRoot() . "/path/1 which is different from expected URL ",
+                        Config::singleton()->getSvnRoot() . "/path/2/",
                     ]
                 ),
             ],

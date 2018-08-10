@@ -3,6 +3,7 @@
 namespace CrowdStar\Tests\SVNAgent;
 
 use CrowdStar\SVNAgent\Actions\Create;
+use CrowdStar\SVNAgent\Config;
 use CrowdStar\SVNAgent\Request;
 use CrowdStar\SVNAgent\SVNHelper;
 
@@ -67,7 +68,10 @@ class SVNHelperTest extends AbstractSvnTestCase
     {
         $action = (new Create((new Request())->init(['data' => ['path' => 'path/1'],] + $this->getBasicRequestData())));
         $action->run();
-        $this->assertSame('http://127.0.0.1/svn/project1/path/1', (new SVNHelper())->getUrl($action->getSvnDir()));
+        $this->assertSame(
+            Config::singleton()->getSvnRoot() . '/path/1',
+            (new SVNHelper())->getUrl($action->getSvnDir())
+        );
 
         self::deletePath('path');
     }
@@ -85,12 +89,12 @@ class SVNHelperTest extends AbstractSvnTestCase
             ],
             [
                 true,
-                'http://127.0.0.1/svn/project1',
+                Config::singleton()->getSvnRoot(),
                 'root directory of the SVN repository',
             ],
             [
                 false,
-                'http://127.0.0.1/svn/project1/directory-not-exist/',
+                Config::singleton()->getSvnRoot() . '/directory-not-exist/',
                 'a non-existing path under the SVN repository',
             ],
         ];
