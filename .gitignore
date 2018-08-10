@@ -9,6 +9,7 @@
 
 # Ignore Composer files
 /composer.lock
+/composer.phar
 /vendor/
 
 # Ignore phplint files
