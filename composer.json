@@ -2,7 +2,7 @@
   "name": "crowdstar/svn-agent-host",
   "description": "A native messaging host to handle SVN commands received from specific Chrome extension.",
   "homepage": "https://www.glu.com",
-  "license": "proprietary",
+  "license": "Apache-2.0",
   "require": {
     "php": ">=7.0",
     "arvenil/ninja-mutex": "~0.6",
