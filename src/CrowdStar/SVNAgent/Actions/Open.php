@@ -35,14 +35,14 @@ class Open extends AbstractAction implements PathBasedActionInterface
      */
     public function processAction(): AbstractAction
     {
-        // PHP code "ShellWrap::open(dirname($dir));" won't work if path $dir contains space. Because of that, we have
-        // to switch to given directory first, then open its parent directory.
-        $dir = $this->getSvnDir();
+        // PHP code "ShellWrap::open($dir);" won't work if path $dir contains space. Because of that, we have to switch
+        // to given directory first, then open it.
+        $dir = dirname($this->getSvnDir());
         if (is_dir($dir)) {
             chdir($dir);
             $this->setMessage('open folder in Finder')->exec(
                 function () {
-                    ShellWrap::open('..');
+                    ShellWrap::open('.');
                 }
             );
         } else {
