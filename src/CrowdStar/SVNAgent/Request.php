@@ -95,7 +95,7 @@ class Request
         $this
             ->setUsername($data['username'] ? base64_decode($data['username']) : '')
             ->setPassword($data['password'] ? base64_decode($data['password']) : '')
-            ->setTimeout($data['timeout'] ? $data['timeout'] : Config::DEFAULT_TIMEOUT)
+            ->setTimeout(!empty($data['timeout']) ? $data['timeout'] : Config::DEFAULT_TIMEOUT)
             ->setAction($data['action'] ?? '')
             ->setData($data['data'] ?? []);
 
