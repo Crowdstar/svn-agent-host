@@ -22,7 +22,7 @@ use MrRio\ShellWrap;
 
 /**
  * Class Open
- * Open given directory in Finder.
+ * Open the parent directory of given directory in Finder (Mac OS) or File Explorer (Windows).
  *
  * @package CrowdStar\SVNAgent\Actions
  */
@@ -35,12 +35,14 @@ class Open extends AbstractAction implements PathBasedActionInterface
      */
     public function processAction(): AbstractAction
     {
+        // PHP code "ShellWrap::open(dirname($dir));" won't work if path $dir contains space. Because of that, we have
+        // to switch to given directory first, then open its parent directory.
         $dir = $this->getSvnDir();
         if (is_dir($dir)) {
             chdir($dir);
             $this->setMessage('open folder in Finder')->exec(
                 function () {
-                    ShellWrap::open('.');
+                    ShellWrap::open('..');
                 }
             );
         } else {
