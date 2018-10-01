@@ -41,7 +41,7 @@ class Config
     /**
      * The current system version.
      */
-    const VERSION = '0.1.0';
+    const VERSION = '1.0.5';
 
     /**
      * Default timeout to execute given action. In seconds.
