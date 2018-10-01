@@ -20,6 +20,7 @@ namespace CrowdStar\SVNAgent;
 use Bugsnag\Client;
 use Bugsnag\Handler;
 use Bugsnag\Report;
+use CrowdStar\SVNAgent\Monolog\Processor\SvnProcessor;
 use CrowdStar\SVNAgent\Traits\LoggerTrait;
 use Dotenv\Dotenv;
 use Exception;
@@ -116,7 +117,7 @@ class Config
         $logger  = new Logger(getmypid());
         $handler = new StreamHandler($this->getLogFile(), Logger::DEBUG);
         $handler->setFormatter(new LineFormatter(null, null, false, true));
-        $logger->pushHandler($handler);
+        $logger->pushHandler($handler)->pushProcessor(new SvnProcessor());
         $this->setLogger($logger);
 
         ErrorHandler::register($this->getLogger());
