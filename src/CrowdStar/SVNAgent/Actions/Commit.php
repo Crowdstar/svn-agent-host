@@ -54,6 +54,7 @@ class Commit extends AbstractAction implements PathBasedActionInterface
                 );
             } catch (ShellWrapException $e) {
                 // This "svn add" command fails if nothing to add.
+                $this->getLogger()->error('Error happened when adding files before an SVN commit: ' . $e->getMessage());
             }
 
             $this->setMessage('SVN commit')->exec(
