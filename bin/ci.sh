@@ -39,22 +39,27 @@ done
 
 # Build the Docker image and launch Docker containers.
 docker build --no-cache -t "crowdstar/svn-agent-host:${ALPINE_TAG}" .
-docker-compose -p svn-agent-host stop
-docker-compose -p svn-agent-host up -d --force-recreate
+docker-compose -p sah stop
+docker-compose -p sah up -d --force-recreate
 docker ps
 
 # Initialize the SVN server container.
-docker exec -t svn-agent-host_svn-server_1 htpasswd -b /etc/subversion/passwd username password
-docker exec -t svn-agent-host_svn-server_1 svnadmin create /home/svn/project1
-docker exec -t svn-agent-host_svn-server_1 chmod -R 777 /home/svn/project1
+docker exec -t `docker ps | grep svn-server | awk '{print $NF}'` htpasswd -b /etc/subversion/passwd username password
+docker exec -t `docker ps | grep svn-server | awk '{print $NF}'` svnadmin create /home/svn/project1
+docker exec -t `docker ps | grep svn-server | awk '{print $NF}'` chmod -R 777 /home/svn/project1
 
 # Check PHP and Subversion versions.
-docker exec -t svn-agent-host_svn-agent-host_1 sh -c "php --version && svn --version"
+docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c \
+    "php --version && svn --version"
 
 # Load third-party Composer packages.
-docker exec -t svn-agent-host_svn-agent-host_1 sh -c "cd /svn-agent-host && composer update -n"
+docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c \
+    "cd /svn-agent-host && composer update -n"
 
 # Run tests.
-docker exec -t svn-agent-host_svn-agent-host_1 sh -c "cd /svn-agent-host && ./vendor/bin/phplint"
-docker exec -t svn-agent-host_svn-agent-host_1 sh -c "cd /svn-agent-host && ./vendor/bin/phpcs -v --standard=PSR2 src tests || true"
-docker exec -t svn-agent-host_svn-agent-host_1 sh -c "cd /svn-agent-host && ./vendor/bin/phpunit"
+docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c \
+    "cd /svn-agent-host && ./vendor/bin/phplint"
+docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c \
+    "cd /svn-agent-host && ./vendor/bin/phpcs -v --standard=PSR2 src tests || true"
+docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c \
+    "cd /svn-agent-host && ./vendor/bin/phpunit"
