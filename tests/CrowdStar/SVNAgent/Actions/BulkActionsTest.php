@@ -250,7 +250,7 @@ class BulkActionsTest extends AbstractSvnTestCase
     public function testMaxPaths()
     {
         $paths = array_map(
-            function (int $i): string {
+            function (int $i) : string {
                 return "/path/${i}";
             },
             range(1, 40)
@@ -271,7 +271,7 @@ class BulkActionsTest extends AbstractSvnTestCase
     public function testMaxPathsWithException()
     {
         $paths = array_map(
-            function (int $i): string {
+            function (int $i) : string {
                 return "/path/${i}";
             },
             range(1, 41)

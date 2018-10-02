@@ -60,6 +60,6 @@ docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c \
 docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c \
     "cd /svn-agent-host && ./vendor/bin/phplint"
 docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c \
-    "cd /svn-agent-host && ./vendor/bin/phpcs -v --standard=PSR2 src tests || true"
+    "cd /svn-agent-host && ./vendor/bin/phpcs -v --standard=PSR2 src tests"
 docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c \
     "cd /svn-agent-host && ./vendor/bin/phpunit"
