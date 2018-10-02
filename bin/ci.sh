@@ -63,3 +63,6 @@ docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c \
     "cd /svn-agent-host && ./vendor/bin/phpcs -v --standard=PSR2 src tests"
 docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c \
     "cd /svn-agent-host && ./vendor/bin/phpunit"
+
+# Stop the Docker containers once tests are done.
+docker-compose -p sah stop
