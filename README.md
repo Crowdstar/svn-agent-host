@@ -5,7 +5,13 @@
 
 A native messaging host to handle SVN commands received from specific Chrome extension.
 
-# Run Unit Tests
+This repository was for an internal project at [Glu Mobile](https://www.glu.com). We make part of the whole project open
+source so that developers could use it as a demo to learn how to use PHP to
+
+* write [native messaging host](https://developer.chrome.com/apps/nativeMessaging#native-messaging-host) for Chrome.
+* wrap Subversion operations (without using [the Subversion extension](http://php.net/manual/en/book.svn.php) in PHP).
+
+# Run Tests
 
 We use _Docker_ to prepare our test environments. You may run unit tests, coding style checks, and other tests in Docker
 containers with following commands:
