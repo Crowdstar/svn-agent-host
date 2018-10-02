@@ -17,3 +17,7 @@
 
 # Ignore file phpunit.xml
 /phpunit.xml
+
+# Ignore generated Docker files
+/docker-compose.yml
+/Dockerfile

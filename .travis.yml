@@ -1,24 +1,9 @@
-language: php
-
-php:
-  - 7.2
-  - 7.1
-  - 7.0
+env:
+  - ALPINE_TAG=3.7
+  - ALPINE_TAG=3.8
 
 services:
   - docker
 
-before_install:
-  - docker run --rm -d --name svn-server -p 80:80 elleflorio/svn-server
-  - docker ps -a
-  - docker exec -t svn-server htpasswd -b /etc/subversion/passwd username password
-  - docker exec -t svn-server svnadmin create /home/svn/project1
-  - docker exec -t svn-server chmod -R 777 /home/svn/project1
-  - composer install -n
-  - svn --version
-
 script:
-  - ./vendor/bin/phplint
-  - ./vendor/bin/phpcs -v --standard=PSR2 src tests
-  # - ./vendor/bin/phpunit
-  - ./vendor/bin/phpunit -v --debug
+  - ./bin/ci.sh ${ALPINE_TAG}
