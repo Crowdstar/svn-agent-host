@@ -13,4 +13,4 @@ services:
   svn-server:
     image: elleflorio/svn-server
     ports:
-      - "80:80"
+      - 80
