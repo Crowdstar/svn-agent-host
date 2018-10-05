@@ -17,7 +17,7 @@
 
 namespace CrowdStar\Tests\SVNAgent;
 
-use CrowdStar\SVNAgent\Actions\Open;
+use CrowdStar\SVNAgent\Actions\DummyPathBasedAction;
 use CrowdStar\SVNAgent\Config;
 use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Request;
@@ -78,7 +78,7 @@ abstract class AbstractSvnTestCase extends TestCase
         chdir($_SERVER['HOME']);
 
         $request = (new Request())->init(self::getBasicRequestData() + ['data' => ['path' => $path]]);
-        $action  = new Open($request);
+        $action  = new DummyPathBasedAction($request);
 
         if (is_dir($action->getSvnDir())) {
             ShellWrap::rm('-rf', $action->getSvnDir());

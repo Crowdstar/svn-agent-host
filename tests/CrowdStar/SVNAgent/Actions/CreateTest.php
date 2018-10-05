@@ -78,6 +78,6 @@ class CreateTest extends AbstractSvnTestCase
         $this->assertGreaterThan(0, $response['revision'], 'field "revision" must be a positive int');
 
         $expected['revision'] = $response['revision'];
-        $this->assertEquals($expected, $response, $message);
+        $this->assertSame($expected, $response, $message);
     }
 }
