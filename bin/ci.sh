@@ -43,26 +43,26 @@ docker-compose -p sah stop
 docker-compose -p sah up -d --force-recreate
 docker ps
 
+function getContainerName()
+{
+    docker ps | grep ${1} | awk '{print $NF}'
+}
+
 # Initialize the SVN server container.
-docker exec -t `docker ps | grep svn-server | awk '{print $NF}'` htpasswd -b /etc/subversion/passwd username password
-docker exec -t `docker ps | grep svn-server | awk '{print $NF}'` svnadmin create /home/svn/project1
-docker exec -t `docker ps | grep svn-server | awk '{print $NF}'` chmod -R 777 /home/svn/project1
+docker exec -t `getContainerName svn-server` htpasswd -b /etc/subversion/passwd username password
+docker exec -t `getContainerName svn-server` svnadmin create /home/svn/project1
+docker exec -t `getContainerName svn-server` chmod -R 777 /home/svn/project1
 
 # Check PHP and Subversion versions.
-docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c \
-    "php --version && svn --version"
+docker exec -t `getContainerName svn-agent-host` sh -c "php --version && svn --version"
 
 # Load third-party Composer packages.
-docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c \
-    "cd /svn-agent-host && composer update -n"
+docker exec -t `getContainerName svn-agent-host` sh -c "cd /svn-agent-host && composer update -n"
 
 # Run tests.
-docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c \
-    "cd /svn-agent-host && ./vendor/bin/phplint"
-docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c \
-    "cd /svn-agent-host && ./vendor/bin/phpcs -v --standard=PSR2 src tests"
-docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c \
-    "cd /svn-agent-host && ./vendor/bin/phpunit"
+docker exec -t `getContainerName svn-agent-host` sh -c "cd /svn-agent-host && ./vendor/bin/phplint"
+docker exec -t `getContainerName svn-agent-host` sh -c "cd /svn-agent-host && ./vendor/bin/phpcs -v --standard=PSR2 src tests"
+docker exec -t `getContainerName svn-agent-host` sh -c "cd /svn-agent-host && ./vendor/bin/phpunit"
 
 # Stop the Docker containers once tests are done.
 docker-compose -p sah stop
