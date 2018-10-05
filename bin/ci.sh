@@ -57,12 +57,12 @@ docker exec -t `getContainerName svn-server` chmod -R 777 /home/svn/project1
 docker exec -t `getContainerName svn-agent-host` sh -c "php --version && svn --version"
 
 # Load third-party Composer packages.
-docker exec -t `getContainerName svn-agent-host` sh -c "cd /svn-agent-host && composer update -n"
+docker exec -t `getContainerName svn-agent-host` sh -c "composer update -n"
 
 # Run tests.
-docker exec -t `getContainerName svn-agent-host` sh -c "cd /svn-agent-host && ./vendor/bin/phplint"
-docker exec -t `getContainerName svn-agent-host` sh -c "cd /svn-agent-host && ./vendor/bin/phpcs -v --standard=PSR2 src tests"
-docker exec -t `getContainerName svn-agent-host` sh -c "cd /svn-agent-host && ./vendor/bin/phpunit"
+docker exec -t `getContainerName svn-agent-host` sh -c "./vendor/bin/phplint"
+docker exec -t `getContainerName svn-agent-host` sh -c "./vendor/bin/phpcs -v --standard=PSR2 src tests"
+docker exec -t `getContainerName svn-agent-host` sh -c "./vendor/bin/phpunit"
 
 # Stop the Docker containers once tests are done.
 docker-compose -p sah stop

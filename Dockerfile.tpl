@@ -35,3 +35,5 @@ RUN \
     --retry-max-time   60 \
     http://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer && \
   composer --version
+
+WORKDIR /svn-agent-host
