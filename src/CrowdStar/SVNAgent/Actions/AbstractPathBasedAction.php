@@ -17,36 +17,11 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
-use CrowdStar\SVNAgent\Traits\SimpleResponseTrait;
-use MrRio\ShellWrap;
-
 /**
- * Class Cleanup
- * Clean up and discard local SVN changes under given directory.
+ * Class AbstractPathBasedAction
  *
  * @package CrowdStar\SVNAgent\Actions
  */
-class Cleanup extends AbstractPathBasedAction
+abstract class AbstractPathBasedAction extends AbstractAction implements PathBasedActionInterface
 {
-    use SimpleResponseTrait;
-
-    /**
-     * @inheritdoc
-     */
-    public function processAction(): AbstractAction
-    {
-        $dir = $this->getSvnDir();
-        if (is_readable($dir)) {
-            chdir($dir);
-            $this->setMessage('SVN cleanup')->exec(
-                function () {
-                    ShellWrap::bash($this->getConfig()->getRootDir() . '/vendor/bin/svn-cleanup.sh');
-                }
-            );
-        } else {
-            $this->setError("Folder '{$dir}' not exist");
-        }
-
-        return $this;
-    }
 }

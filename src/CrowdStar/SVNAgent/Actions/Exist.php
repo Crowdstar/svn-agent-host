@@ -25,7 +25,7 @@ use CrowdStar\SVNAgent\SVNHelper;
  *
  * @package CrowdStar\SVNAgent\Actions
  */
-class Exist extends AbstractAction implements PathBasedActionInterface
+class Exist extends AbstractPathBasedAction
 {
     use SimpleResponseTrait;
 

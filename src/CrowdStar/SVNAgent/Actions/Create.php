@@ -17,8 +17,8 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
-use CrowdStar\SVNAgent\Traits\PathBasedResponseTrait;
 use CrowdStar\SVNAgent\SVNHelper;
+use CrowdStar\SVNAgent\Traits\PathBasedResponseTrait;
 use MrRio\ShellWrap;
 
 /**
@@ -28,7 +28,7 @@ use MrRio\ShellWrap;
  * @package CrowdStar\SVNAgent\Actions
  * @deprecated Please use action \CrowdStar\SVNAgent\Actions\Update instead.
  */
-class Create extends AbstractAction implements PathBasedActionInterface
+class Create extends AbstractPathBasedAction
 {
     use PathBasedResponseTrait;
 

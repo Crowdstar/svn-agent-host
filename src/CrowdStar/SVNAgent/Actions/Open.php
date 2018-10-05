@@ -26,7 +26,7 @@ use MrRio\ShellWrap;
  *
  * @package CrowdStar\SVNAgent\Actions
  */
-class Open extends AbstractAction implements PathBasedActionInterface
+class Open extends AbstractPathBasedAction
 {
     use SimpleResponseTrait;
 
