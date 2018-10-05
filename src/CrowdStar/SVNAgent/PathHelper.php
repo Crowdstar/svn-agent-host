@@ -17,6 +17,8 @@
 
 namespace CrowdStar\SVNAgent;
 
+use CrowdStar\SVNAgent\Exceptions\ClientException;
+
 /**
  * Class PathHelper
  *
@@ -24,6 +26,23 @@ namespace CrowdStar\SVNAgent;
  */
 class PathHelper
 {
+    /**
+     * @param string $path
+     * @return string
+     * @throws ClientException
+     */
+    public static function normalizePath(string $path): string
+    {
+        $path = self::trim($path);
+        if (empty($path)) {
+            throw new ClientException('given path is empty');
+        }
+
+        // SVN URL like https://svn.apache.org/repos/asf (without trailing slash) returns HTTP 301 response back.
+        // Here we make sure there are always slashes before and after given SVN path.
+        return DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR;
+    }
+
     /**
      * @param string $path
      * @return string
