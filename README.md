@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/Crowdstar/svn-agent-host.svg?branch=master)](https://travis-ci.org/Crowdstar/svn-agent-host)
 [![Latest Stable Version](https://poser.pugx.org/Crowdstar/svn-agent-host/v/stable.svg)](https://packagist.org/packages/crowdstar/svn-agent-host)
 [![Latest Unstable Version](https://poser.pugx.org/Crowdstar/svn-agent-host/v/unstable.svg)](https://packagist.org/packages/crowdstar/svn-agent-host)
-[![License](https://poser.pugx.org/Crowdstar/svn-agent-host/license.svg)](https://packagist.org/packages/crowdstar/svn-agent-host)
+[![License](https://poser.pugx.org/Crowdstar/svn-agent-host/license)](https://packagist.org/packages/crowdstar/svn-agent-host)
 
 A native messaging host to handle SVN commands received from specific Chrome extension.
 
