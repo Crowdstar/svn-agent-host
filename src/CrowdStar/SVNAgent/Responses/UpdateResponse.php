@@ -26,6 +26,7 @@ class UpdateResponse extends AbstractVersionedResponse
 {
     /**
      * @inheritdoc
+     * @see RenameResponse::process()
      */
     public function process(string $output)
     {

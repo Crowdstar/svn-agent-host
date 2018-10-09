@@ -201,6 +201,7 @@ containers with following commands:
     "message": "error message"
 }
 ```
+
 ## 5. Checkout
 
 ### 5.1. Successful
@@ -224,6 +225,26 @@ containers with following commands:
 ```
 
 ### 5.2. Failed
+
+```json
+{
+    "success": false,
+    "message": "error message"
+}
+```
+
+## 6. Rename
+
+### 6.1. Successful
+
+```json
+{
+    "success": true,
+    "revision": 48973
+}
+```
+
+### 6.2. Failed
 
 ```json
 {
