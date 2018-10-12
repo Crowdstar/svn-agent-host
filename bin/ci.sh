@@ -2,11 +2,7 @@
 #
 # The continuous integration script to run different tests.
 # Usage:
-#     ./bin/ci.sh [TAG_OF_AN_ALPINE_IMAGE]
-#     ./bin/ci.sh 3.8
-#     or
-#     ALPINE_TAG=3.8 ./bin/ci.sh
-# @see https://hub.docker.com/_/alpine/ Official Docker repository of Alpine
+#     PHP_VERSION=7.2 SVN_VERSION=1.10.3 ./bin/ci.sh
 #
 
 set -e
@@ -19,26 +15,17 @@ popd > /dev/null
 
 cd "${CURRENT_SCRIPT_PATH}/.."
 
-if [ -z "${ALPINE_TAG}" ] ; then
-    if [ -z "${1}" ] ; then
-        echo "Error: Please specify a Docker tag of the Alpine image to be used."
-        echo "       For example:"
-        echo "           ./bin/ci.sh 3.8"
-        echo "           or"
-        echo "           ALPINE_TAG=3.8 ./bin/ci.sh"
-        exit 1
-    else
-        ALPINE_TAG="${1}"
-    fi
+if [ -z "${PHP_VERSION}" ] || [ -z "${SVN_VERSION}" ] ; then
+    echo "Error: Please specify environment variable PHP_VERSION and SVN_VERSION."
+    echo "       For example:"
+    echo "           PHP_VERSION=7.2 SVN_VERSION=1.10.3 ./bin/ci.sh"
+    exit 1
 fi
 
 # Create Docker files.
-for file in "docker-compose.yml" "Dockerfile"; do
-    sed "s/ALPINE_TAG/${ALPINE_TAG}/g" "${file}.tpl" > "${file}"
-done
+sed "s/%%PHP_VERSION%%/${PHP_VERSION}/g; s/%%SVN_VERSION%%/${SVN_VERSION}/g" docker-compose.yml.tpl > docker-compose.yml
 
-# Build the Docker image and launch Docker containers.
-docker build --no-cache -t "crowdstar/svn-agent-host:${ALPINE_TAG}" .
+# Launch Docker containers.
 docker-compose -p sah stop
 docker-compose -p sah up -d --force-recreate
 docker ps

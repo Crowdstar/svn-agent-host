@@ -17,11 +17,9 @@ We use _Docker_ to prepare our test environments. You may run unit tests, coding
 containers with following commands:
 
 ```bash
-# # Use a base image alpine:3.7, which has PHP 7.1 and Subversion 1.9 installed for testing purpose.
-./bin/ci.sh 3.7
-# or
-# Use a base image alpine:3.8, which has PHP 7.2 and Subversion 1.10 installed for testing purpose.
-./bin/ci.sh 3.8
+PHP_VERSION=7.0 SVN_VERSION=1.8.19 ./bin/ci.sh
+PHP_VERSION=7.1 SVN_VERSION=1.9.9  ./bin/ci.sh
+PHP_VERSION=7.2 SVN_VERSION=1.10.3 ./bin/ci.sh
 ```
 
 # Native Messaging Responses

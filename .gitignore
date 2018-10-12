@@ -20,4 +20,3 @@
 
 # Ignore generated Docker files
 /docker-compose.yml
-/Dockerfile

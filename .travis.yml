@@ -1,9 +1,10 @@
 env:
-  - ALPINE_TAG=3.7
-  - ALPINE_TAG=3.8
+  - PHP_VERSION=7.0 SVN_VERSION=1.8.19
+  - PHP_VERSION=7.1 SVN_VERSION=1.9.9
+  - PHP_VERSION=7.2 SVN_VERSION=1.10.3
 
 services:
   - docker
 
 script:
-  - ./bin/ci.sh ${ALPINE_TAG}
+  - ./bin/ci.sh

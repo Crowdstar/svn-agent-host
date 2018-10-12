@@ -4,12 +4,12 @@ version: '3'
 # Please check script ./bin/ci.sh to see how it is used.
 services:
   svn-agent-host:
-    image: crowdstar/svn-agent-host:ALPINE_TAG
+    image: deminy/php-svn:php-%%PHP_VERSION%%-svn-%%SVN_VERSION%%
     command: tail -f /dev/null
     links:
       - svn-server
     volumes:
-      - .:/svn-agent-host
+      - .:/docker-php-svn
   svn-server:
     image: elleflorio/svn-server
     ports:
