@@ -22,6 +22,43 @@ PHP_VERSION=7.1 SVN_VERSION=1.9.9  ./bin/ci.sh
 PHP_VERSION=7.2 SVN_VERSION=1.10.3 ./bin/ci.sh
 ```
 
+# Demo Code to Communicate with the Host from a Chrome Extension
+
+Following demo code shows how to communicate with the native message host from a Chrome extension.
+
+```javascript
+// content.js: a Content Script file.
+window.addEventListener(
+    "message",
+    function (event) {
+        chrome.runtime.sendMessage(
+            event.data,
+            function (response) {
+                console.log('response from the background script', response);
+            }
+        );
+    },
+    false
+);
+window.postMessage({action: "create", data: {"path": "path/1"}}, "*");
+
+// background.js: a Background Script file.
+chrome.runtime.onMessage.addListener(
+    function (request, sender, sendResponse) {
+        chrome.runtime.sendNativeMessage(
+            'com.glu.crowdstar.svnagent', // name of the native messaging host.
+            request,
+            function (response) {
+                console.log("response from the native messaging host: ", response);
+                // sendResponse(response);
+            }
+        );
+
+        return true;
+    }
+);
+```
+
 # Native Messaging Responses
 
 ## 1. Bulk Review
