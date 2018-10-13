@@ -22,7 +22,7 @@ PHP_VERSION=7.1 SVN_VERSION=1.9.9  ./bin/ci.sh
 PHP_VERSION=7.2 SVN_VERSION=1.10.3 ./bin/ci.sh
 ```
 
-# Demo Code to Communicate with the Host from a Chrome Extension
+# Demo Code
 
 Following demo code shows how to communicate with the native message host from a Chrome extension.
 
