@@ -17,7 +17,9 @@
 
 namespace CrowdStar\Tests\SVNAgent;
 
+use CrowdStar\SVNAgent\Actions\AbstractPathBasedAction;
 use CrowdStar\SVNAgent\Actions\DummyPathBasedAction;
+use CrowdStar\SVNAgent\Actions\Update;
 use CrowdStar\SVNAgent\Config;
 use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Request;
@@ -66,6 +68,86 @@ abstract class AbstractSvnTestCase extends TestCase
     public static function resetSvnHost()
     {
         putenv(Config::SVN_AGENT_SVN_ROOT . '=' . self::$svnRoot);
+    }
+
+    /**
+     * @param string $path
+     * @return AbstractPathBasedAction
+     * @throws ClientException
+     */
+    protected function createSvnUri(string $path): AbstractPathBasedAction
+    {
+        $requestData = [
+            'data' => [
+                'path' => $path,
+            ]
+        ] + $this->getBasicRequestData();
+
+        $action = new Update((new Request())->init($requestData));
+        $action->run();
+
+        return $action;
+    }
+
+    /**
+     * @param string $path
+     * @throws ClientException
+     */
+    protected function mkdir(string $path)
+    {
+        $request = (new Request())->init(
+            [
+                'data' => [
+                    'path' => $path,
+                ],
+            ] + $this->getBasicRequestData()
+        );
+        $dummyAction = new DummyPathBasedAction($request);
+        if (!file_exists($dummyAction->getSvnDir())) {
+            mkdir($dummyAction->getSvnDir(), 0755, true);
+        }
+    }
+
+    /**
+     * @param string $svnDir
+     */
+    protected function addSampleFiles(string $svnDir)
+    {
+        $i = 1;
+        foreach (['.', 'dir1'] as $dir) {
+            $dir = $svnDir . DIRECTORY_SEPARATOR . $dir;
+
+            if (!is_dir($dir)) {
+                mkdir($dir);
+            }
+
+            chdir($dir);
+            touch("empty{$i}.txt");
+            file_put_contents("hello${i}.txt", 'Hello, World!');
+
+            $i++;
+        }
+    }
+
+    /**
+     * Update files added by method AbstractSvnTestCase::addSampleFiles().
+     *
+     * @param string $svnDir
+     * @see AbstractSvnTestCase::addSampleFiles()
+     */
+    protected function updateSvnDir(string $svnDir)
+    {
+        $i = 1;
+        foreach (['.', 'dir1'] as $dir) {
+            $dir = $svnDir . DIRECTORY_SEPARATOR . $dir;
+
+            chdir($dir);
+            unlink("empty{$i}.txt");
+            file_put_contents("hello${i}.txt", '');
+            touch("new{$i}.txt");
+
+            $i++;
+        }
     }
 
     /**

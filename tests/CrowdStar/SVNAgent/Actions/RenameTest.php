@@ -268,23 +268,4 @@ class RenameTest extends AbstractSvnTestCase
         );
         new Rename($request);
     }
-
-    /**
-     * @param string $path
-     * @throws ClientException
-     */
-    protected function mkdir(string $path)
-    {
-        $request = (new Request())->init(
-            [
-                'data' => [
-                    'path' => $path,
-                ],
-            ] + $this->getBasicRequestData()
-        );
-        $dummyAction = new DummyPathBasedAction($request);
-        if (!file_exists($dummyAction->getSvnDir())) {
-            mkdir($dummyAction->getSvnDir(), 0755, true);
-        }
-    }
 }
