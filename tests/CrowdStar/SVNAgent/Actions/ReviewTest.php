@@ -110,15 +110,15 @@ class ReviewTest extends AbstractSvnTestCase
                 'actions' => [
                     [
                         'type' => '!',
-                        'file' => '/root/svn-agent/svn/path/1/dir1/empty2.txt',
+                        'file' => '/root/svn-agent/svn/path/1/dir1/empty 2.txt',
                     ],
                     [
                         'type' => 'M',
-                        'file' => '/root/svn-agent/svn/path/1/dir1/hello2.txt',
+                        'file' => '/root/svn-agent/svn/path/1/dir1/hello 2.txt',
                     ],
                     [
                         'type' => '?',
-                        'file' => '/root/svn-agent/svn/path/1/dir1/new2.txt',
+                        'file' => '/root/svn-agent/svn/path/1/dir1/new 2.txt',
                     ],
                     [
                         'type' => '!',
