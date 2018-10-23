@@ -116,14 +116,15 @@ abstract class AbstractSvnTestCase extends TestCase
         $i = 1;
         foreach (['.', 'dir1'] as $dir) {
             $dir = $svnDir . DIRECTORY_SEPARATOR . $dir;
+            $str = str_pad('', $i - 1, ' '); // make sure our code supports spaces in file names.
 
             if (!is_dir($dir)) {
                 mkdir($dir);
             }
 
             chdir($dir);
-            touch("empty{$i}.txt");
-            file_put_contents("hello${i}.txt", 'Hello, World!');
+            touch("empty{$str}{$i}.txt");
+            file_put_contents("hello{$str}${i}.txt", 'Hello, World!');
 
             $i++;
         }
@@ -140,11 +141,12 @@ abstract class AbstractSvnTestCase extends TestCase
         $i = 1;
         foreach (['.', 'dir1'] as $dir) {
             $dir = $svnDir . DIRECTORY_SEPARATOR . $dir;
+            $str = str_pad('', $i - 1, ' '); // make sure our code supports spaces in file names.
 
             chdir($dir);
-            unlink("empty{$i}.txt");
-            file_put_contents("hello${i}.txt", '');
-            touch("new{$i}.txt");
+            unlink("empty{$str}{$i}.txt");
+            file_put_contents("hello{$str}${i}.txt", '');
+            touch("new{$str}{$i}.txt");
 
             $i++;
         }
