@@ -42,7 +42,7 @@ class Unlock extends AbstractAction implements LocklessActionInterface, PathNotR
             function () {
                 $this->getLogger()->info('current pid is: ' . getmypid());
                 (new ShellWrap())(
-                    $this->getConfig()->getRootDir() . '/vendor/bin/kill-host-processes.sh',
+                    $this->getFullBinPath('kill-host-processes.sh'),
                     getmypid(),
                     $this->getConfig()->getExtensionId(),
                     $this->getLockFilePath()

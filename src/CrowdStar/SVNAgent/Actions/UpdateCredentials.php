@@ -38,7 +38,7 @@ class UpdateCredentials extends AbstractAction implements PathNotRequiredActionI
     {
         $this->setMessage('SVN save credentials')->exec(
             function () {
-                ShellWrap::bash($this->getConfig()->getRootDir() . '/vendor/bin/svn-save-credentials.sh');
+                ShellWrap::bash($this->getFullBinPath('svn-save-credentials.sh'));
                 //ShellWrap::svn(
                 //    'auth',
                 //    '--remove',

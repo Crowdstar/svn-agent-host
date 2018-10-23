@@ -22,6 +22,7 @@ use CrowdStar\SVNAgent\Config;
 use CrowdStar\SVNAgent\Error;
 use CrowdStar\SVNAgent\Exceptions\ClientException;
 use CrowdStar\SVNAgent\Exceptions\Exception;
+use CrowdStar\SVNAgent\PathHelper;
 use CrowdStar\SVNAgent\Request;
 use CrowdStar\SVNAgent\Responses\AbstractResponse;
 use CrowdStar\SVNAgent\Responses\ErrorResponse;
@@ -362,5 +363,15 @@ abstract class AbstractAction
     protected function getPostActions(): array
     {
         return [];
+    }
+
+    /**
+     * @param string $filename
+     * @return string
+     * @throws Exception
+     */
+    protected function getFullBinPath(string $filename): string
+    {
+        return PathHelper::getFullBinPath($filename);
     }
 }

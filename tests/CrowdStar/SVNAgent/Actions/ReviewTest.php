@@ -18,6 +18,7 @@
 namespace CrowdStar\Tests\SVNAgent\Actions;
 
 use CrowdStar\SVNAgent\Actions\AbstractAction;
+use CrowdStar\SVNAgent\Actions\Cleanup;
 use CrowdStar\SVNAgent\Actions\Commit;
 use CrowdStar\SVNAgent\Actions\DummyPathBasedAction;
 use CrowdStar\SVNAgent\Actions\Review;
@@ -27,11 +28,11 @@ use CrowdStar\SVNAgent\Request;
 use CrowdStar\Tests\SVNAgent\AbstractSvnTestCase;
 
 /**
- * Class ReviewTest
+ * Class ReviewAndCleanupTest
  *
  * @package CrowdStar\Tests\SVNAgent\Actions
  */
-class ReviewTest extends AbstractSvnTestCase
+class ReviewAndCleanupTest extends AbstractSvnTestCase
 {
     /**
      * @inheritdoc
@@ -44,6 +45,7 @@ class ReviewTest extends AbstractSvnTestCase
     /**
      * @covers AbstractAction::run()
      * @covers AbstractAction::process()
+     * @covers Cleanup::processAction()
      * @covers Review::processAction()
      * @throws ClientException
      * @group svn-server
@@ -101,7 +103,7 @@ class ReviewTest extends AbstractSvnTestCase
             'nothing changed after all changes under given SVN folder have been committed'
         );
 
-        $this->updateSvnDir($action->getSvnDir());
+        $this->makeChangesUnderSvnDir($action->getSvnDir());
         $this->assertSame(
             [
                 'success'  => true,
@@ -135,6 +137,17 @@ class ReviewTest extends AbstractSvnTestCase
             ],
             (new Review($request))->run()->toArray(),
             'files changed under given SVN folder'
+        );
+
+        (new Cleanup($request))->run();
+        $this->assertSame(
+            [
+                'success'  => true,
+                'path'     => '/path/1/',
+                'actions'  => [],
+            ],
+            (new Review($request))->run()->toArray(),
+            'nothing changed after all changes under given SVN folder have been cleaned up'
         );
     }
 }

@@ -135,7 +135,7 @@ abstract class AbstractSvnTestCase extends TestCase
      * @param string $svnDir
      * @see AbstractSvnTestCase::addSampleFiles()
      */
-    protected function updateSvnDir(string $svnDir)
+    protected function makeChangesUnderSvnDir(string $svnDir)
     {
         $i = 1;
         foreach (['.', 'dir1'] as $dir) {

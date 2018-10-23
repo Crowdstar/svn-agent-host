@@ -18,6 +18,7 @@
 namespace CrowdStar\SVNAgent;
 
 use CrowdStar\SVNAgent\Exceptions\ClientException;
+use CrowdStar\SVNAgent\Exceptions\Exception;
 
 /**
  * Class PathHelper
@@ -26,6 +27,21 @@ use CrowdStar\SVNAgent\Exceptions\ClientException;
  */
 class PathHelper
 {
+    /**
+     * @param string $filename
+     * @return string
+     * @throws Exception
+     */
+    public static function getFullBinPath(string $filename): string
+    {
+        $path = realpath(dirname(__DIR__, 3)) . '/bin/' . $filename;
+        if (is_executable($path)) {
+            return $path;
+        }
+
+        throw new Exception("binary '{$path}' not found");
+    }
+
     /**
      * @param string $path
      * @return string

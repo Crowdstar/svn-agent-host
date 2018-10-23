@@ -40,7 +40,7 @@ class Cleanup extends AbstractPathBasedAction
             chdir($dir);
             $this->setMessage('SVN cleanup')->exec(
                 function () {
-                    ShellWrap::bash($this->getConfig()->getRootDir() . '/vendor/bin/svn-cleanup.sh');
+                    ShellWrap::bash($this->getFullBinPath('svn-cleanup.sh'));
                 }
             );
         } else {
