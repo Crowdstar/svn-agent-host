@@ -24,4 +24,14 @@ namespace CrowdStar\Tests\SVNAgent;
  */
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Update directory separators in given path to make it work under current OS.
+     *
+     * @param string $path
+     * @return string
+     */
+    protected function updateDirectorySeparator(string $path): string
+    {
+        return str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', DIRECTORY_SEPARATOR, $path));
+    }
 }

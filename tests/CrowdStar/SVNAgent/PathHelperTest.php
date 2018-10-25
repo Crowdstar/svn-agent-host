@@ -31,7 +31,7 @@ class PathHelperTest extends TestCase
      */
     public function dataTrim(): array
     {
-        return [
+        $data = [
             [
                 'a',
                 'a',
@@ -83,6 +83,8 @@ class PathHelperTest extends TestCase
                 'multiple-level path with extra slashes around it',
             ],
         ];
+
+        return $this->updatePaths($data);
     }
 
     /**
@@ -102,7 +104,7 @@ class PathHelperTest extends TestCase
      */
     public function dataLtrim(): array
     {
-        return [
+        $data = [
             [
                 'a',
                 'a',
@@ -154,6 +156,8 @@ class PathHelperTest extends TestCase
                 'multiple-level path with extra slashes around it',
             ],
         ];
+
+        return $this->updatePaths($data);
     }
 
     /**
@@ -172,7 +176,7 @@ class PathHelperTest extends TestCase
      */
     public function dataRtrim(): array
     {
-        return [
+        $data = [
             [
                 'a',
                 'a',
@@ -224,6 +228,8 @@ class PathHelperTest extends TestCase
                 'multiple-level path with extra slashes around it',
             ],
         ];
+
+        return $this->updatePaths($data);
     }
 
     /**
@@ -236,5 +242,20 @@ class PathHelperTest extends TestCase
     public function testRtrim(string $expected, string $path, string $message)
     {
         $this->assertSame($expected, PathHelper::rtrim($path), $message);
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function updatePaths(array $data): array
+    {
+        foreach ($data as $key => $value) {
+            foreach ([0, 1] as $index) { // First two parameters in the array are file paths.
+                $data[$key][$index] = $this->updateDirectorySeparator($data[$key][$index]);
+            }
+        }
+
+        return $data;
     }
 }
