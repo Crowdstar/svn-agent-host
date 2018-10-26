@@ -121,6 +121,7 @@ class RenameTest extends AbstractSvnTestCase
 
     /**
      * @covers Rename::validate()
+     * @group svn-server
      * @expectedException \CrowdStar\SVNAgent\Exceptions\ClientException
      * @expectedExceptionMessage source path and destination path are the same
      */
@@ -140,6 +141,7 @@ class RenameTest extends AbstractSvnTestCase
 
     /**
      * @covers Rename::validate()
+     * @group svn-server
      * @expectedException \CrowdStar\SVNAgent\Exceptions\ClientException
      * @expectedExceptionMessage source path '/root/svn-agent/svn/path/4/' not exist
      */
@@ -159,6 +161,7 @@ class RenameTest extends AbstractSvnTestCase
 
     /**
      * @covers Rename::validate()
+     * @group svn-server
      * @expectedException \CrowdStar\SVNAgent\Exceptions\ClientException
      * @expectedExceptionMessage field 'toPath' not passed in in the request
      */
@@ -179,6 +182,7 @@ class RenameTest extends AbstractSvnTestCase
 
     /**
      * @covers Rename::validate()
+     * @group svn-server
      * @expectedException \CrowdStar\SVNAgent\Exceptions\ClientException
      * @expectedExceptionMessage given path is empty
      */
@@ -199,6 +203,7 @@ class RenameTest extends AbstractSvnTestCase
 
     /**
      * @covers Rename::validate()
+     * @group svn-server
      * @expectedException \CrowdStar\SVNAgent\Exceptions\ClientException
      * @expectedExceptionMessage destination path '/root/svn-agent/svn/path/9/' already exists
      */
@@ -220,6 +225,7 @@ class RenameTest extends AbstractSvnTestCase
 
     /**
      * @covers Rename::validate()
+     * @group svn-server
      * @expectedException \CrowdStar\SVNAgent\Exceptions\ClientException
      * @expectedExceptionMessage source URL 'http://svn-server/svn/project1/path/10/' not exist
      */
@@ -240,6 +246,7 @@ class RenameTest extends AbstractSvnTestCase
 
     /**
      * @covers Rename::validate()
+     * @group svn-server
      * @expectedException \CrowdStar\SVNAgent\Exceptions\ClientException
      * @expectedExceptionMessage destination URL 'http://svn-server/svn/project1/path/13/' already exists
      */

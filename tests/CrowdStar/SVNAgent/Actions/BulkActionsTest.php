@@ -246,6 +246,7 @@ class BulkActionsTest extends AbstractSvnTestCase
 
     /**
      * @covers AbstractBulkAction::setPaths
+     * @group svn-server
      */
     public function testMaxPaths()
     {
@@ -265,6 +266,7 @@ class BulkActionsTest extends AbstractSvnTestCase
 
     /**
      * @covers AbstractBulkAction::setPaths
+     * @group svn-server
      * @expectedException \CrowdStar\SVNAgent\Exceptions\ClientException
      * @expectedExceptionMessage up to 40 paths can be handled together
      */

@@ -59,6 +59,7 @@ class SVNHelperTest extends AbstractSvnTestCase
     /**
      * @dataProvider dataGetSvnVersion
      * @covers SVNHelper::getSvnVersion()
+     * @group svn
      * @param string $expected
      * @param string $rawSvnVersion
      * @param string $message
@@ -78,6 +79,8 @@ class SVNHelperTest extends AbstractSvnTestCase
 
     /**
      * @covers SVNHelper::getUrl()
+     * @group svn
+     * @group svn-server
      */
     public function testGetUrl()
     {
@@ -118,6 +121,8 @@ class SVNHelperTest extends AbstractSvnTestCase
     /**
      * @dataProvider dataUrlExists
      * @covers SVNHelper::urlExists()
+     * @group svn
+     * @group svn-server
      * @param bool $expected
      * @param string $path
      * @param string $message
