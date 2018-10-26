@@ -18,7 +18,7 @@
 namespace CrowdStar\SVNAgent\Actions;
 
 use CrowdStar\SVNAgent\Traits\SimpleResponseTrait;
-use MrRio\ShellWrap;
+use CrowdStar\SVNAgent\WindowsCompatibleInterface;
 
 /**
  * Class Open
@@ -26,7 +26,7 @@ use MrRio\ShellWrap;
  *
  * @package CrowdStar\SVNAgent\Actions
  */
-class Open extends AbstractPathBasedAction
+class Open extends AbstractPathBasedAction implements WindowsCompatibleInterface
 {
     use SimpleResponseTrait;
 
@@ -40,9 +40,13 @@ class Open extends AbstractPathBasedAction
         $dir = dirname($this->getSvnDir());
         if (is_dir($dir)) {
             chdir($dir);
-            $this->setMessage('open folder in Finder')->exec(
+            $this->setMessage('open folder')->exec(
                 function () {
-                    ShellWrap::open('.');
+                    if ($this->getConfig()->onWindows()) {
+                        exec('explorer .'); // open folder in File Explorer on Windows
+                    } else {
+                        exec('open .'); // open folder in Finder on Mac
+                    }
                 }
             );
         } else {

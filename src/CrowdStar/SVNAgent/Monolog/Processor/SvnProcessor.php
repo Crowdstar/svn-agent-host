@@ -17,6 +17,7 @@
 
 namespace CrowdStar\SVNAgent\Monolog\Processor;
 
+use CrowdStar\SVNAgent\Config;
 use CrowdStar\SVNAgent\SVNHelper;
 use Monolog\Logger;
 
@@ -54,8 +55,15 @@ class SvnProcessor
     public function __invoke(array $record): array
     {
         if ($record['level'] >= $this->level) {
+            $record['extra']['os']  = PHP_OS;
             $record['extra']['php'] = PHP_VERSION;
-            $record['extra']['svn'] = self::getSvnVersion();
+
+            // Few actions need to run on Windows directly, like the Open action (to open a SVN working directory in
+            // File Explorer on Windows). Actions running on Windows directly don't need to work on SVN repositories,
+            // and we may not have Subversion installed on Windows for that.
+            if (!Config::singleton()->onWindows()) {
+                $record['extra']['svn'] = self::getSvnVersion();
+            }
         }
 
         return $record;

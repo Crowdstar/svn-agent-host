@@ -143,6 +143,14 @@ class Config
     }
 
     /**
+     * @return bool
+     */
+    public function onWindows(): bool
+    {
+        return (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
+    }
+
+    /**
      * @return string
      */
     public function getRootDir(): string
