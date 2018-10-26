@@ -6,7 +6,7 @@
   "require": {
     "php": ">=7.0",
     "arvenil/ninja-mutex": "~0.6",
-    "bugsnag/bugsnag": "~3.13.0",
+    "bugsnag/bugsnag": "~3.13",
     "monolog/monolog": "~1.11",
     "deminy/shellwrap": "dev-master",
     "vlucas/phpdotenv": "~2.2"
