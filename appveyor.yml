@@ -12,7 +12,6 @@ environment:
   matrix:
     - PHP_VERSION: '7.0.30'
     - PHP_VERSION: '7.1.21'
-    - PHP_VERSION: '7.2.9'
 
 matrix:
   fast_finish: true
