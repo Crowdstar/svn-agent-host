@@ -25,6 +25,8 @@ PHP_VERSION=7.2 SVN_VERSION=1.10.3 ./bin/ci.sh
 
 # Demo Code
 
+The host program is expected to be executed in Mac and Linux only. For Windows users, you may have the host program installed in Ubuntu or some other Linux distribution (through the _Windows Subsystem for Linux_).
+
 Following demo code shows how to communicate with the native message host from a Chrome extension.
 
 ```javascript
