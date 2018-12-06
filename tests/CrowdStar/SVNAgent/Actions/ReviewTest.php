@@ -19,11 +19,9 @@ namespace CrowdStar\Tests\SVNAgent\Actions;
 
 use CrowdStar\SVNAgent\Actions\AbstractAction;
 use CrowdStar\SVNAgent\Actions\Commit;
-use CrowdStar\SVNAgent\Actions\DummyPathBasedAction;
 use CrowdStar\SVNAgent\Actions\Review;
 use CrowdStar\SVNAgent\Actions\Update;
 use CrowdStar\SVNAgent\Exceptions\ClientException;
-use CrowdStar\SVNAgent\Request;
 use CrowdStar\Tests\SVNAgent\AbstractSvnTestCase;
 
 /**
@@ -53,8 +51,8 @@ class ReviewTest extends AbstractSvnTestCase
     {
         $this->createSvnUri('/path/1');
 
-        $request = (new Request())->init(['data' => ['path' => 'path/1']] + $this->getBasicRequestData());
-        $action  = new DummyPathBasedAction($request);
+        $action  = $this->getDummyPathBasedAction('path/1');
+        $request = $action->getRequest();
 
         $this->assertSame(
             [
@@ -74,15 +72,15 @@ class ReviewTest extends AbstractSvnTestCase
                 'actions' => [
                     [
                         'type' => '?',
-                        'file' => '/root/svn-agent/svn/path/1/dir1',
+                        'file' => self::getSvnRootDir() . '/path/1/dir1',
                     ],
                     [
                         'type' => '?',
-                        'file' => '/root/svn-agent/svn/path/1/empty1.txt',
+                        'file' => self::getSvnRootDir() . '/path/1/empty1.txt',
                     ],
                     [
                         'type' => '?',
-                        'file' => '/root/svn-agent/svn/path/1/hello1.txt',
+                        'file' => self::getSvnRootDir() . '/path/1/hello1.txt',
                     ],
                 ],
             ],
@@ -110,27 +108,27 @@ class ReviewTest extends AbstractSvnTestCase
                 'actions' => [
                     [
                         'type' => '!',
-                        'file' => '/root/svn-agent/svn/path/1/dir1/empty 2.txt',
+                        'file' => self::getSvnRootDir() . '/path/1/dir1/empty 2.txt',
                     ],
                     [
                         'type' => 'M',
-                        'file' => '/root/svn-agent/svn/path/1/dir1/hello 2.txt',
+                        'file' => self::getSvnRootDir() . '/path/1/dir1/hello 2.txt',
                     ],
                     [
                         'type' => '?',
-                        'file' => '/root/svn-agent/svn/path/1/dir1/new 2.txt',
+                        'file' => self::getSvnRootDir() . '/path/1/dir1/new 2.txt',
                     ],
                     [
                         'type' => '!',
-                        'file' => '/root/svn-agent/svn/path/1/empty1.txt',
+                        'file' => self::getSvnRootDir() . '/path/1/empty1.txt',
                     ],
                     [
                         'type' => 'M',
-                        'file' => '/root/svn-agent/svn/path/1/hello1.txt',
+                        'file' => self::getSvnRootDir() . '/path/1/hello1.txt',
                     ],
                     [
                         'type' => '?',
-                        'file' => '/root/svn-agent/svn/path/1/new1.txt',
+                        'file' => self::getSvnRootDir() . '/path/1/new1.txt',
                     ],
                 ],
             ],

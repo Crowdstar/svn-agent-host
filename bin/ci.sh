@@ -30,10 +30,7 @@ docker-compose -p sah stop
 docker-compose -p sah up -d --force-recreate
 docker ps
 
-# Initialize the SVN server container.
-docker exec -t `docker ps | grep svn-server | awk '{print $NF}'` htpasswd -b /etc/subversion/passwd username password
-docker exec -t `docker ps | grep svn-server | awk '{print $NF}'` svnadmin create /home/svn/project1
-docker exec -t `docker ps | grep svn-server | awk '{print $NF}'` chmod -R 777 /home/svn/project1
+. ./bin/init-svn-server.sh
 
 # Check PHP and Subversion versions.
 docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c "php --version && svn --version"

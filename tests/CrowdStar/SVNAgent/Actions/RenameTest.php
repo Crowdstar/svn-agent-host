@@ -142,11 +142,14 @@ class RenameTest extends AbstractSvnTestCase
     /**
      * @covers Rename::validate()
      * @group svn-server
-     * @expectedException \CrowdStar\SVNAgent\Exceptions\ClientException
-     * @expectedExceptionMessage source path '/root/svn-agent/svn/path/4/' not exist
      */
     public function testValidateWhenSourcePathNotExist()
     {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage(
+            "source path '" . self::getDummyPathBasedAction('/path/4/')->getSvnDir() . "' not exist"
+        );
+
         new Rename(
             (new Request())->init(
                 [
@@ -204,11 +207,14 @@ class RenameTest extends AbstractSvnTestCase
     /**
      * @covers Rename::validate()
      * @group svn-server
-     * @expectedException \CrowdStar\SVNAgent\Exceptions\ClientException
-     * @expectedExceptionMessage destination path '/root/svn-agent/svn/path/9/' already exists
      */
     public function testValidateWhenDestinationPathExist()
     {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage(
+            "destination path '" . self::getDummyPathBasedAction('/path/9/')->getSvnDir() . "' already exists"
+        );
+
         $this->mkdir('/path/8/');
         $this->mkdir('/path/9/');
 

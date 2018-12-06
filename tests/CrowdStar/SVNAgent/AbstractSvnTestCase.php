@@ -95,14 +95,7 @@ abstract class AbstractSvnTestCase extends TestCase
      */
     protected function mkdir(string $path)
     {
-        $request = (new Request())->init(
-            [
-                'data' => [
-                    'path' => $path,
-                ],
-            ] + $this->getBasicRequestData()
-        );
-        $dummyAction = new DummyPathBasedAction($request);
+        $dummyAction = self::getDummyPathBasedAction($path);
         if (!file_exists($dummyAction->getSvnDir())) {
             mkdir($dummyAction->getSvnDir(), 0755, true);
         }
@@ -154,6 +147,24 @@ abstract class AbstractSvnTestCase extends TestCase
 
     /**
      * @param string $path
+     * @return Request
+     */
+    protected function getPathBasedRequest(string $path): Request
+    {
+        return (new Request())->init(['data' => ['path' => $path]] + $this->getBasicRequestData());
+    }
+
+    /**
+     * @param string ...$paths
+     * @return Request
+     */
+    protected function getPathsBasedRequest(string ...$paths): Request
+    {
+        return (new Request())->init(['data' => ['paths' => $paths]] + $this->getBasicRequestData());
+    }
+
+    /**
+     * @param string $path
      * @throws ClientException
      */
     protected static function deletePath(string $path)
@@ -162,7 +173,7 @@ abstract class AbstractSvnTestCase extends TestCase
         chdir($_SERVER['HOME']);
 
         $request = (new Request())->init(self::getBasicRequestData() + ['data' => ['path' => $path]]);
-        $action  = new DummyPathBasedAction($request);
+        $action  = self::getDummyPathBasedAction($path);
 
         if (is_dir($action->getSvnDir())) {
             ShellWrap::rm('-rf', $action->getSvnDir());
@@ -193,20 +204,20 @@ abstract class AbstractSvnTestCase extends TestCase
 
     /**
      * @param string $path
-     * @return Request
+     * @return DummyPathBasedAction
+     * @throws ClientException
      */
-    protected function getPathBasedRequest(string $path): Request
+    protected static function getDummyPathBasedAction(string $path = ''): DummyPathBasedAction
     {
-        return (new Request())->init(['data' => ['path' => $path]] + $this->getBasicRequestData());
-    }
+        $request = (new Request())->init(
+            [
+                'data' => [
+                    'path' => $path,
+                ],
+            ] + self::getBasicRequestData()
+        );
 
-    /**
-     * @param string ...$paths
-     * @return Request
-     */
-    protected function getPathsBasedRequest(string ...$paths): Request
-    {
-        return (new Request())->init(['data' => ['paths' => $paths]] + $this->getBasicRequestData());
+        return new DummyPathBasedAction($request);
     }
 
     /**
@@ -247,5 +258,21 @@ abstract class AbstractSvnTestCase extends TestCase
     protected static function getSvnPassword(): string
     {
         return $_ENV['SVN_PASSWORD'];
+    }
+
+    /**
+     * @return string
+     */
+    protected static function getSvnRootDir(): string
+    {
+        return Config::singleton()->getSvnRootDir();
+    }
+
+    /**
+     * @return string
+     */
+    protected static function getSvnRoot(): string
+    {
+        return Config::singleton()->getSvnRoot();
     }
 }

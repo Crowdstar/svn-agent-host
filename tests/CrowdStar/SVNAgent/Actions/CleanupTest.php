@@ -20,11 +20,9 @@ namespace CrowdStar\Tests\SVNAgent\Actions;
 use CrowdStar\SVNAgent\Actions\AbstractAction;
 use CrowdStar\SVNAgent\Actions\Cleanup;
 use CrowdStar\SVNAgent\Actions\Commit;
-use CrowdStar\SVNAgent\Actions\DummyPathBasedAction;
 use CrowdStar\SVNAgent\Actions\Review;
 use CrowdStar\SVNAgent\Actions\Update;
 use CrowdStar\SVNAgent\Exceptions\ClientException;
-use CrowdStar\SVNAgent\Request;
 use CrowdStar\Tests\SVNAgent\AbstractSvnTestCase;
 
 /**
@@ -54,8 +52,8 @@ class CleanupTest extends AbstractSvnTestCase
     {
         $this->createSvnUri('/path/1');
 
-        $request = (new Request())->init(['data' => ['path' => 'path/1']] + $this->getBasicRequestData());
-        $action  = new DummyPathBasedAction($request);
+        $action           = self::getDummyPathBasedAction('path/1');
+        $request          = $action->getRequest();
         $expectedResponse = [
             'success' => true,
             'message' => '',
