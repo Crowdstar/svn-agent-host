@@ -17,6 +17,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\SVNHelper;
 use CrowdStar\SVNAgent\Traits\SimpleResponseTrait;
 use MrRio\ShellWrap;
 
@@ -44,14 +45,7 @@ class UpdateCredentials extends AbstractAction implements PathNotRequiredActionI
                 //    '--remove',
                 //    $this->getConfig()->getSvnRoot() //TODO: change this to base URL like http://example.com
                 //);
-                ShellWrap::svn(
-                    'info',
-                    $this->getConfig()->getSvnRoot(),
-                    [
-                        'username' => $this->getRequest()->getUsername(),
-                        'password' => $this->getRequest()->getPassword(),
-                    ]
-                );
+                ShellWrap::svn('info', $this->getConfig()->getSvnRoot(), SVNHelper::getOptions($this->getRequest()));
             }
         );
 

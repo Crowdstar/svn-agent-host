@@ -68,13 +68,7 @@ class Update extends AbstractPathBasedAction
                         chdir($dir);
                         $this->setMessage('SVN update')->exec(
                             function () {
-                                ShellWrap::svn(
-                                    'update',
-                                    '--username',
-                                    $this->getRequest()->getUsername(),
-                                    '--password',
-                                    $this->getRequest()->getPassword()
-                                );
+                                ShellWrap::svn('update', SVNHelper::getOptions($this->getRequest()));
                             }
                         );
                     } else {
@@ -102,15 +96,7 @@ class Update extends AbstractPathBasedAction
         $this->setResponse(new CheckoutResponse($this->getPath()));
         $this->setMessage('SVN checkout')->exec(
             function () use ($url, $dir) {
-                ShellWrap::svn(
-                    'checkout',
-                    '--username',
-                    $this->getRequest()->getUsername(),
-                    '--password',
-                    $this->getRequest()->getPassword(),
-                    $url,
-                    $dir
-                );
+                ShellWrap::svn('checkout', $url, $dir, SVNHelper::getOptions($this->getRequest()));
             }
         );
 

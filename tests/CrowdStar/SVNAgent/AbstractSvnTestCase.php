@@ -179,15 +179,7 @@ abstract class AbstractSvnTestCase extends TestCase
             ShellWrap::rm('-rf', $action->getSvnDir());
         }
         if (SVNHelper::urlExists($action->getSvnUri(), $request)) {
-            ShellWrap::svn(
-                'delete',
-                $action->getSvnUri(),
-                [
-                    'username' => $request->getUsername(),
-                    'password' => $request->getPassword(),
-                    'm'        => 'path deleted',
-                ]
-            );
+            ShellWrap::svn('delete', $action->getSvnUri(), SVNHelper::getOptions($request, ['m' => 'path deleted']));
         }
     }
 

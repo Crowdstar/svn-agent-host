@@ -45,11 +45,7 @@ class Create extends AbstractPathBasedAction
                         'mkdir',
                         $url,
                         '--parents',
-                        [
-                            'username' => $this->getRequest()->getUsername(),
-                            'password' => $this->getRequest()->getPassword(),
-                            'm'        => 'path added through SVN Agent',
-                        ]
+                        SVNHelper::getOptions($this->getRequest(), ['m' => 'path added through SVN Agent'])
                     );
                 }
             );

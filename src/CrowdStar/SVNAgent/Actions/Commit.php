@@ -17,6 +17,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
+use CrowdStar\SVNAgent\SVNHelper;
 use CrowdStar\SVNAgent\Traits\PathBasedResponseTrait;
 use MrRio\ShellWrap;
 use MrRio\ShellWrapException;
@@ -61,11 +62,7 @@ class Commit extends AbstractPathBasedAction
                 function () use ($dir) {
                     ShellWrap::svn(
                         'commit',
-                        [
-                            'username' => $this->getRequest()->getUsername(),
-                            'password' => $this->getRequest()->getPassword(),
-                            'm'        => 'changes committed through SVN Agent',
-                        ]
+                        SVNHelper::getOptions($this->getRequest(), ['m' => 'changes committed through SVN Agent'])
                     );
 
                     // Delete the local folder after committed.

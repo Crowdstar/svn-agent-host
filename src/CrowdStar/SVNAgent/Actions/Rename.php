@@ -110,25 +110,13 @@ class Rename extends AbstractPathBasedAction
                     'move',
                     $fromUrl,
                     $toUrl,
-                    [
-                        'username' => $this->getRequest()->getUsername(),
-                        'password' => $this->getRequest()->getPassword(),
-                        'm'        => 'rename path',
-                    ]
+                    SVNHelper::getOptions($this->getRequest(), ['m' => 'rename path'])
                 );
             }
         );
         $this->setMessage('SVN switch')->exec(
             function () use ($toUrl, $toDir) {
-                ShellWrap::svn(
-                    'switch',
-                    $toUrl,
-                    $toDir,
-                    [
-                        'username' => $this->getRequest()->getUsername(),
-                        'password' => $this->getRequest()->getPassword(),
-                    ]
-                );
+                ShellWrap::svn('switch', $toUrl, $toDir, SVNHelper::getOptions($this->getRequest()));
             }
         );
 

@@ -93,14 +93,7 @@ class SVNHelper
     public static function urlExists(string $url, Request $request): bool
     {
         try {
-            ShellWrap::svn(
-                'info',
-                $url,
-                [
-                    'username' => $request->getUsername(),
-                    'password' => $request->getPassword(),
-                ]
-            );
+            ShellWrap::svn('info', $url, self::getOptions($request));
         } catch (ShellWrapException $e) {
             return false;
         }
@@ -116,5 +109,29 @@ class SVNHelper
     public static function sameUrl(string $url1, string $url2): bool
     {
         return (PathHelper::rtrim($url1) == PathHelper::rtrim($url2));
+    }
+
+    /**
+     * @param Request $request
+     * @param array $extraOptions
+     * @return array
+     */
+    public static function getOptions(Request $request, array $extraOptions = []): array
+    {
+        $options = [
+            'username' => $request->getUsername(),
+            'password' => $request->getPassword(),
+        ];
+
+        $certFailures = getenv(Config::SVN_TRUST_SERVER_CERT_FAILURES);
+
+        if ($certFailures) {
+            $options += [
+                'non-interactive'            => true,
+                'trust-server-cert-failures' => $certFailures,
+            ];
+        }
+
+        return array_merge($options, $extraOptions);
     }
 }
