@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# The continuous integration script to run different tests.
+# The continuous integration script to run different tests under Linux environments using Docker.
 # Usage:
-#     PHP_VERSION=7.2 SVN_VERSION=1.10.3 ./bin/ci.sh
+#     PHP_VERSION=7.2 SVN_VERSION=1.10.3 ./bin/ci-on-linux.sh
 #
 
 set -e
