@@ -1,10 +1,22 @@
-env:
-  - PHP_VERSION=7.0 SVN_VERSION=1.8.19
-  - PHP_VERSION=7.1 SVN_VERSION=1.9.9
-  - PHP_VERSION=7.2 SVN_VERSION=1.10.3
+os:
+  - linux
+  - osx
+
+matrix:
+  include:
+    - os: linux
+      env: PHP_VERSION=7.0 SVN_VERSION=1.8.19
+    - os: linux
+      env: PHP_VERSION=7.1 SVN_VERSION=1.9.9
+    - os: linux
+      env: PHP_VERSION=7.2 SVN_VERSION=1.10.3
+    - os: osx
+      osx_image: xcode9
+    - os: osx
+      osx_image: xcode10
 
 services:
   - docker
 
 script:
-  - ./bin/ci.sh
+  - ./bin/ci-on-${TRAVIS_OS_NAME}.sh

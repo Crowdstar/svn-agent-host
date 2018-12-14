@@ -18,18 +18,15 @@ We use _Docker_ to setup our test environments. You may run unit tests, coding s
 different versions of PHP and Subversion installations (prepared with _Docker_) using following commands:
 
 ```bash
-PHP_VERSION=7.0 SVN_VERSION=1.8.19 ./bin/ci.sh
-PHP_VERSION=7.1 SVN_VERSION=1.9.9  ./bin/ci.sh
-PHP_VERSION=7.2 SVN_VERSION=1.10.3 ./bin/ci.sh
+PHP_VERSION=7.0 SVN_VERSION=1.8.19 ./bin/ci-on-linux.sh
+PHP_VERSION=7.1 SVN_VERSION=1.9.9  ./bin/ci-on-linux.sh
+PHP_VERSION=7.2 SVN_VERSION=1.10.3 ./bin/ci-on-linux.sh
 ```
 
 To run unit tests with current PHP and Subversion installation on your box, just execute following commands directly:
 
 ```bash
-docker run --rm -d --name svn-server -p 80:80 elleflorio/svn-server
-./bin/init-svn-server.sh
-./vendor/bin/phpunit
-docker stop svn-server
+./bin/ci-on-osx.sh
 ```
 
 # Demo Code
