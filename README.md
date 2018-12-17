@@ -21,6 +21,7 @@ different versions of PHP and Subversion installations (prepared with _Docker_) 
 PHP_VERSION=7.0 SVN_VERSION=1.8.19 ./bin/ci-on-linux.sh
 PHP_VERSION=7.1 SVN_VERSION=1.9.9  ./bin/ci-on-linux.sh
 PHP_VERSION=7.2 SVN_VERSION=1.10.3 ./bin/ci-on-linux.sh
+PHP_VERSION=7.3 SVN_VERSION=1.11.0 ./bin/ci-on-linux.sh
 ```
 
 To run unit tests with current PHP and Subversion installation on your box, just execute following commands directly:
