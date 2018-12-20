@@ -29,6 +29,37 @@ class PathHelperTest extends TestCase
     /**
      * @return array
      */
+    public function dataToWindowsPath(): array
+    {
+        return [
+            [
+                'C:\Users\james\path\to\a\folder',
+                '/mnt/c/Users/james/path/to/a/folder',
+                'convert a Linux path under WSL to the host path on Windows',
+            ],
+            [
+                'C:\users\james\path\to\a\folder',
+                '/mnt/c/users/james/path/to/a/folder',
+                'convert a Linux path under WSL to the host path on Windows, where the Linux path is in lowercase',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataToWindowsPath
+     * @covers PathHelper::toWindowsPath()
+     * @param string $expected
+     * @param string $path
+     * @param string $message
+     */
+    public function testToWindowsPath(string $expected, string $path, string $message)
+    {
+        $this->assertSame($expected, PathHelper::toWindowsPath($path), $message);
+    }
+
+    /**
+     * @return array
+     */
     public function dataTrim(): array
     {
         $data = [

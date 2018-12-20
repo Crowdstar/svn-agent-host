@@ -30,6 +30,7 @@ use CrowdStar\SVNAgent\Responses\PathBasedErrorResponse;
 use CrowdStar\SVNAgent\SVNHelper;
 use CrowdStar\SVNAgent\Traits\LoggerTrait;
 use CrowdStar\SVNAgent\Traits\PathTrait;
+use CrowdStar\SVNAgent\WindowsCompatibleInterface;
 use MrRio\ShellWrap;
 use MrRio\ShellWrapException;
 use NinjaMutex\Lock\FlockLock;
@@ -253,7 +254,12 @@ abstract class AbstractAction
      */
     public function getSvnDir(): string
     {
-        return $this->getConfig()->getSvnRootDir() . $this->getPath();
+        $svnDir = $this->getConfig()->getSvnRootDir() . $this->getPath();
+        if (($this instanceof WindowsCompatibleInterface) && $this->getConfig()->onWindows()) {
+            return PathHelper::toWindowsPath($svnDir);
+        }
+
+        return $svnDir;
     }
 
     /**

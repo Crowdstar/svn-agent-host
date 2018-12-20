@@ -60,6 +60,23 @@ class PathHelper
     }
 
     /**
+     * Convert a Linux path from a Windows subsystem for Linux to the host path on Windows. Here we have an assumption
+     * that the path is under folder C:\Users on Windows.
+     *
+     * @param string $path
+     * @return string
+     * @throws Exception
+     */
+    public static function toWindowsPath(string $path): string
+    {
+        if (stripos($path, '/Users/') === false) {
+            throw new Exception('only paths under folder C:\Users on Windows can be converted');
+        }
+
+        return str_replace('/', '\\', ucfirst(preg_replace('/^(.+)\/(\w)\/(Users)\/(.*)$/i', '$2:\\\$3\\\$4', $path)));
+    }
+
+    /**
      * @param string $path
      * @return string
      */
