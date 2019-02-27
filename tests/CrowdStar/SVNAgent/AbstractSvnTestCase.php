@@ -121,6 +121,12 @@ abstract class AbstractSvnTestCase extends TestCase
 
             $i++;
         }
+
+        // Add an empty subdirectory.
+        $dir = $svnDir . DIRECTORY_SEPARATOR . 'dir2';
+        if (!is_dir($dir)) {
+            mkdir($dir);
+        }
     }
 
     /**

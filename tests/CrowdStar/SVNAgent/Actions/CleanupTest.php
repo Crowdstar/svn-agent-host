@@ -72,9 +72,9 @@ class CleanupTest extends AbstractSvnTestCase
 
         $this->addSampleFiles($action->getSvnDir());
         $this->assertCount(
-            3,
+            4,
             (new Review($request))->run()->toArray()['actions'],
-            '2 new files and 1 new folder added under given SVN folder'
+            '2 new files and 2 new subdirectories added under given SVN folder'
         );
         $this->assertSame(
             $expectedResponse,

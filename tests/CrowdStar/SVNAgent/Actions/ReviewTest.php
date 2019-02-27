@@ -76,6 +76,10 @@ class ReviewTest extends AbstractSvnTestCase
                     ],
                     [
                         'type' => '?',
+                        'file' => self::getSvnRootDir() . '/path/1/dir2',
+                    ],
+                    [
+                        'type' => '?',
                         'file' => self::getSvnRootDir() . '/path/1/empty1.txt',
                     ],
                     [
