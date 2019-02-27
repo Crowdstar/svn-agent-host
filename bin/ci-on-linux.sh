@@ -2,7 +2,8 @@
 #
 # The continuous integration script to run different tests under Linux environments using Docker.
 # Usage:
-#     PHP_VERSION=7.2 SVN_VERSION=1.10.3 ./bin/ci-on-linux.sh
+#     PHP_VERSION=7.2    SVN_VERSION=1.10.3 ./bin/ci-on-linux.sh
+#     PHP_VERSION=7.1.19 SVN_VERSION=1.10.0 ./bin/ci-on-linux.sh
 #
 
 set -e
@@ -18,7 +19,8 @@ cd "${CURRENT_SCRIPT_PATH}/.."
 if [ -z "${PHP_VERSION}" ] || [ -z "${SVN_VERSION}" ] ; then
     echo "Error: Please specify environment variable PHP_VERSION and SVN_VERSION."
     echo "       For example:"
-    echo "           PHP_VERSION=7.2 SVN_VERSION=1.10.3 ./bin/ci.sh"
+    echo "           PHP_VERSION=7.2    SVN_VERSION=1.10.3 ./bin/ci.sh"
+    echo "           PHP_VERSION=7.1.19 SVN_VERSION=1.10.0 ./bin/ci-on-linux.sh
     exit 1
 fi
 
