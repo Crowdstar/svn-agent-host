@@ -28,6 +28,7 @@ use Psr\Log\LoggerInterface;
  */
 class ActionFactory
 {
+    const SVN_AUTH               = 'auth';
     const SVN_BULK_REVIEW        = 'bulk-review';
     const SVN_BULK_UPDATE        = 'bulk-update';
     const SVN_CLEANUP            = 'cleanup';
@@ -36,6 +37,7 @@ class ActionFactory
     const SVN_CREATE             = 'create';
     const SVN_EXIST              = 'exist';
     const SVN_OPEN               = 'open';
+    const SVN_RENAME             = 'rename';
     const SVN_REVIEW             = 'review';
     const SVN_UNLOCK             = 'unlock';
     const SVN_UPDATE             = 'update';
@@ -44,6 +46,7 @@ class ActionFactory
     const VERSION                = 'version';
 
     const ACTION_CLASSES = [
+        self::SVN_AUTH               => Auth::class,
         self::SVN_BULK_REVIEW        => BulkReview::class,
         self::SVN_BULK_UPDATE        => BulkUpdate::class,
         self::SVN_CLEANUP            => Cleanup::class,
@@ -52,6 +55,7 @@ class ActionFactory
         self::SVN_CREATE             => Create::class,
         self::SVN_EXIST              => Exist::class,
         self::SVN_OPEN               => Open::class,
+        self::SVN_RENAME             => Rename::class,
         self::SVN_REVIEW             => Review::class,
         self::SVN_UNLOCK             => Unlock::class,
         self::SVN_UPDATE             => Update::class,
