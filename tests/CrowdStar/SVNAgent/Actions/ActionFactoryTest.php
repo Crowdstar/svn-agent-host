@@ -104,6 +104,7 @@ class ActionFactoryTest extends AbstractSvnTestCase
     /**
      * @dataProvider dataFromRequest
      * @covers ActionFactory::fromRequest()
+     * @group svn-server
      * @param string $action
      * @throws ClientException
      */
