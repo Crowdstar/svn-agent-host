@@ -58,7 +58,7 @@ class RenameTest extends AbstractSvnTestCase
                         'path'   => '/path/1/',
                         'toPath' => '/path/2/',
                     ],
-                ] + $this->getBasicRequestData(),
+                ] + self::getBasicRequestData(),
                 'a successful "rename" action should return a versioned response back.',
             ],
         ];
@@ -134,7 +134,7 @@ class RenameTest extends AbstractSvnTestCase
                         'path'   => '/path/3/',
                         'toPath' => '/path/3',
                     ],
-                ] + $this->getBasicRequestData()
+                ] + self::getBasicRequestData()
             )
         );
     }
@@ -157,7 +157,7 @@ class RenameTest extends AbstractSvnTestCase
                         'path'   => '/path/4/',
                         'toPath' => '/path/5/',
                     ],
-                ] + $this->getBasicRequestData()
+                ] + self::getBasicRequestData()
             )
         );
     }
@@ -178,7 +178,7 @@ class RenameTest extends AbstractSvnTestCase
                     'data' => [
                         'path' => '/path/6/',
                     ],
-                ] + $this->getBasicRequestData()
+                ] + self::getBasicRequestData()
             )
         );
     }
@@ -198,7 +198,7 @@ class RenameTest extends AbstractSvnTestCase
                     'toPath' => '',
 
                 ],
-            ] + $this->getBasicRequestData()
+            ] + self::getBasicRequestData()
         );
 
         new Rename($request);
@@ -224,7 +224,7 @@ class RenameTest extends AbstractSvnTestCase
                     'path'   => '/path/8/',
                     'toPath' => '/path/9/',
                 ],
-            ] + $this->getBasicRequestData()
+            ] + self::getBasicRequestData()
         );
         new Rename($request);
     }
@@ -245,7 +245,7 @@ class RenameTest extends AbstractSvnTestCase
                     'path'   => '/path/10/',
                     'toPath' => '/path/11/',
                 ],
-            ] + $this->getBasicRequestData()
+            ] + self::getBasicRequestData()
         );
         new Rename($request);
     }
@@ -264,7 +264,7 @@ class RenameTest extends AbstractSvnTestCase
                     'data' => [
                         'path' => $path,
                     ],
-                ] + $this->getBasicRequestData()
+                ] + self::getBasicRequestData()
             );
             $createAction = new Create($request);
             $createAction->run();
@@ -277,7 +277,7 @@ class RenameTest extends AbstractSvnTestCase
                     'path'   => '/path/12/',
                     'toPath' => '/path/13/',
                 ],
-            ] + $this->getBasicRequestData()
+            ] + self::getBasicRequestData()
         );
         new Rename($request);
     }

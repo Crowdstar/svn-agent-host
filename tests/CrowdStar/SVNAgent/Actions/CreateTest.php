@@ -53,7 +53,7 @@ class CreateTest extends AbstractSvnTestCase
                 ],
                 [
                     'data' => ['path' => 'path/1'],
-                ] + $this->getBasicRequestData(),
+                ] + self::getBasicRequestData(),
                 'a successful "create" action should return a versioned response back.',
             ],
         ];

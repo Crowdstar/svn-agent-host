@@ -84,7 +84,7 @@ class SVNHelperTest extends AbstractSvnTestCase
      */
     public function testGetUrl()
     {
-        $action = (new Create((new Request())->init(['data' => ['path' => 'path/1'],] + $this->getBasicRequestData())));
+        $action = (new Create((new Request())->init(['data' => ['path' => 'path/1'],] + self::getBasicRequestData())));
         $action->run();
         $this->assertSame(
             Config::singleton()->getSvnRoot() . '/path/1',

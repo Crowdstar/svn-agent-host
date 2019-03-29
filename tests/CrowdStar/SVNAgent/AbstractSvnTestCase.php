@@ -81,7 +81,7 @@ abstract class AbstractSvnTestCase extends TestCase
             'data' => [
                 'path' => $path,
             ]
-        ] + $this->getBasicRequestData();
+        ] + self::getBasicRequestData();
 
         $action = new Update((new Request())->init($requestData));
         $action->run();
@@ -157,7 +157,7 @@ abstract class AbstractSvnTestCase extends TestCase
      */
     protected function getPathBasedRequest(string $path): Request
     {
-        return (new Request())->init(['data' => ['path' => $path]] + $this->getBasicRequestData());
+        return (new Request())->init(['data' => ['path' => $path]] + self::getBasicRequestData());
     }
 
     /**
@@ -166,7 +166,7 @@ abstract class AbstractSvnTestCase extends TestCase
      */
     protected function getPathsBasedRequest(string ...$paths): Request
     {
-        return (new Request())->init(['data' => ['paths' => $paths]] + $this->getBasicRequestData());
+        return (new Request())->init(['data' => ['paths' => $paths]] + self::getBasicRequestData());
     }
 
     /**

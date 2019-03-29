@@ -54,7 +54,7 @@ class UpdateTest extends AbstractSvnTestCase
                 ],
                 [
                     'data' => ['path' => 'path/a'],
-                ] + $this->getBasicRequestData(),
+                ] + self::getBasicRequestData(),
                 'a successful "update" action should return a versioned response back.',
             ],
         ];
@@ -116,10 +116,10 @@ class UpdateTest extends AbstractSvnTestCase
     public function testProcessActionWithInvalidWorkingCopy()
     {
         $action1 = new Update((new Request())->init(
-            ['data' => ['path' => 'path/1']] + $this->getBasicRequestData()
+            ['data' => ['path' => 'path/1']] + self::getBasicRequestData()
         ));
         $action2 = new Update((new Request())->init(
-            ['data' => ['path' => 'path/2']] + $this->getBasicRequestData()
+            ['data' => ['path' => 'path/2']] + self::getBasicRequestData()
         ));
 
         $action1->run()->toArray();

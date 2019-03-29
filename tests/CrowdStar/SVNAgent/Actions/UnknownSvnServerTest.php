@@ -71,7 +71,7 @@ class UnknownSvnServerTest extends AbstractSvnTestCase
                 ],
                 [
                     'data' => ['path' => 'path/1'],
-                ] + $this->getBasicRequestData(),
+                ] + self::getBasicRequestData(),
                 '',
             ],
         ];

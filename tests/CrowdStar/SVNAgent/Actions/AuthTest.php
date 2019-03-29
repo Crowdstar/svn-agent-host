@@ -38,17 +38,17 @@ class AuthTest extends AbstractSvnTestCase
         return [
             [
                 false,
-                array_merge($this->getBasicRequestData(), ['username' => 'invalid_username']),
+                array_merge(self::getBasicRequestData(), ['username' => 'invalid_username']),
                 'SVN access with invalid username',
             ],
             [
                 true,
-                $this->getBasicRequestData(),
+                self::getBasicRequestData(),
                 'SVN access with valid username/password',
             ],
             [
                 false,
-                array_merge($this->getBasicRequestData(), ['password' => 'invalid_password']),
+                array_merge(self::getBasicRequestData(), ['password' => 'invalid_password']),
                 'SVN access with invalid password',
             ],
         ];
