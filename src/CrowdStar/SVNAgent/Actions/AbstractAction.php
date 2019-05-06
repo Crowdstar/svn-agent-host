@@ -265,19 +265,11 @@ abstract class AbstractAction
     }
 
     /**
-     * @return string
+     * @return AbstractAction
      */
     public function getBackupDir(): string
     {
-        return $this->getConfig()->getRootDir() . DIRECTORY_SEPARATOR . 'backup';
-    }
-
-    /**
-     * @return AbstractAction
-     */
-    public function initBackupDir(): string
-    {
-        $dir = $this->getBackupDir();
+        $dir = join(DIRECTORY_SEPARATOR, [$this->getConfig()->getRootDir(), 'backup', uniqid(date('YmdHis-'))]);
 
         if (!file_exists($dir)) {
             mkdir($dir, self::DIR_MODE, true);

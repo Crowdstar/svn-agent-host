@@ -18,7 +18,9 @@
 namespace CrowdStar\Tests\SVNAgent\Actions;
 
 use CrowdStar\SVNAgent\Actions\AbstractAction;
+use CrowdStar\SVNAgent\Actions\Commit;
 use CrowdStar\SVNAgent\Actions\Delete;
+use CrowdStar\SVNAgent\Actions\Update;
 use CrowdStar\SVNAgent\Request;
 use CrowdStar\Tests\SVNAgent\AbstractSvnTestCase;
 use MrRio\ShellWrap;
@@ -71,8 +73,20 @@ class DeleteTest extends AbstractSvnTestCase
      */
     public function testProcessActionWhereBothLocalDirAndRemoteDirExist()
     {
-        $this->createSvnUri($this->path);
-        $this->assertTrue((new Delete((new Request())->init($this->getRequestData())))->run()->toArray()['success']);
+        $request = (new Request())->init($this->getRequestData());
+        $action  = new Delete($request);
+
+        $this->createSvnUri($action->getPath());
+        $this->addSampleFiles($action->getSvnDir());
+        (new Commit($request))->run();
+        (new Update($request))->run(); // To checkout a local copy.
+
+        $response = $action->run()->toArray();
+        $backupDir = str_replace('local files moved to folder ', '', $response['message']);
+
+        $this->assertTrue($response['success']);
+        $this->assertFileExists("{$backupDir}/empty1.txt");
+        $this->assertDirectoryExists("{$backupDir}/dir2");
     }
 
     /**
@@ -85,7 +99,9 @@ class DeleteTest extends AbstractSvnTestCase
     {
         $this->mkdir($this->path);
         $response = (new Delete((new Request())->init($this->getRequestData())))->run()->toArray();
-        $this->assertSame(['success'  => true, 'message' => 'local folder deleted'], $response);
+
+        $this->assertTrue($response['success']);
+        $this->assertContains('local files moved to folder ', $response['message']);
     }
 
     /**

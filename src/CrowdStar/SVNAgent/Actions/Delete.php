@@ -36,12 +36,6 @@ class Delete extends AbstractPathBasedAction
      */
     public function processAction(): AbstractAction
     {
-        $dir = $this->getSvnDir();
-        if (is_dir($dir)) {
-            rename($dir, ($this->initBackupDir() . DIRECTORY_SEPARATOR . uniqid(date('YmdHis-'))));
-            $this->prepareResponse('local folder deleted');
-        }
-
         $url = $this->getSvnUri();
         if (SVNHelper::urlExists($url, $this->getRequest())) {
             $this->setMessage('SVN folder deletion')->exec(
@@ -53,6 +47,13 @@ class Delete extends AbstractPathBasedAction
                     );
                 }
             );
+        }
+
+        $dir = $this->getSvnDir();
+        if (is_dir($dir)) {
+            $backupDir = $this->getBackupDir();
+            rename($dir, $backupDir);
+            $this->prepareResponse("local files moved to folder {$backupDir}");
         }
 
         return $this;
