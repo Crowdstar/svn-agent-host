@@ -46,6 +46,8 @@ abstract class AbstractAction
 {
     use LoggerTrait, PathTrait;
 
+    const DIR_MODE = 0755;
+
     /**
      * @var Config
      */
@@ -260,6 +262,28 @@ abstract class AbstractAction
         }
 
         return $svnDir;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBackupDir(): string
+    {
+        return $this->getConfig()->getRootDir() . DIRECTORY_SEPARATOR . 'backup';
+    }
+
+    /**
+     * @return AbstractAction
+     */
+    public function initBackupDir(): string
+    {
+        $dir = $this->getBackupDir();
+
+        if (!file_exists($dir)) {
+            mkdir($dir, self::DIR_MODE, true);
+        }
+
+        return $dir;
     }
 
     /**

@@ -51,7 +51,7 @@ class Update extends AbstractPathBasedAction
 
         if (!is_dir($dir)) {
             if (!is_dir(dirname($dir))) {
-                mkdir(dirname($dir), 0755, true);
+                mkdir(dirname($dir), self::DIR_MODE, true);
             }
 
             $this->checkout($url, $dir);
