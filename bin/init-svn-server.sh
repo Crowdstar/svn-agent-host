@@ -9,6 +9,6 @@
 
 set -ex
 
-docker exec -t `docker ps | grep svn-server | awk '{print $NF}'` htpasswd -b /etc/subversion/passwd username password
-docker exec -t `docker ps | grep svn-server | awk '{print $NF}'` svnadmin create /home/svn/project1
-docker exec -t `docker ps | grep svn-server | awk '{print $NF}'` chmod -R 777 /home/svn/project1
+docker exec -t $(docker ps -qf "name=svn-server") htpasswd -b /etc/subversion/passwd username password
+docker exec -t $(docker ps -qf "name=svn-server") svnadmin create /home/svn/project1
+docker exec -t $(docker ps -qf "name=svn-server") chmod -R 777 /home/svn/project1
