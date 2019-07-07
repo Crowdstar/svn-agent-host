@@ -13,7 +13,7 @@ popd > /dev/null
 
 cd "${CURRENT_SCRIPT_PATH}/.."
 
-docker run --rm -d --name svn-server -p 80:80 elleflorio/svn-server
+docker run --rm -d --name svn-server -p 80:80 krisdavison/svn-server:v3.0
 ./bin/init-svn-server.sh
 ./vendor/bin/phpunit
 docker stop svn-server

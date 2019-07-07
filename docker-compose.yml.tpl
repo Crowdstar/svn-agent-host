@@ -11,6 +11,6 @@ services:
     volumes:
       - .:/docker-php-svn
   svn-server:
-    image: elleflorio/svn-server
+    image: krisdavison/svn-server:v3.0
     ports:
       - 80
