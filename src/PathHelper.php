@@ -34,7 +34,7 @@ class PathHelper
      */
     public static function getFullBinPath(string $filename): string
     {
-        $path = realpath(dirname(__DIR__, 3)) . '/bin/' . $filename;
+        $path = realpath(dirname(__DIR__)) . '/bin/' . $filename;
         if (is_executable($path)) {
             return $path;
         }

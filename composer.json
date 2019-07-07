@@ -18,12 +18,12 @@
   },
   "autoload": {
     "psr-4": {
-      "CrowdStar\\SVNAgent\\": "src/CrowdStar/SVNAgent/"
+      "CrowdStar\\SVNAgent\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "CrowdStar\\Tests\\SVNAgent\\": "tests/CrowdStar/SVNAgent/"
+      "CrowdStar\\Tests\\SVNAgent\\": "tests/"
     }
   },
   "bin": [
