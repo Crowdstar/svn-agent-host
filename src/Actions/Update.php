@@ -33,7 +33,6 @@ class Update extends AbstractPathBasedAction
 {
     /**
      * @inheritdoc
-     * @todo process responses for SVN checkout only.
      */
     public function processAction(): AbstractAction
     {
