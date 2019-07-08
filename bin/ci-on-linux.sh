@@ -35,15 +35,15 @@ docker ps
 . ./bin/init-svn-server.sh
 
 # Check PHP and Subversion versions.
-docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c "php --version && svn --version"
+docker exec -t $(docker ps -qf "name=svn-agent-host") sh -c "php --version && svn --version"
 
 # Load third-party Composer packages.
-docker exec -t `docker ps | grep svn-agent-host | awk '{print $NF}'` sh -c "composer update -n"
+docker exec -t $(docker ps -qf "name=svn-agent-host") sh -c "composer update -n"
 
 # Run tests.
-docker exec -t `docker ps | grep agent-host | awk '{print $NF}'` sh -c "./vendor/bin/phplint"
-docker exec -t `docker ps | grep agent-host | awk '{print $NF}'` sh -c "./vendor/bin/phpcs -v --standard=PSR2 src tests"
-docker exec -t `docker ps | grep agent-host | awk '{print $NF}'` sh -c "./vendor/bin/phpunit"
+docker exec -t $(docker ps -qf "name=svn-agent-host") sh -c "./vendor/bin/phplint"
+docker exec -t $(docker ps -qf "name=svn-agent-host") sh -c "./vendor/bin/phpcs -v --standard=PSR2 src tests"
+docker exec -t $(docker ps -qf "name=svn-agent-host") sh -c "./vendor/bin/phpunit"
 
 # Stop the Docker containers once tests are done.
 docker-compose -p sah stop
