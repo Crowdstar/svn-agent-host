@@ -72,7 +72,13 @@ class ActionFactoryTest extends AbstractSvnTestCase
                 ActionFactory::SVN_CREATE,
             ],
             [
+                ActionFactory::SVN_DELETE,
+            ],
+            [
                 ActionFactory::SVN_EXIST,
+            ],
+            [
+                ActionFactory::SVN_EXPORT,
             ],
             [
                 ActionFactory::SVN_OPEN,

@@ -35,7 +35,9 @@ class ActionFactory
     const SVN_COMMIT             = 'commit';
     const SVN_COMMITS            = 'commits';
     const SVN_CREATE             = 'create';
+    const SVN_DELETE             = 'delete';
     const SVN_EXIST              = 'exist';
+    const SVN_EXPORT             = 'export';
     const SVN_OPEN               = 'open';
     const SVN_RENAME             = 'rename';
     const SVN_REVIEW             = 'review';
@@ -53,7 +55,9 @@ class ActionFactory
         self::SVN_COMMIT             => Commit::class,
         self::SVN_COMMITS            => BulkCommits::class,
         self::SVN_CREATE             => Create::class,
+        self::SVN_DELETE             => Delete::class,
         self::SVN_EXIST              => Exist::class,
+        self::SVN_EXPORT             => Export::class,
         self::SVN_OPEN               => Open::class,
         self::SVN_RENAME             => Rename::class,
         self::SVN_REVIEW             => Review::class,
