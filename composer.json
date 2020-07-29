@@ -7,9 +7,9 @@
     "php": ">=7.0",
     "arvenil/ninja-mutex": "~0.6",
     "bugsnag/bugsnag": "~3.13",
-    "monolog/monolog": "~1.11",
+    "monolog/monolog": "~1.11 || ~2.0",
     "deminy/shellwrap": "dev-master",
-    "vlucas/phpdotenv": "~2.2"
+    "vlucas/phpdotenv": "~4.0"
   },
   "require-dev": {
     "overtrue/phplint": "~1.1.0",

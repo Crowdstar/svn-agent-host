@@ -107,8 +107,8 @@ class Config
      */
     public function init(string $path, string $file = '.env'): Config
     {
-        $dotenv = (new Dotenv($path, $file));
-        $dotenv->overload();
+        $dotenv = Dotenv::createMutable($path, $file);
+        $dotenv->load();
         foreach (self::REQUIRED_ENVIRONMENT_VARIABLES as $var) {
             $dotenv->required($var)->notEmpty();
         }
