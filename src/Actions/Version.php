@@ -17,7 +17,7 @@
 
 namespace CrowdStar\SVNAgent\Actions;
 
-use CrowdStar\SVNAgent\Traits\SimpleResponseTrait;
+use CrowdStar\SVNAgent\Responses\VersionResponse;
 
 /**
  * Class Version
@@ -26,15 +26,19 @@ use CrowdStar\SVNAgent\Traits\SimpleResponseTrait;
  */
 class Version extends AbstractAction implements LocklessActionInterface, PathNotRequiredActionInterface
 {
-    use SimpleResponseTrait;
-
     /**
      * @inheritdoc
      */
     public function processAction(): AbstractAction
     {
-        $this->setMessage('version')->prepareResponse($this->getConfig()::VERSION);
+        return $this->setMessage('version');
+    }
 
-        return $this;
+    /**
+     * @inheritdoc
+     */
+    protected function initResponse(): AbstractAction
+    {
+        return $this->setResponse(new VersionResponse());
     }
 }
