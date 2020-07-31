@@ -86,8 +86,8 @@ class SelfUpdate extends AbstractAction implements PathNotRequiredActionInterfac
     protected function getDirs(): array
     {
         return [
-            dirname(__DIR__, 4), // Assuming this file sits under folder vendor/crowdstar/svn-agent-host/src/Actions/.
             dirname(__DIR__, 2), // Assuming this file sits under folder src/Actions/.
+            dirname(__DIR__, 5), // Assuming this file sits under folder vendor/crowdstar/svn-agent-host/src/Actions/.
         ];
     }
 }
