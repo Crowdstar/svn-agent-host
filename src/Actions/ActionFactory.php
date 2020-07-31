@@ -28,6 +28,7 @@ use Psr\Log\LoggerInterface;
  */
 class ActionFactory
 {
+    const SELF_UPDATE            = 'self-update';
     const SVN_AUTH               = 'auth';
     const SVN_BULK_REVIEW        = 'bulk-review';
     const SVN_BULK_UPDATE        = 'bulk-update';
@@ -48,6 +49,7 @@ class ActionFactory
     const VERSION                = 'version';
 
     const ACTION_CLASSES = [
+        self::SELF_UPDATE            => SelfUpdate::class,
         self::SVN_AUTH               => Auth::class,
         self::SVN_BULK_REVIEW        => BulkReview::class,
         self::SVN_BULK_UPDATE        => BulkUpdate::class,
